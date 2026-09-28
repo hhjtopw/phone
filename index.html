@@ -672,6 +672,14 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .st-f{flex:1;height:44px;border:1.5px solid rgba(255,255,255,.75);border-radius:22px;padding:0 18px;display:flex;align-items:center;color:#fff;font-size:15px}
 .scr.noTop .st-bars,.scr.noTop .st-head,.scr.bgoff .st-bars,.scr.bgoff .st-head{display:none!important}
 .scr.noBottom .st-in,.scr.bgoff .st-in{display:none!important}
+/* screen picker (grouped) */
+.sgrps{margin:18px 0 0;display:flex;flex-direction:column;gap:12px}
+.sgl{font-size:11.5px;font-weight:600;color:var(--sub);margin:0 2px 6px}
+.sgb{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pkbtn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 0 10px;background:var(--panel);border:1px solid var(--line);border-radius:10px;font-size:11.5px;font-weight:500;color:var(--sub);cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.pkbtn svg{width:16px;height:16px;color:#a0a0a0}
+.pkbtn:hover{background:var(--soft)}
+.pkbtn.on{background:var(--ink);border-color:var(--ink);color:var(--onink);font-weight:600}.pkbtn.on svg{color:var(--onink)}
 </style>
 </head>
 <body>
@@ -742,10 +750,12 @@ UI.tw='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="curre
 UI.tg='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21 4L3 11l6 2.2L11 20l3-4.2L18.5 19z"/><path d="M9 13.2L21 4"/></svg>';
 UI.tl='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>';
 UI.news='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 16.5h5"/></svg>';
-UI.dial=UI.call;UI.story=UI.ig;
+UI.dial=UI.call;UI.recents=UI.call;UI.story=UI.ig;
 const DSP_LOGO='data:image/png;base64,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';
 /* ═════════════ Data tables ═════════════ */
-const SCREENS=[['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램'],['tw','트위터'],['tl','타임라인'],['news','디스패치'],['dial','전화 연결 중'],['story','인스타 스토리']];
+const SCREENS=[['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램'],['tw','트위터'],['tl','타임라인'],['news','디스패치'],['dial','전화 걸기'],['story','인스타 스토리'],['recents','최근 통화']];
+const SCREEN_GROUPS=[['메신저',['chat','sms','ig','line','tg']],['전화',['dial','recents','call','face']],['SNS와 뉴스',['story','tw','tl','news']],['기기 화면',['lock','gallery']]];
+const screenLabel=k=>(SCREENS.find(x=>x[0]===k)||[k,k])[1];
 const WALLS=[
   ['linear-gradient(170deg,#4a4a50 0%,#1c1c1f 100%)','그라파이트'],
   ['linear-gradient(170deg,#f1f1f4 0%,#d3d4da 100%)','라이트 그레이',1],
@@ -803,8 +813,9 @@ function defaults(){
     tw:{mode:'light'},
     news:{cat:'단독',title:'기사 제목을 입력하세요',sub:'',by:'디스패치 | 홍길동 기자',date:`${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())} ${pad(t.h)}:${pad(t.m)}`,wm:true,wmPos:'tl',wmSize:24,wmOp:100,scroll:0,logo:null,
       blocks:[{id:uid(),kind:'text',text:'기사 본문 첫 문단을 입력하세요. 문단은 여러 개 추가할 수 있어요.'},{id:uid(),kind:'photo',img:null,cap:'사진 설명을 입력하세요'},{id:uid(),kind:'text',text:'사진을 첨부하면 로고가 사진 위에 자동으로 붙어요.'}]},
-    dial:{name:'이름',sub:'전화 거는 중',photo:null},
-    story:{img:null,avatar:null,name:'username',time:'3시간',bars:4,cur:1,prog:40,text:'',textStyle:'plain',textY:50,hint:'메시지 보내기...'},
+    dial:{name:'이름',sub:'전화 거는 중',photo:null,result:'none',ringSec:3,endText:'통화 종료',stage:'ring'},
+    recents:{title:'최근 통화',items:[{id:uid(),name:'이름',kind:'missed',time:'오후 3:24'},{id:uid(),name:'이름',kind:'missed',time:'오후 3:21'},{id:uid(),name:'이름',kind:'out',time:'오후 3:18'}]},
+    story:{slots:[{id:uid(),img:null},{id:uid(),img:null},{id:uid(),img:null}],avatar:null,name:'username',time:'3시간',cur:1,prog:40,imgSec:3,text:'',textStyle:'plain',textY:50,hint:'메시지 보내기...'},
     tl:{mode:'light',tab:0,fab:true,me:null,tweetsF:[
       {id:uid(),name:'팔로우 중인 계정',handle:'@following',ver:false,text:'팔로잉 탭에 뜨는 트윗이에요 @username',time:'10분',replies:'4',rts:'2',likes:'57',views:'1,204',av:null,imgs:[null,null,null,null],priv:true,liked:false,rted:false},
       {id:uid(),name:'친구',handle:'@friend',ver:false,text:'오늘 모임 다들 올 거지?',time:'34분',replies:'12',rts:'',likes:'98',views:'2,310',av:null,imgs:[null,null,null,null],priv:false,liked:true,rted:false},
@@ -816,7 +827,7 @@ function defaults(){
     face:{other:null,me:null,name:'이름',status:'00:00',pip:true},
     call:{name:'이름',sub:'휴대전화',photo:null},
     gallery:{title:'최근 항목',cols:3,items:[]},
-    exp:{scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',gifScreens:['lock','chat','sms'],gifAnim:true,tlPress:true},
+    exp:{scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',fx:'none',fxY:60,vidMode:'single',vidSeq:['lock','chat'],gifScreens:['lock','chat','sms'],gifAnim:true,tlPress:true},
   };
 }
 function merge(base,src){
@@ -858,7 +869,7 @@ function bgImg(im,ca=1){
   return `<div class="imgbox"><div style="left:${(L.l*100).toFixed(3)}%;top:${(L.t/L.H*100).toFixed(3)}%;width:${(L.iw*100).toFixed(3)}%;height:${(L.ih/L.H*100).toFixed(3)}%;background-image:url('${im.url}')"></div></div>`;
 }
 function aspectOf(p,im){
-  if(/^(lock\.wall|face\.other|call\.photo|dial\.photo|story\.img|chat\.bgImg)$/.test(p))return SA;
+  if(/^(lock\.wall|face\.other|call\.photo|dial\.photo|story\.slots\.\d+\.img|chat\.bgImg)$/.test(p))return SA;
   {const m=p.match(/^tl\.(?:tweets|tweetsF)\.(\d+)\.imgs\.(\d+)$/);if(m){const L=(S.tl[p.split('.')[1]][+m[1]].imgs||[]),n=L.filter(x=>x&&x.url).length,r=L.slice(0,+m[2]).filter(x=>x&&x.url).length;return (n===2||(n===3&&r===0))?8/9:16/9;}}
   if(/^news\.blocks\.\d+\.img$/.test(p))return Math.min(1.9,Math.max(.7,(im&&im.ar)||1.5));
   if(p==='face.me')return 104/156;
@@ -1147,23 +1158,37 @@ function screenNews(s){
   return{bg,body};
 }
 function screenDial(s){
-  const C=s.dial,t=s._ct;
-  const base=(C.sub||'').replace(/[.…]+$/,''),dots=t==null?'…':'.'.repeat(1+Math.floor(t*2)%3);
+  const C=s.dial,t=s._ct,res=C.result||'none',rs=Math.max(1,+C.ringSec||3);
+  let ph='ring',te=0;                       // ph: ring(거는 중) → end(받음/거절 이후), te: 결과 이후 경과 초
+  if(res!=='none'){
+    if(t!=null){if(t>=rs){ph='end';te=t-rs;}}
+    else if(C.stage==='end'){ph='end';te=res==='answer'?3:1;}
+  }
+  const base=(C.sub||'').replace(/[.]+$/,''),dots=(t==null||ph==='end')?'':'.'.repeat(1+Math.floor(t*2)%3);
+  let sub=esc(base)+dots;
+  if(ph==='end')sub=res==='answer'?pad(Math.floor(te/60))+':'+pad(Math.floor(te)%60):esc(C.endText||'통화 종료');
   const photo=C.photo&&C.photo.url?`${bgImg(C.photo,SA)}<div class="bgl" style="background:rgba(0,0,0,.5)"></div>`:'';
   const bg=`<div class="bgl" style="background:linear-gradient(175deg,#3c3f46,#1a1b1f 60%,#0f0f11)">${photo}</div>`;
   const kp='<svg width="26" height="26" viewBox="0 0 24 24" fill="#fff">'+[4,12,20].map(y=>[4,12,20].map(x=>`<circle cx="${x}" cy="${y}" r="1.9"/>`).join('')).join('')+'</svg>';
   const b=(ic,l)=>`<div class="cl-it"><div class="c s dl">${ic}</div>${l}</div>`;
-  const body=`<div class="cl"><div class="cl-sub">${esc(base)}${dots}</div><div class="cl-name">${esc(C.name)}</div></div>
-  <div class="cl-bot" style="bottom:56px;padding:0 40px"><div class="dl-g">${b(I.mic('#fff',26),'소리 끄기')}${b(kp,'키패드')}${b(I.speaker('#fff',26),'스피커')}${b(I.plus('#fff',26),'통화 추가')}${b(I.video('#fff',26),'FaceTime')}${b(I.person('#fff'),'연락처')}</div>
-  <div class="cl-row" style="justify-content:center;margin-top:34px"><div class="cl-it"><div class="c b" style="background:#ff3b30">${I.phone('#fff',34,135)}</div></div></div></div>`;
+  const k=Math.min(1,te/.3),rej=res==='reject'&&ph==='end';
+  const op=res==='answer'?(ph==='ring'?.5:.5+.5*k):rej?1-.65*k:1;               // 받으면 버튼이 켜지고, 거절되면 흐려져요
+  const pop=res==='answer'&&ph==='end'&&te<.3?`;transform:scale(${(.94+.06*k).toFixed(3)})`:'';
+  const mix=(x,y,q)=>x.map((v,i)=>Math.round(v+(y[i]-v)*q)).join(',');
+  const endBg=rej?`rgb(${mix([255,59,48],[92,92,98],k)})`:'#ff3b30',rowOp=rej?1-.4*k:1;
+  const fade=rej?Math.min(1,Math.max(0,(te-1.2)/.6)):0;                          // 거절 뒤 화면이 꺼져요
+  const ov=fade>0?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;background:#000;opacity:${fade.toFixed(2)};z-index:9;pointer-events:none"></div>`:'';
+  const body=`<div class="cl"><div class="cl-sub" style="font-variant-numeric:tabular-nums">${sub}</div><div class="cl-name">${esc(C.name)}</div></div>
+  <div class="cl-bot" style="bottom:56px;padding:0 40px"><div class="dl-g" style="opacity:${op.toFixed(2)}${pop}">${b(I.mic('#fff',26),' ')}${b(kp,'')}${b(I.speaker('#fff',26),'')}${b(I.plus('#fff',26),' ')}${b(I.video('#fff',26),'FaceTime')}${b(I.person('#fff'),'')}</div>
+  <div class="cl-row" style="justify-content:center;margin-top:34px;opacity:${rowOp.toFixed(2)}"><div class="cl-it"><div class="c b" style="background:${endBg}">${I.phone('#fff',34,135)}</div></div></div></div>${ov}`;
   return{bg,body};
 }
 function screenStory(s){
   const T=s.story,p=T._p!=null?T._p:(+T.prog||0)/100;
-  const bars=Math.max(1,Math.min(10,+T.bars||1)),cur=Math.min(bars-1,Math.max(0,(+T.cur||1)-1));
+  const sl=T.slots||[],bars=Math.max(1,sl.length),cur=Math.min(bars-1,Math.max(0,T._cur!=null?T._cur:(+T.cur||1)-1)),im=sl[cur]&&sl[cur].img;
   const seg=Array.from({length:bars},(_,i)=>`<i><b style="width:${i<cur?100:i===cur?(p*100).toFixed(1):0}%"></b></i>`).join('');
-  const has=T.img&&T.img.url;
-  const bg=`<div class="bgl" style="background:${has?'#000':'linear-gradient(160deg,#833ab4,#fd1d1d 60%,#fcb045)'}">${has?bgImg(T.img,SA):''}<div class="bgl" style="background:linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,0) 150px,rgba(0,0,0,0) 62%,rgba(0,0,0,.4))"></div></div>`;
+  const has=im&&im.url;
+  const bg=`<div class="bgl" style="background:${has?'#000':'linear-gradient(160deg,#833ab4,#fd1d1d 60%,#fcb045)'}">${has?bgImg(im,SA):''}<div class="bgl" style="background:linear-gradient(rgba(0,0,0,.42),rgba(0,0,0,0) 150px,rgba(0,0,0,0) 62%,rgba(0,0,0,.4))"></div></div>`;
   const av=T.avatar&&T.avatar.url?bgImg(T.avatar):I.person('#fff');
   const x='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>';
   const dt='<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
@@ -1173,10 +1198,73 @@ function screenStory(s){
   const body=`<div class="st-bars">${seg}</div><div class="st-head"><div class="st-av">${av}</div><b>${esc(T.name)}</b><span>${esc(T.time)}</span><div class="st-r">${dt}${x}</div></div>${tx}<div class="st-sp"></div><div class="st-in"><div class="st-f">${esc(T.hint)}</div>${ht}${sd}</div>`;
   return{bg,body};
 }
-const SCREEN_FN={lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw,tl:screenTl,news:screenNews,dial:screenDial,story:screenStory};
+const SCREEN_FN={lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw,tl:screenTl,news:screenNews,dial:screenDial,story:screenStory,recents:screenRecents};
 
 let BOX=1;
+function msgFx(s){return s;}
+function msgDeco(root,st){
+  if(!CHATLIKE.includes(st.screen)||!st.chat)return;
+  const ms=st.chat.messages.filter(visibleMsg),rows=root.querySelectorAll('.mrow'),sms=st.screen==='sms';
+  ms.forEach((m,i)=>{
+    const row=rows[i];if(!row)return;
+    if(m.state==='deleted'&&!m._keep){   // 카카오톡 25.7 이후: 말풍선 대신 대화창에 안내 문구만 남아요
+      row.innerHTML='<div style="width:100%;text-align:center;font-size:12px;color:#8e8e93;padding:8px 0">메시지가 삭제되었습니다</div>';
+      row.style.justifyContent='center';return;
+    }
+    const R=m.side==='right',fail=m.state==='failed'&&!m._nofail,rx=m.react&&!m._noreact;
+    if(!fail&&!rx)return;
+    const t=(m.text||'').trim(),leaf=t?[...row.querySelectorAll('*')].find(e=>!e.children.length&&e.textContent.trim()===t):null;
+    const b=leaf||row.querySelector('.kt-img')||row.lastElementChild;if(!b)return;
+    b.style.position='relative';b.style.overflow='visible';
+    if(fail){   // 빨간 ! 는 내 말풍선 바로 옆 (카톡·LINE·텔레그램은 왼쪽 시간 자리, 아이폰 메시지는 오른쪽)
+      row.querySelectorAll('.kt-meta').forEach(e=>e.style.visibility='hidden');
+      const x=document.createElement('i');
+      x.style.cssText=`position:absolute;${sms?'left':'right'}:calc(100% + 6px);bottom:3px;width:19px;height:19px;border-radius:50%;background:#ff3b30;color:#fff;font:700 13px/19px sans-serif;text-align:center;font-style:normal`;
+      x.textContent='!';b.appendChild(x);
+      if(sms){const y=document.createElement('div');y.style.cssText='position:absolute;right:0;top:calc(100% + 3px);white-space:nowrap;font:400 11px sans-serif;color:#ff3b30';y.textContent='전달되지 않음';b.appendChild(y);row.style.marginBottom='18px';}
+    }
+    if(rx){     // 반응은 말풍선 아래 모서리에 걸쳐요 (아이폰 메시지는 위쪽 모서리), 대화 가운데 쪽 모서리
+      const c=document.createElement('i');
+      c.style.cssText=`position:absolute;${R?'left':'right'}:${sms?-10:-8}px;${sms?'top:-13px':'bottom:-12px'};z-index:3;background:#fff;color:#111;border:1px solid rgba(0,0,0,.09);border-radius:12px;padding:1px 6px;font:normal 13px/1.4 sans-serif;box-shadow:0 1px 3px rgba(0,0,0,.18);transform:scale(${m._pop?1.3:1})`;
+      c.textContent=m.react;b.appendChild(c);
+      if(sms)row.style.marginTop='12px';else row.style.marginBottom='14px';
+    }
+  });
+}
+function sheetApply(root,st){
+  if(!st._sheet)return;
+  const scr=root.querySelector('.scr');if(!scr)return;
+  const d=document.createElement('div');
+  d.style.cssText='position:absolute;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.42);z-index:20;display:flex;align-items:center;justify-content:center';
+  d.innerHTML='<div style="width:250px;background:#fff;border-radius:14px;overflow:hidden;text-align:center;font-size:16px;color:#111"><div style="padding:16px 0;border-bottom:.5px solid #ddd">재전송</div><div style="padding:16px 0;color:#ff3b30">삭제</div></div>';
+  scr.appendChild(d);
+}
+function fxApply(root,st){
+  const f=st._fx;if(!f)return;
+  const t=root.querySelector('.dev')||root.querySelector('.scr');if(!t)return;
+  if(f.k==='zoom'){const e=1-Math.pow(1-f.q,3);t.style.transformOrigin=`50% ${f.y}%`;t.style.transform=`scale(${(1+.45*e).toFixed(3)})`;}
+  else{const a=Math.sin(f.q*Math.PI*7)*(1-f.q)*9;t.style.transform=`translate(${a.toFixed(1)}px,${(a*.35).toFixed(1)}px) rotate(${(a*.12).toFixed(2)}deg)`;}
+}
+function screenRecents(s){
+  const R=s.recents,n=R.items.length;
+  const ph='<svg width="12" height="12" viewBox="0 0 24 24" fill="#8e8e93" style="flex:none"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.100.4 2.300.6 3.600.6.600 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.600 21 3 13.400 3 4c0-.6.4-1 1-1h3.500c.6 0 1 .4 1 1 0 1.300.2 2.500.6 3.600.1.300 0 .7-.2 1z"/></svg>';
+  const rows=R.items.map((x,i)=>{
+    const m=x.kind==='missed',rp=(i===n-1&&s._rp!=null)?s._rp:1;
+    return`<div style="display:flex;padding-left:16px;opacity:${rp};transform:translateY(${((1-rp)*-12).toFixed(1)}px)"><div style="flex:1;min-width:0;display:flex;align-items:center;padding:9px 16px 9px 0;border-bottom:.5px solid #d1d1d6"><div style="flex:1;min-width:0"><div style="font-size:17px;font-weight:500;letter-spacing:-.3px;color:${m?'#ff3b30':'#000'}">${esc(x.name)}</div><div style="display:flex;align-items:center;gap:4px;font-size:14px;color:#8e8e93;margin-top:1px">${ph}${x.kind==='out'?'<span style="font-size:11px">↗</span>':''}휴대전화</div></div><div style="font-size:15px;color:#8e8e93;margin-right:12px">${esc(x.time)}</div><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.6v.4"/></svg></div></div>`;}).join('');
+  const seg='<div style="display:flex;width:140px;padding:2px;border-radius:9px;background:rgba(118,118,128,.12);font-size:13px;font-weight:600;text-align:center"><div style="flex:1;padding:5px 0;border-radius:7px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.14)">전체</div><div style="flex:1;padding:5px 0;color:#000">부재중</div></div>';
+  const ic=(d,f)=>`<svg width="25" height="25" viewBox="0 0 24 24" fill="${f?'currentColor':'none'}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+  const tabs=[['즐겨찾기',ic('<path d="M12 3.500l2.600 5.400 5.900.8-4.300 4.100 1.100 5.900L12 16.900 6.700 19.700l1.100-5.900L3.500 9.700l5.900-.8z"/>')],['최근 통화',ic('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.500 2"/>')],['연락처',ic('<circle cx="12" cy="12" r="9"/><circle cx="12" cy="10" r="3"/><path d="M6.500 18c1.200-2.400 3-3.500 5.500-3.500s4.300 1.100 5.500 3.500"/>')],['키패드',ic([5,12,19].map(y=>[5,12,19].map(x=>`<circle cx="${x}" cy="${y}" r="1.400" fill="currentColor"/>`).join('')).join(''))],['음성 사서함',ic('<circle cx="7" cy="12" r="3.500"/><circle cx="17" cy="12" r="3.500"/><path d="M7 15.500h10"/>')]];
+  const bar=`<div style="position:absolute;left:0;right:0;bottom:0;height:84px;padding:7px 4px 0;box-sizing:border-box;display:flex;background:rgba(249,249,249,.94);border-top:.5px solid rgba(0,0,0,.22)">${tabs.map(([l,i],k)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-weight:500;color:${k===1?'#0a84ff':'#8e8e93'}">${i}${l}</div>`).join('')}</div>`;
+  return{bg:'<div class="bgl" style="background:#fff"></div>',body:`<div style="padding:50px 16px 0"><div style="display:flex;align-items:center;justify-content:space-between;height:44px"><span style="color:#0a84ff;font-size:17px;width:44px">편집</span>${seg}<span style="width:44px"></span></div><div style="font-size:34px;font-weight:700;letter-spacing:.3px;margin:2px 0 8px;color:#000">${esc(R.title)}</div></div>${rows}${bar}`};
+}
+function E_recents(){
+  const L=S.recents.items,n=L.length;
+  return card('최근 통화',`${fld('제목',txt('recents.title','최근 통화'))}<div class="hint box">기록이 위에서부터 하나씩 나타나요. 부재중은 빨간 글씨로 보여요. 전화 걸기(거절) 화면 다음에 이어 붙이려면 저장 탭의 "여러 화면 이어붙이기"를 쓰세요.</div>
+    ${L.map((x,i)=>`<div class="item"><div class="item-h">${seg(`recents.items.${i}.kind`,[['missed','부재중'],['out','발신'],['in','수신']],'sm')}${mv('recents.items',i,n)}</div><div class="g2">${fld('이름',txt(`recents.items.${i}.name`,'이름'))}${fld('시간',txt(`recents.items.${i}.time`,'오후 3:24'))}</div></div>`).join('')}
+    ${n<12?`<button class="btn line" data-act="add" data-path="recents.items" data-tpl="call">＋ 기록 추가</button>`:''}`);
+}
 function stageHTML(s,opt={}){
+  s=msgFx(s);
   BOX=1+((((s.chat&&s.chat.bs)||100)/100)-1)*.4;   // 말풍선 변화의 40%만 주변에 반영
   const d=s.device, ratio=d.ratio||'phone', off=!!d.bgOff, [W,H]=DIMS[ratio]||DIMS.phone; SA=W/H;
   const sc=statusColor(s);
@@ -1271,9 +1359,9 @@ document.addEventListener('wheel',e=>{
   setZoom(p,(im.z||100)*(e.deltaY<0?1.08:1/1.08));
 },{passive:false});
 function imgField(p,label,adj=true,vk=''){
-  const im=g(p), has=im&&im.url, V=vk&&VID[vk];
+  const im=g(p), has=im&&im.url, isSt=vk&&vk.startsWith('story'), V=vk&&(VID[vk]||(isSt&&SVID[(S.story.slots[+vk.slice(5)]||{}).id]));
   return`<div class="imgf"><div class="imgf-top"><div class="th" style="${has?`background-image:url('${im.url}')`:''}">${has?'':'+'}</div><div class="imgf-tx"><b>${label}</b><span>${V?`영상 · ${esc(V.name)} · ${V.dur.toFixed(1)}초`:has?'적용됨 · 위치 조절 가능':vk?'사진 · 영상 (JPG · PNG · MP4 · MOV · WEBM)':'JPG · PNG · WEBP'}</span></div>
-  <label class="btn sm ghost upl">${has?'변경':'업로드'}<input type="file" accept="${vk?'image/*,video/*':'image/*'}" data-img="${p}"></label>${has?`<button class="ib x" data-act="clearImg" data-path="${p}" title="삭제">✕</button>`:''}</div>
+  <label class="btn sm ghost upl">${has?'변경':'업로드'}<input type="file" accept="${vk?'image/*,video/*':'image/*'}" data-img="${p}"${isSt?' multiple':''}></label>${has?`<button class="ib x" data-act="clearImg" data-path="${p}" title="삭제">✕</button>`:''}</div>
   ${has&&adj?navHTML(p):''}</div>`;
 }
 const imgMini=p=>{const im=g(p);return im&&im.url
@@ -1300,7 +1388,9 @@ function E_msgs(){
   return card('말풍선 크기',`${rng('chat.bs',60,160,5,'크기','%')}<div class="hint" style="margin-top:8px">모든 채팅 화면(카톡·메시지·인스타·LINE·텔레그램)의 말풍선 글자와 여백이 함께 커지고 작아져요. 프로필 · 이름 · 시간 · 사진과 하단 입력창도 함께 따라가요.</div>`)+quickCard()+card('메시지',`<div class="hint box">카카오톡 · 메시지 · 인스타 · LINE · 텔레그램 화면이 같은 대화를 사용해요. 같은 사람이 연달아 보내면 프로필이 자동으로 묶여요.</div>
     ${ms.map((m,i)=>`<div class="item msg ${m.side}"><div class="item-h">${seg(`chat.messages.${i}.side`,[['left','상대'],['right','나']],'sm')}<input class="in sm" style="width:108px" data-bind="chat.messages.${i}.time" value="${esc(m.time)}" placeholder="시간">${mv('chat.messages',i,ms.length)}</div>
       ${area(`chat.messages.${i}.text`,'메시지 내용')}
-      <div class="item-f">${imgMini(`chat.messages.${i}.img`)}<div style="width:120px">${tog(`chat.messages.${i}.unread`,'안읽음 1')}</div></div></div>`).join('')}
+      <div class="item-f">${imgMini(`chat.messages.${i}.img`)}<div style="width:120px">${tog(`chat.messages.${i}.unread`,'안읽음 1')}</div></div>
+      ${fld('메시지 상태 (영상 · 미리보기에서 변하는 모습이 나와요)',seg(`chat.messages.${i}.state`,[['none','기본'],['deleted','삭제됨'],['failed','전송 실패']],'sm'))}
+      ${fld('이모티콘 반응',seg(`chat.messages.${i}.react`,[['','없음'],['❤️','❤️'],['👍','👍'],['😂','😂'],['😢','😢']],'sm'))}</div>`).join('')}
     <div class="g2"><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="left">＋ 상대방</button><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="right">＋ 나</button></div>
     <div class="sep"></div>${tog('chat.typing','입력 중… 말풍선 표시 (정지 화면 · PNG용, 영상 · GIF엔 안 나와요)')}${tog('exp.typing','영상 · GIF: 상대 메시지 전에 "입력 중…"')}${tog('exp.typingMe','영상 · GIF: 내 메시지 전에도 "입력 중…"')}${tog('exp.typeIn','영상 · GIF: 내 메시지를 입력창에 타이핑 (타이핑하는 동안 "입력 중…" 말풍선도 같이 나와요)')}${tog('chat.autoRead','상대가 읽으면 카톡 "1" 자동 사라짐')}`);
 }
@@ -1348,7 +1438,7 @@ function E_device(){
     ${tog('status.showPct','배터리 % 숫자')}${tog('status.charging','충전 중')}`,randBtn('status'));
 }
 function E_export(){
-  const e=S.exp, gifDesc={lock:'알림이 하나씩 도착',chat:'메시지가 하나씩 도착',sms:'메시지가 하나씩 도착',face:'통화 시간이 1초씩 증가',call:'수락 버튼이 울림',gallery:'사진이 하나씩 추가',tl:'트윗이 아래에서 올라오며 하나씩 등장',news:'기사가 위에서 아래로 스크롤',dial:'점이 움직이며 연결 중',story:'상단 진행 막대가 차올라요'}[S.screen]||'메시지가 하나씩 도착';
+  const e=S.exp, gifDesc={lock:'알림이 하나씩 도착',chat:'메시지가 하나씩 도착',sms:'메시지가 하나씩 도착',face:'통화 시간이 1초씩 증가',call:'수락 버튼이 울림',gallery:'사진이 하나씩 추가',tl:'트윗이 아래에서 올라오며 하나씩 등장',news:'기사가 위에서 아래로 스크롤',dial:({answer:'연결 중 → 상대가 받아 통화 시간이 올라가요',reject:'연결 중 → 상대가 거절해 통화가 끊겨요'})[S.dial.result]||'점이 움직이며 연결 중',recents:'통화 기록이 하나씩 쌓여요',story:'상단 진행 막대가 차올라요'}[S.screen]||'메시지가 하나씩 도착';
   return fcard('png','이미지 (PNG)',`${fld('해상도',seg('exp.scale',[[2,'2x'],[3,'3x'],[4,'4x (최고화질)']]))}
     ${fld('배경',seg('exp.bg',[['transparent','투명'],['#ffffff','흰색'],['#f3f3f5','회색'],['#000000','검정']]))}
     ${tog('exp.shadow','기기 그림자')}<div class="sep"></div>
@@ -1388,6 +1478,7 @@ const wantSfx=(s,side)=>s.exp.sfx==='all'||(s.exp.sfx==='me'&&side==='right');
 
 function applySlide(root,st){
   if(!st)return;
+  msgDeco(root,st);fxApply(root,st);sheetApply(root,st);
   const ti=root.querySelector('.tl-inner');
   if(ti){
     if(st.tl&&st.tl._sc){
@@ -1429,13 +1520,55 @@ function chatPlan(s){
       for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');mk(c=>{take(c,k-1);c._draft=txt;c._typing='right';},j===st?tot/st+260:tot/st,`d${k}_${j}`);}}
     else if(s.exp.typingMe&&m.side==='right'&&firstOfSide)mk(c=>{take(c,k-1);c._typing='right';},gap*.7,`tr${k}`);
     let sound=m.side;
-    if(s.exp.smooth)for(const t of [.3,.62,.88]){mk(c=>{take(c,k);c._slide=t;},45,`s${k}_${t}`,sound);sound=undefined;}
-    mk(c=>take(c,k),k===n?Math.max(1600,gap*1.6):gap*.7,`k${k}`,sound);
+    const stt=m.state,rx=!!m.react,pre=stt==='deleted'||stt==='failed'||rx,endD=k===n?Math.max(1600,gap*1.6):gap*.7;
+    const cur=(c,ex)=>{take(c,k);c.chat.messages[k-1]={...c.chat.messages[k-1],...ex};};
+    if(s.exp.smooth)for(const t of [.3,.62,.88]){mk(c=>{take(c,k);c._slide=t;if(pre)c.chat.messages[k-1]={...c.chat.messages[k-1],_keep:1,_nofail:1,_noreact:1};},45,`s${k}_${t}`,sound);sound=undefined;}
+    if(pre){
+      mk(c=>cur(c,{_keep:1,_nofail:1,_noreact:1}),gap*.8,`k${k}`,sound);
+      if(rx&&stt!=='deleted'){mk(c=>cur(c,{_nofail:1,_pop:1}),90,`x${k}a`);mk(c=>cur(c,{_nofail:1}),stt==='failed'?gap*.7:endD,`x${k}b`);}
+      if(stt==='deleted')mk(c=>cur(c,{_noreact:1}),endD,`e${k}`);
+      if(stt==='failed'){mk(c=>cur(c,{}),gap*.7,`f${k}`);mk(c=>{cur(c,{});c._sheet=1;},gap*1.1,`fs${k}`);mk(c=>cur(c,{}),endD,`fe${k}`);}
+    }else mk(c=>take(c,k),endD,`k${k}`,sound);
   }
   return F;
 }
 /* ── 영상통화용 영상 · 전화 애니메이션 ── */
-const VID={other:null,me:null};
+const VID={other:null,me:null},SVID={};
+const STORY_MAX=10;
+async function setStorySlots(i,files){
+  const L=S.story.slots;let j=i,first=i;
+  for(let k=0;k<files.length;k++){
+    if(k>0){
+      j++;
+      if(j>=L.length||L[j].img){
+        if(L.length>=STORY_MAX){toast('스토리는 최대 '+STORY_MAX+'칸까지 넣을 수 있어요');break;}
+        L.splice(j,0,{id:uid(),img:null});
+      }
+    }
+    await setStorySlot(j,files[k]);
+  }
+  S.story.cur=first+1;
+}
+async function fillStoryBulk(files){
+  const L=S.story.slots;let first=-1;
+  for(const f of files){
+    let j=L.findIndex(x=>!x.img);
+    if(j<0){
+      if(L.length>=STORY_MAX){toast('스토리는 최대 '+STORY_MAX+'칸까지 넣을 수 있어요');break;}
+      L.push({id:uid(),img:null});j=L.length-1;
+    }
+    if(first<0)first=j;
+    await setStorySlot(j,f);
+  }
+  if(first>=0)S.story.cur=first+1;
+}
+async function setStorySlot(i,file){
+  const sl=S.story.slots[i];if(!sl)return;
+  if(file.type.startsWith('video/')){
+    try{busy('영상 불러오는 중…',.3);const v=await loadVideoFile(file);SVID[sl.id]=v;sl.img={url:vidToDataURL(v.el),x:50,y:50,z:100,ar:v.w/v.h,vid:true};toast('영상 칸을 넣었어요 — ▶ 미리보기나 영상 저장에서 재생돼요');}
+    catch(err){console.error(err);toast('영상을 열 수 없어요');}finally{busyOff();}
+  }else{SVID[sl.id]=null;sl.img=await loadImg(file);}
+}
 function loadVideoFile(file){
   return new Promise((res,rej)=>{
     const url=URL.createObjectURL(file),v=document.createElement('video');
@@ -1476,12 +1609,29 @@ function callPlan(s){
   for(let i=0;i<n;i++)F.push({s:{...s,_ct:i/fps},delay:1000/fps,key:'c'+i});
   return F;
 }
-const stateOf=async f=>f.vt!=null?await faceState(f):f.s;
+async function storyState(f){
+  const s=f.s,c={...s,story:{...s.story,slots:s.story.slots.slice()}},sl=c.story.slots[f.sv.i],vo=sl&&SVID[sl.id];
+  if(vo&&sl.img)c.story.slots[f.sv.i]={...sl,img:{...sl.img,url:await frameUrl(vo,f.sv.t%(vo.dur||1))}};
+  return c;
+}
+const stateOf=async f=>f.sv?await storyState(f):f.vt!=null?await faceState(f):f.s;
+function planFor(s){
+  if(CHATLIKE.includes(s.screen))return chatPlan(s);
+  if(s.screen==='face'&&(VID.other||VID.me))return facePlan(s);
+  if(s.screen==='call')return callPlan(s);
+  return buildFrames(s).map((f,i)=>({...f,key:'b'+i,snd:(s.screen==='lock'&&i>0)?'left':undefined}));
+}
+function fxTail(p,s){
+  const fx=s.exp.fx,last=p[p.length-1];
+  if(!fx||fx==='none'||!last||!last.s)return p;
+  const n=fx==='zoom'?9:12,out=p.slice();
+  for(let i=1;i<=n;i++)out.push({...last,s:{...last.s,_fx:{k:fx,q:i/n,y:s.exp.fxY}},delay:i===n?900:70,key:last.key+'_fx'+i,snd:undefined});
+  return out;
+}
 function videoPlan(){
-  if(CHATLIKE.includes(S.screen))return chatPlan(S);
-  if(S.screen==='face'&&(VID.other||VID.me))return facePlan(S);
-  if(S.screen==='call')return callPlan(S);
-  return buildFrames(S).map((f,i)=>({...f,key:'b'+i,snd:(S.screen==='lock'&&i>0)?'left':undefined}));
+  const sq=S.exp.vidSeq||[];
+  if(S.exp.vidMode==='seq'&&sq.length)return sq.flatMap((k,i)=>fxTail(planFor({...S,screen:k}),S).map(f=>({...f,key:'q'+i+'_'+f.key})));
+  return fxTail(planFor(S),S);
 }
 let playing=false,blankPreview=false;
 document.addEventListener('click',e=>{if(blankPreview&&e.target.closest('#view')){blankPreview=false;renderPreview();}});
@@ -1670,6 +1820,9 @@ function E_video(){
     ${fld('저장 형식',seg('exp.vidFmt',[['mp4','MP4'],['webm','WebM'],['png','PNG 시퀀스 (zip)']]))}
     <div class="hint" style="margin:-4px 0 10px">${S.exp.vidFmt==='png'?'프레임마다 PNG를 30fps로 묶어 zip으로 저장해요. 배경을 \'투명\'으로 두면 진짜 투명이에요 (소리는 안 들어가요). 프리미어 · 애프터이펙트 · 다빈치에서 \'이미지 시퀀스\'로 불러오세요.':S.exp.vidBg==='transparent'?(S.exp.vidFmt==='webm'?'<b>WebM(VP9 알파)</b>로 투명하게 저장돼요. 재생·편집 앱이 알파를 읽어야 투명으로 보여요.':'MP4는 투명을 저장할 수 없어서 <b>크로마키 색 배경</b>으로 저장해요. 편집 앱의 크로마키(색상 키)로 그 색을 지우세요. 진짜 투명은 PNG 시퀀스를 쓰세요.'):'투명이 필요하면 배경색을 \'투명\'으로 고르세요.'}</div>
     
+    ${fld('화면 이어붙이기',seg('exp.vidMode',[['single','지금 화면만'],['seq','여러 화면 이어붙이기']]))}
+    ${S.exp.vidMode==='seq'?`<div class="fld"><span class="lb">순서 — 누른 순서대로 이어져요</span><div class="gseq">${SCREENS.map(([k,l])=>{const n=(S.exp.vidSeq||[]).indexOf(k);return`<button type="button" class="${n>=0?'on':''}" data-act="vidToggle" data-val="${k}"><i>${n>=0?n+1:''}</i>${l}</button>`;}).join('')}</div></div>`:''}
+    ${fld('강조 효과 (마지막 장면에서)',seg('exp.fx',[['none','없음'],['zoom','줌인'],['shake','흔들림']]))}${S.exp.fx==='zoom'?rng('exp.fxY',0,100,5,'확대 중심 세로 위치','%'):''}
     ${S.screen==='face'?fld('영상통화 프레임',seg('exp.faceFps',[[8,'8fps'],[10,'10fps'],[15,'15fps']]))+tog('exp.vidAudio','넣은 영상의 소리 포함'):''}${S.screen==='call'?fld('전화 애니메이션 길이',seg('exp.callSec',[[3,'3초'],[5,'5초'],[8,'8초']])):''}${tog('exp.smooth','부드러운 스크롤 애니메이션')}${tog('exp.typing','상대 메시지 전에 "입력 중…" 넣기')}${tog('exp.typingMe','내 메시지 전에도 "입력 중…" 넣기')}
     ${fld('효과음',seg('exp.sfx',[['off','끄기'],['me','내 메시지'],['all','모든 메시지']]))}
     ${rng('exp.sfxVol',0,100,5,'볼륨','%')}${rng('exp.sfxOff',-300,300,10,'효과음 싱크 보정','ms')}<div class="sep"></div>
@@ -1708,16 +1861,27 @@ function E_news(){
     +`<div class="g2"><button class="btn line" data-act="add" data-path="news.blocks" data-tpl="ntext">＋ 문단</button><button class="btn line" data-act="add" data-path="news.blocks" data-tpl="nphoto">＋ 사진</button></div>`);
 }
 function E_dial(){
-  return card('전화 연결 중',`<div class="g2">${fld('이름',txt('dial.name','이름'))}${fld('상태 문구',txt('dial.sub','전화 거는 중'))}</div>
-    ${imgField('dial.photo','배경 사진')}<div class="hint" style="margin-top:8px">GIF · 영상 · ▶ 미리보기에서는 상태 문구 뒤의 점(…)이 하나씩 늘어나며 연결 중 느낌이 나요.</div>`);
+  const D=S.dial,res=D.result||'none';
+  return card('전화 걸기',`<div class="g2">${fld('이름',txt('dial.name','이름'))}${fld('상태 문구',txt('dial.sub','전화 거는 중'))}</div>
+    ${imgField('dial.photo','배경 사진')}<div class="hint" style="margin-top:8px">${res==='none'?'GIF · 영상 · ▶ 미리보기에서는 상태 문구 뒤의 점(…)이 하나씩 늘어나며 연결 중 느낌이 나요.':'GIF · 영상 · ▶ 미리보기에서 거는 중 장면 뒤로 결과 장면이 이어져요.'}</div>`)
+  +card('전화 결과',`${fld('상대 반응',seg('dial.result',[['none','계속 거는 중'],['answer','받음'],['reject','거절']]))}
+    ${res==='none'?'<div class="hint">계속 거는 중을 고르면 연결음이 울리는 모습만 반복돼요.</div>':`
+    ${fld('연결되기 전 울리는 시간',seg('dial.ringSec',[[2,'2초'],[3,'3초'],[5,'5초'],[8,'8초']]))}
+    ${res==='reject'?fld('끊긴 뒤 문구',txt('dial.endText','통화 종료')):''}
+    ${fld('화면에서 미리 볼 장면',seg('dial.stage',[['ring','거는 중'],['end',res==='answer'?'받은 뒤':'거절된 뒤']]))}
+    <div class="hint">${res==='answer'?'상대가 받으면 상태 문구가 통화 시간(00:00)으로 바뀌고 버튼이 켜져요. 통화 시간은 4초까지 올라가요.':'상대가 거절하면 문구가 바뀌고 버튼이 흐려지다가 화면이 꺼져요.'} PNG 저장은 위에서 고른 장면으로 저장돼요.</div>`}`);
 }
 function E_story(){
-  return card('인스타 스토리',`${imgField('story.img','스토리 사진')}
-    <div class="g2">${fld('아이디',txt('story.name','username'))}${fld('올린 시간',txt('story.time','3시간'))}</div>
-    ${imgField('story.avatar','프로필 사진',false)}
-    ${fld('입력창 문구',txt('story.hint','메시지 보내기...'))}
-    ${rng('story.bars',1,10,1,'스토리 수','개')}${rng('story.cur',1,10,1,'현재 칸','번')}${rng('story.prog',0,100,5,'진행','%')}
-    <div class="hint" style="margin-top:4px">GIF · 영상 · ▶ 미리보기에서는 현재 칸의 진행 막대가 처음부터 끝까지 차올라요.</div>`)
+  const T=S.story,sl=T.slots,n=sl.length;
+  return card('인스타 스토리',`<div class="g2">${fld('아이디',txt('story.name','username'))}${fld('올린 시간',txt('story.time','3시간'))}</div>
+    ${imgField('story.avatar','프로필 사진',false)}${fld('입력창 문구',txt('story.hint','메시지 보내기...'))}`)
+  +card('스토리 칸',`<div class="hint box">칸마다 사진이나 영상을 넣을 수 있어요 (JPG · PNG · MP4 · MOV · WEBM). 위쪽 진행 막대 개수는 칸 수와 같아요. 파일을 <b>여러 개 한 번에</b> 고르면 빈 칸부터 순서대로 채워지고, 모자라면 칸이 자동으로 늘어나요 (최대 ${STORY_MAX}칸).</div>
+    <label class="btn line upl" style="display:flex;justify-content:center;margin-bottom:12px">＋ 사진 · 영상 여러 개 한 번에 넣기<input type="file" accept="image/*,video/*" multiple data-storymulti="1"></label>
+    ${sl.map((x,i)=>`<div class="item"><div class="item-h"><span class="badge">칸 ${i+1}</span>${mv('story.slots',i,n)}</div>${imgField(`story.slots.${i}.img`,'사진 · 영상',true,'story'+i)}</div>`).join('')}
+    ${n<STORY_MAX?`<button class="btn line" data-act="add" data-path="story.slots" data-tpl="slot">＋ 빈 칸 추가</button>`:''}
+    <div class="sep"></div>${rng('story.cur',1,Math.max(1,n),1,'미리 볼 칸','번')}${rng('story.prog',0,100,5,'진행','%')}
+    ${fld('사진 한 칸 길이',seg('story.imgSec',[[2,'2초'],[3,'3초'],[5,'5초']]))}
+    <div class="hint" style="margin-top:4px">GIF · 영상 · ▶ 미리보기에서는 1번 칸부터 순서대로 진행 막대가 차고 다음 칸으로 넘어가요. 영상 칸은 영상 길이만큼(최대 15초) 재생돼요. 영상 소리는 들어가지 않아요.</div>`)
   +card('사진 위 글자',`${fld('내용',area('story.text','비우면 숨김'))}${fld('스타일',seg('story.textStyle',[['plain','기본'],['box','흰 박스']]))}${rng('story.textY',10,90,1,'세로 위치','%')}`);
 }
 function E_chatlike(t){
@@ -1756,8 +1920,8 @@ function renderEditor(){
   $('#tabs').innerHTML=[['screen','화면'],['device','화면 · 기기'],['export','저장']].map(([k,l])=>`<button class="${ui.tab===k?'on':''}" data-act="tab" data-val="${k}">${l}</button>`).join('');
   let h='';
   if(ui.tab==='screen'){
-    h=`<div class="chips">${SCREENS.map(([k,l])=>`<button class="chip ${S.screen===k?'on':''}" data-act="screen" data-val="${k}">${UI[k]}${l}</button>`).join('')}</div>`
-      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램'),tw:E_tw,tl:E_tl,news:E_news,dial:E_dial,story:E_story})[S.screen]();
+    h=`<div class="sgrps">${SCREEN_GROUPS.map(([gl,ks])=>`<div class="sgrp"><div class="sgl">${gl}</div><div class="sgb">${ks.map(k=>`<button class="pkbtn ${S.screen===k?'on':''}" data-act="screen" data-val="${k}">${UI[k]}${screenLabel(k)}</button>`).join('')}</div></div>`).join('')}</div>`
+      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램'),tw:E_tw,tl:E_tl,news:E_news,dial:E_dial,story:E_story,recents:E_recents})[S.screen]();
   }else if(ui.tab==='device')h=E_device();
   else if(ui.tab==='ooc')h=E_ooc();
   else h=E_export();
@@ -1780,11 +1944,13 @@ document.addEventListener('input',e=>{
   commit();
 });
 const TPL={
+  slot:()=>({id:uid(),img:null}),
+  call:()=>({id:uid(),name:'이름',kind:'missed',time:'오후 3:24'}),
   noti:()=>({id:uid(),app:'kakao',title:'',body:'',time:'지금'}),
   ntext:()=>({id:uid(),kind:'text',text:''}),nphoto:()=>({id:uid(),kind:'photo',img:null,cap:''}),
   tweet:()=>({id:uid(),name:'이름',handle:'@username',ver:false,text:'',time:'1시간',replies:'',rts:'',likes:'',views:'',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false}),
-  left:()=>({id:uid(),side:'left',text:'',time:S.chat.messages.at(-1)?.time||'오후 12:00',unread:false,img:null}),
-  right:()=>({id:uid(),side:'right',text:'',time:S.chat.messages.at(-1)?.time||'오후 12:00',unread:false,img:null}),
+  left:()=>({id:uid(),side:'left',text:'',time:S.chat.messages.at(-1)?.time||'오후 12:00',unread:false,img:null,state:'none',react:''}),
+  right:()=>({id:uid(),side:'right',text:'',time:S.chat.messages.at(-1)?.time||'오후 12:00',unread:false,img:null,state:'none',react:''}),
 };
 function randDate(){const y=new Date().getFullYear();return new Date(y,rnd(0,11),rnd(1,28));}
 const RAND={
@@ -1802,8 +1968,9 @@ const ACT={
     requestAnimationFrame(()=>{const items=$('#pbody').querySelectorAll('.item');const last=items[items.length-1];if(last){last.scrollIntoView({block:'center',behavior:'smooth'});last.querySelector('textarea,input.in')?.focus({preventScroll:true});}});},
   del:el=>{const a=g(el.dataset.path);a.splice(+el.dataset.i,1);if(el.dataset.path==='gallery.items')ui.gsel=-1;renderEditor();commit();},
   move:el=>{const a=g(el.dataset.path),i=+el.dataset.i,j=i+ +el.dataset.d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];if(el.dataset.path==='gallery.items')ui.gsel=j;renderEditor();commit();},
-  clearImg:el=>{sp(el.dataset.path,null);const k=el.dataset.path.replace('face.','');if(VID[k])VID[k]=null;renderEditor();commit();},
+  clearImg:el=>{sp(el.dataset.path,null);const k=el.dataset.path.replace('face.','');if(VID[k])VID[k]=null;{const m=el.dataset.path.match(/^story\.slots\.(\d+)\.img$/);if(m){const q=S.story.slots[+m[1]];if(q)SVID[q.id]=null;}}renderEditor();commit();},
   clearVid:el=>{const k=el.dataset.val;VID[k]=null;if(S.face[k])S.face[k].vid=false;renderEditor();commit();},
+  vidToggle:el=>{const a=S.exp.vidSeq,k=el.dataset.val,i=a.indexOf(k);if(i>=0)a.splice(i,1);else a.push(k);renderEditor();commit();},
   gifToggle:el=>{const a=S.exp.gifScreens,k=el.dataset.val,i=a.indexOf(k);if(i>=0)a.splice(i,1);else a.push(k);renderEditor();commit();},
   zoom:el=>{const im=g(el.dataset.path);if(im)setZoom(el.dataset.path,(im.z||100)+ +el.dataset.d);},
   zoomFit:el=>{const im=g(el.dataset.path);if(!im)return;im.x=50;im.y=50;setZoom(el.dataset.path,100);},
@@ -1837,9 +2004,12 @@ document.addEventListener('change',async e=>{
   try{
     if(el.dataset.img!==undefined){
       const f=el.files[0],fv=/^face\.(other|me)$/.test(el.dataset.img),vk=el.dataset.img.slice(5);
-      if(fv&&f.type.startsWith('video/'))await setVideo(vk,f);
+      const sm=el.dataset.img.match(/^story\.slots\.(\d+)\.img$/);
+      if(sm)await setStorySlots(+sm[1],[...el.files]);
+      else if(fv&&f.type.startsWith('video/'))await setVideo(vk,f);
       else{if(fv)VID[vk]=null;sp(el.dataset.img,await loadImg(f));}
     }
+    else if(el.dataset.storymulti!==undefined){await fillStoryBulk([...el.files]);}
     else if(el.dataset.gallery!==undefined){for(const f of el.files)S.gallery.items.push({id:uid(),img:await loadImg(f,900)});}
     else if(el.dataset.load!==undefined){const t=await el.files[0].text();S=merge(defaults(),JSON.parse(t));ui.gsel=-1;if(!(S.exp.gifScale>=1.5))S.exp.gifScale=2;if(![0.75,1,1.5,2.5].includes(S.exp.gifSpeed))S.exp.gifSpeed=1.5;toast('프로젝트를 불러왔어요');}
     renderEditor();commit();
@@ -1926,8 +2096,18 @@ function buildFrames(s){
         push(c=>{cut(c);},k===n?hold:D);
       }break;}
     case'news':{const NS=48;push(c=>{c.news._sc=0;},700/sp);for(let i=1;i<=NS;i++){const e=(1-Math.cos(Math.PI*i/NS))/2;push(c=>{c.news._sc=e;},i===NS?hold:110/sp);}break;}
-    case'dial':{for(let i=0;i<9;i++)push(c=>{c._ct=i*.5;},450/sp);break;}
-    case'story':{const NS=16;for(let i=0;i<=NS;i++)push(c=>{c.story._p=i/NS;},i===NS?hold*.6:260/sp);break;}
+    case'dial':{
+      const res=s.dial.result||'none';
+      if(res==='none'){for(let i=0;i<9;i++)push(c=>{c._ct=i*.5;},450/sp);break;}
+      const rs=Math.max(1,+s.dial.ringSec||3),tail=res==='answer'?4:1.9,fps=10,n=Math.round((rs+tail)*fps);
+      for(let i=0;i<n;i++)push(c=>{c._ct=i/fps;},1000/fps);      // 통화 시간이 실제 초와 맞도록 배속 설정은 적용하지 않아요
+      F[F.length-1].delay=res==='answer'?900:500;break;}
+    case'story':{const sl=s.story.slots||[],ip=+s.story.imgSec||3;
+      if(!sl.length){push(()=>{},hold);break;}
+      sl.forEach((x,i)=>{const vo=SVID[x.id],dur=vo?Math.min(15,vo.dur||3):ip,fps=vo?8:4,n=Math.max(2,Math.round(dur*fps));
+        for(let j=1;j<=n;j++){push(c=>{c.story._cur=i;c.story._p=j/n;},(j===n&&i===sl.length-1)?hold*.6:(vo?1000/fps:1000/fps/sp));F[F.length-1].sv={i,t:(j-1)/fps};}
+      });break;}
+    case'recents':{const n=s.recents.items.length;push(c=>{c.recents.items=[];},D*.8);for(let k=1;k<=n;k++){for(const t of [.35,.7])push(c=>{c.recents.items=c.recents.items.slice(0,k);c._rp=t;},55/sp);push(c=>{c.recents.items=c.recents.items.slice(0,k);},k===n?hold:D*.55);}break;}
     case'gallery':{const n=Math.min(s.gallery.items.length,40);for(let k=0;k<=n;k++)push(c=>{c.gallery.items=c.gallery.items.slice(0,k);},k===n?hold:D*.6);break;}
   }
   return F;
@@ -2018,7 +2198,7 @@ function gifPlan(){
 async function exportGIF(){
   const {frames,keys,name}=gifPlan(),n=frames.length,sc=S.exp.gifScale,bg=bgVal(S.exp.gifBg);
   try{
-    const grab=async i=>{const c=await capture(frames[i].s,sc,bg);return{w:c.width,h:c.height,data:c.getContext('2d').getImageData(0,0,c.width,c.height).data};};
+    const grab=async i=>{const c=await capture(await stateOf(frames[i]),sc,bg);return{w:c.width,h:c.height,data:c.getContext('2d').getImageData(0,0,c.width,c.height).data};};
     const cache=new Map();
     for(let j=0;j<keys.length;j++){busy(`색상 분석 중… ${j+1}/${keys.length}`,.02+.08*(j/keys.length));cache.set(keys[j],await grab(keys[j]));}
     const pal=buildPalette([...cache.values()].map(f=>f.data),255);
