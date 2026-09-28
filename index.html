@@ -611,6 +611,14 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .scr.noBottom .tl-in,.scr.noBottom .tl-fab{display:none!important}
 .scr.bgoff .tl-head,.scr.bgoff .tl-in,.scr.bgoff .tl-fab{display:none!important}
 .scr.bgoff .tl-list{background:transparent!important}
+.tl-im{display:grid;gap:2px;background:var(--xb)}
+.tl-ci{position:relative;overflow:hidden;min-height:0;min-width:0}
+.tl-im.n2{grid-template-columns:1fr 1fr}
+.tl-im.n3,.tl-im.n4{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+.tl-im.n3 .tl-ci:first-child{grid-row:1/3}
+.sb.flat{height:30px;padding:0 18px;font-size:13.5px;justify-content:space-between}
+.sb.flat .sb-l{width:auto;text-align:left}
+.sb.flat .sb-r{width:auto;justify-content:flex-end;gap:5px}
 </style>
 </head>
 <body>
@@ -737,14 +745,18 @@ function defaults(){
       messages:mkMsgs(SAMPLE,kt)},
     sms:{service:'imessage',dateLine:`오늘 ${kt}`,read:'읽음'},
     tw:{mode:'light'},
-    tl:{mode:'light',tab:0,fab:true,me:null,tweets:[
-      {id:uid(),name:'이름',handle:'@username',ver:true,text:'오늘 날씨 진짜 좋다 #일상',time:'2시간',replies:'128',rts:'1,024',likes:'1.2만',views:'32만',av:null,img:null},
-      {id:uid(),name:'이름',handle:'@username',ver:false,text:'다들 점심 뭐 먹었어?',time:'5시간',replies:'34',rts:'12',likes:'890',views:'1.4만',av:null,img:null},
-      {id:uid(),name:'이름',handle:'@username',ver:false,text:'월요일은 언제나 힘들어 ㅠㅠ',time:'1일',replies:'9',rts:'3',likes:'241',views:'5,210',av:null,img:null}]},
+    tl:{mode:'light',tab:0,fab:true,me:null,tweetsF:[
+      {id:uid(),name:'팔로우 중인 계정',handle:'@following',ver:false,text:'팔로잉 탭에 뜨는 트윗이에요 @username',time:'10분',replies:'4',rts:'2',likes:'57',views:'1,204',av:null,imgs:[null,null,null,null],priv:true,liked:false,rted:false},
+      {id:uid(),name:'친구',handle:'@friend',ver:false,text:'오늘 모임 다들 올 거지?',time:'34분',replies:'12',rts:'',likes:'98',views:'2,310',av:null,imgs:[null,null,null,null],priv:false,liked:true,rted:false},
+      {id:uid(),name:'뉴스',handle:'@news',ver:true,text:'속보: 오늘 오후부터 전국에 비가 내리겠습니다 #날씨',time:'1시간',replies:'240',rts:'1.8천',likes:'4.2천',views:'21만',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false}],
+    tweets:[
+      {id:uid(),name:'이름',handle:'@username',ver:true,text:'오늘 날씨 진짜 좋다 #일상',time:'2시간',replies:'128',rts:'1,024',likes:'1.2만',views:'32만',av:null,imgs:[null,null,null,null],priv:false,liked:true,rted:true},
+      {id:uid(),name:'이름',handle:'@username',ver:false,text:'다들 점심 뭐 먹었어?',time:'5시간',replies:'34',rts:'12',likes:'890',views:'1.4만',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false},
+      {id:uid(),name:'이름',handle:'@username',ver:false,text:'월요일은 언제나 힘들어 ㅠㅠ',time:'1일',replies:'9',rts:'3',likes:'241',views:'5,210',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false}]},
     face:{other:null,me:null,name:'이름',status:'00:00',pip:true},
     call:{name:'이름',sub:'휴대전화',photo:null},
     gallery:{title:'최근 항목',cols:3,items:[]},
-    exp:{scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',gifScreens:['lock','chat','sms'],gifAnim:true},
+    exp:{scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',gifScreens:['lock','chat','sms'],gifAnim:true,tlPress:true},
   };
 }
 function merge(base,src){
@@ -785,7 +797,7 @@ function bgImg(im,ca=1){
 }
 function aspectOf(p,im){
   if(/^(lock\.wall|face\.other|call\.photo|chat\.bgImg)$/.test(p))return SA;
-  if(/^tl\.tweets\.\d+\.img$/.test(p))return 16/9;
+  {const m=p.match(/^tl\.(?:tweets|tweetsF)\.(\d+)\.imgs\.(\d+)$/);if(m){const L=(S.tl[p.split('.')[1]][+m[1]].imgs||[]),n=L.filter(x=>x&&x.url).length,r=L.slice(0,+m[2]).filter(x=>x&&x.url).length;return (n===2||(n===3&&r===0))?8/9:16/9;}}
   if(p==='face.me')return 104/156;
   if(/^chat\.messages\.\d+\.img$/.test(p)){const a=im?.ar||1;return S.screen==='sms'?200/Math.min(280,Math.round(200/a)):190/Math.min(260,Math.round(190/a));}
   return 1;
@@ -821,7 +833,7 @@ function homeColor(s){
   }
 }
 function statusHTML(s,c){
-  const st=s.status,m=s.device.model;
+  const st=s.status,m=(s.device.ratio&&s.device.ratio!=='phone')?'flat':s.device.model;
   const dim=c==='#fff'?'rgba(175,175,182,.75)':'rgba(0,0,0,.32)';
   if(!st.show)return`<div class="sb ${m}"></div>`;
   const bars=[4,6,8.5,11].map((h,i)=>`<i style="height:${h}px;background:${i<st.signal?c:dim}"></i>`).join('');
@@ -1021,28 +1033,34 @@ function screenTw(s){
   return{bg,body};
 }
 function screenTl(s){
-  const T=s.tl,dk=T.mode==='dark',nT=T.tweets.length;
+  const T=s.tl,dk=T.mode==='dark',TW=T.tab?(T.tweetsF||[]):T.tweets,nT=TW.length;
   const V=dk?'--xb:#000;--xl:#2f3336;--xt:#e7e9ea;--xs:#71767b':'--xb:#fff;--xl:#eff3f4;--xt:#0f1419;--xs:#536471';
-  const ic=(d,z=17,w=1.8)=>`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+  const ic=(d,z=17,w=1.8,f='none')=>`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="${f}" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
   const P={rep:'<path d="M12 4C7 4 3 7.2 3 11.2c0 2.5 1.6 4.7 4 6l-.8 3 3.5-2c.8.2 1.5.2 2.3.2 5 0 9-3.2 9-7.2S17 4 12 4z"/>',
     rt:'<path d="M4 11V9a3 3 0 0 1 3-3h11M15 3l3 3-3 3M20 13v2a3 3 0 0 1-3 3H6M9 21l-3-3 3-3"/>',
     like:'<path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/>',
     view:'<path d="M5 20V12M11 20V5M17 20V9"/>',
     share:'<path d="M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>'};
   const vf='<svg width="16" height="16" viewBox="0 0 24 24" style="flex:none"><path fill="#1d9bf0" d="M12 1.5l2.6 1.9 3.2-.2 1 3.1 2.6 1.9-1 3 1 3-2.6 1.9-1 3.1-3.2-.2L12 22.5l-2.6-1.9-3.2.2-1-3.1L2.6 15.8l1-3-1-3 2.6-1.9 1-3.1 3.2.2z"/><path d="M8 12.2l2.7 2.6L16 9.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const lk='<svg width="15" height="15" viewBox="0 0 24 24" style="flex:none;margin-left:1px"><path fill="currentColor" d="M17 9V7a5 5 0 0 0-10 0v2H5v12h14V9zM9 7a3 3 0 0 1 6 0v2H9z"/></svg>';
   const fmt=t=>esc(t).replace(/(^|\s)([#@][^\s<]+)/g,'$1<span style="color:#1d9bf0">$2</span>');
-  const a=(k,v)=>`<span>${ic(P[k],17)}${v?esc(v):''}</span>`;
-  const rows=T.tweets.map((t,i)=>{
+  const a=(k,v,on,i)=>{
+    const col=on?(k==='like'?'#f91880':'#00ba7c'):'';
+    const pp=T._pop&&T._pop.k===i&&T._pop.kind===k,sc=pp?(T._pop.t<.5?1.4:1.15):1;
+    return`<span${col?` style="color:${col}"`:''}><i style="display:inline-flex;transform:scale(${sc})">${ic(P[k],17,on?2.4:1.8,on&&k==='like'?'currentColor':'none')}</i>${v?esc(v):''}</span>`;
+  };
+  const rows=TW.map((t,i)=>{
     const av=t.av&&t.av.url?bgImg(t.av):I.person('#fff');
-    const im=t.img&&t.img.url?`<div class="tl-im">${bgImg(t.img,16/9)}</div>`:'';
+    const list=(Array.isArray(t.imgs)?t.imgs:[t.img]).filter(x=>x&&x.url).slice(0,4),n=list.length;
+    const im=n?`<div class="tl-im n${n}">${list.map((m,j)=>`<div class="tl-ci">${bgImg(m,(n===2||(n===3&&j===0))?8/9:16/9)}</div>`).join('')}</div>`:'';
     let an='';if(T._tlt!=null&&T._tlt<1&&i===nT-1){const e=1-Math.pow(1-T._tlt,3);an=` style="opacity:${Math.min(1,e*1.4).toFixed(2)};transform:translateY(${((1-e)*28).toFixed(1)}px)"`;}
-    return`<div class="tl-t"${an}><div class="tl-pf">${av}</div><div class="tl-c"><div class="tl-n"><b>${esc(t.name)}</b>${t.ver?vf:''}<span>${esc(t.handle)}${t.time?' · '+esc(t.time):''}</span></div>${t.text?`<div class="tl-x">${fmt(t.text)}</div>`:''}${im}<div class="tl-act">${a('rep',t.replies)}${a('rt',t.rts)}${a('like',t.likes)}${a('view',t.views)}${ic(P.share,17)}</div></div></div>`;
+    return`<div class="tl-t"${an}><div class="tl-pf">${av}</div><div class="tl-c"><div class="tl-n"><b>${esc(t.name)}</b>${t.priv?lk:''}${t.ver?vf:''}<span>${esc(t.handle)}${t.time?' · '+esc(t.time):''}</span></div>${t.text?`<div class="tl-x">${fmt(t.text)}</div>`:''}${im}<div class="tl-act">${a('rep',t.replies,0,i)}${a('rt',t.rts,t.rted,i)}${a('like',t.likes,t.liked,i)}${a('view',t.views,0,i)}${ic(P.share,17)}</div></div></div>`;
   }).join('');
   const me=T.me&&T.me.url?bgImg(T.me):I.person('#fff');
   const xl='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>';
   const bg=`<div class="bgl" style="background:${dk?'#000':'#fff'}"></div>`;
   const body=`<div class="tl-head" style="${V}"><div class="tl-top"><div class="tl-av">${me}</div>${xl}<span style="width:30px"></span></div><div class="tl-tabs"><div class="${T.tab?'':'on'}">추천</div><div class="${T.tab?'on':''}">팔로잉</div></div></div>
-  <div class="tl-list" style="${V}">${rows}</div>
+  <div class="tl-list" style="${V}"><div class="tl-inner">${rows}</div></div>
   <div class="tl-in" style="${V}">${ic('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',24,2.2)}${ic('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5l5 5"/>',24)}${ic('<path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4"/>',24)}${ic('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',24)}</div>
   ${T.fab?`<div class="tl-fab">${ic('<path d="M12 5v14M5 12h14"/>',24,2.4)}</div>`:''}`;
   return{bg,body};
@@ -1262,6 +1280,18 @@ const wantSfx=(s,side)=>s.exp.sfx==='all'||(s.exp.sfx==='me'&&side==='right');
 
 function applySlide(root,st){
   if(!st)return;
+  const ti=root.querySelector('.tl-inner');
+  if(ti){
+    if(st.tl&&st.tl._sc){
+      const lh=ti.parentElement.clientHeight,ch=ti.offsetHeight,rs=ti.children,last=rs[rs.length-1];
+      if(last){
+        const full=Math.max(0,ch-lh),prev=rs.length>1?Math.max(0,ch-last.offsetHeight-lh):0;
+        const t=st.tl._tlt==null?1:st.tl._tlt,e=1-Math.pow(1-t,3);
+        ti.style.transform=`translateY(${(-(prev+(full-prev)*e)).toFixed(1)}px)`;
+      }
+    }
+    return;
+  }
   const inner=root.querySelector('.list .inner');if(!inner)return;
   if(st._fade!=null&&st._fade<1)inner.style.opacity=String(st._fade);
   const t=st._slide;if(t==null||t>=1)return;
@@ -1536,19 +1566,24 @@ function E_video(){
     <div class="g2"><button class="btn ghost" data-act="play">▶ 미리보기</button><button class="btn" data-act="vid">영상 저장</button></div>`);
 }
 function E_tl(){
-  const T=S.tl,ts=T.tweets;
-  return card('타임라인',`${fld('화면',seg('tl.mode',[['light','화이트'],['dark','다크']]))}
-    ${fld('상단 탭',seg('tl.tab',[[0,'추천'],[1,'팔로잉']]))}
+  const T=S.tl,key=T.tab?'tweetsF':'tweets',b='tl.'+key+'.';
+  if(!Array.isArray(T[key]))T[key]=[];const ts=T[key];
+  ts.forEach(t=>{if(!Array.isArray(t.imgs))t.imgs=[t.img||null,null,null,null];while(t.imgs.length<4)t.imgs.push(null);});
+  return card('타임라인',`${fld('상단 탭 (탭마다 트윗이 따로예요)',seg('tl.tab',[[0,'추천'],[1,'팔로잉']]))}
+    ${fld('화면',seg('tl.mode',[['light','화이트'],['dark','다크']]))}
     ${imgField('tl.me','내 프로필 사진',false)}${tog('tl.fab','글쓰기 버튼')}
-    <div class="hint" style="margin-top:6px">GIF · 영상 · ▶ 미리보기에서 트윗이 아래에서 부드럽게 올라오며 하나씩 나타나요.</div>`)
-  +card('트윗',ts.map((t,i)=>`<div class="item"><div class="item-h"><span class="badge">트윗 ${i+1}</span>${mv('tl.tweets',i,ts.length)}</div>
-    <div class="g2">${fld('이름',txt(`tl.tweets.${i}.name`,'이름'))}${fld('아이디',txt(`tl.tweets.${i}.handle`,'@username'))}</div>
-    ${area(`tl.tweets.${i}.text`,'트윗 내용 (#해시태그 · @멘션은 파랗게)')}
-    <div class="g2">${fld('시간',txt(`tl.tweets.${i}.time`,'2시간'))}${fld('댓글 수',txt(`tl.tweets.${i}.replies`,'128'))}</div>
-    <div class="g3">${fld('리트윗 수',txt(`tl.tweets.${i}.rts`,'1,024'))}${fld('하트 수',txt(`tl.tweets.${i}.likes`,'1.2만'))}${fld('조회수',txt(`tl.tweets.${i}.views`,'32만'))}</div>
-    ${tog(`tl.tweets.${i}.ver`,'인증 배지')}
-    ${imgField(`tl.tweets.${i}.av`,'프로필 사진',false)}${imgField(`tl.tweets.${i}.img`,'첨부 사진')}</div>`).join('')
-    +`<button class="btn line" data-act="add" data-path="tl.tweets" data-tpl="tweet">＋ 트윗 추가</button>`);
+    ${tog('exp.tlPress','GIF · 영상: 하트 · 리트윗 누르는 애니메이션')}
+    <div class="hint" style="margin-top:6px">GIF · 영상 · ▶ 미리보기에서는 트윗이 올라올 때마다 화면이 함께 스크롤돼요. 지금 <b>${T.tab?'팔로잉':'추천'}</b> 탭의 트윗을 편집 중이에요.</div>`)
+  +card(T.tab?'팔로잉 탭 트윗':'추천 탭 트윗',ts.map((t,i)=>`<div class="item"><div class="item-h"><span class="badge">트윗 ${i+1}</span>${mv('tl.'+key,i,ts.length)}</div>
+    <div class="g2">${fld('이름',txt(`${b}${i}.name`,'이름'))}${fld('아이디',txt(`${b}${i}.handle`,'@username'))}</div>
+    ${area(`${b}${i}.text`,'트윗 내용 (#해시태그 · @멘션은 파랗게)')}
+    <div class="g2">${fld('시간',txt(`${b}${i}.time`,'2시간'))}${fld('댓글 수',txt(`${b}${i}.replies`,'128'))}</div>
+    <div class="g3">${fld('리트윗 수',txt(`${b}${i}.rts`,'1,024'))}${fld('하트 수',txt(`${b}${i}.likes`,'1.2만'))}${fld('조회수',txt(`${b}${i}.views`,'32만'))}</div>
+    <div class="g2">${tog(`${b}${i}.priv`,'비공개 계정 🔒')}${tog(`${b}${i}.ver`,'인증 배지')}</div>
+    <div class="g2">${tog(`${b}${i}.liked`,'하트 누름')}${tog(`${b}${i}.rted`,'리트윗함')}</div>
+    ${imgField(`${b}${i}.av`,'프로필 사진',false)}
+    ${[0,1,2,3].map(j=>imgField(`${b}${i}.imgs.${j}`,`첨부 사진 ${j+1}`)).join('')}</div>`).join('')
+    +`<button class="btn line" data-act="add" data-path="tl.${key}" data-tpl="tweet">＋ 트윗 추가</button>`);
 }
 function E_chatlike(t){
   return card(t,`<div class="g2">${fld('상대 이름',txt('chat.name','이름'))}${fld('안읽은 수',txt('chat.unread','0'))}</div>
@@ -1611,7 +1646,7 @@ document.addEventListener('input',e=>{
 });
 const TPL={
   noti:()=>({id:uid(),app:'kakao',title:'',body:'',time:'지금'}),
-  tweet:()=>({id:uid(),name:'이름',handle:'@username',ver:false,text:'',time:'1시간',replies:'',rts:'',likes:'',views:'',av:null,img:null}),
+  tweet:()=>({id:uid(),name:'이름',handle:'@username',ver:false,text:'',time:'1시간',replies:'',rts:'',likes:'',views:'',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false}),
   left:()=>({id:uid(),side:'left',text:'',time:S.chat.messages.at(-1)?.time||'오후 12:00',unread:false,img:null}),
   right:()=>({id:uid(),side:'right',text:'',time:S.chat.messages.at(-1)?.time||'오후 12:00',unread:false,img:null}),
 };
@@ -1745,7 +1780,15 @@ function buildFrames(s){
       for(let i=0;i<4;i++){const t=sec+i,str=`${pad(Math.floor(t/60)%100)}:${pad(t%60)}`;push(c=>{c.face.status=s.face.status.slice(0,m.index)+str+s.face.status.slice(m.index+m[0].length);},1000/sp);}
       break;}
     case'call':{for(let i=0;i<20;i++)push(c=>{c._ct=i*.12;},120/sp);break;}
-    case'tl':{const n=s.tl.tweets.length;for(let k=1;k<=n;k++){for(const t of [.4,.8])push(c=>{c.tl.tweets=c.tl.tweets.slice(0,k);c.tl._tlt=t;},50/sp);push(c=>{c.tl.tweets=c.tl.tweets.slice(0,k);},k===n?hold:D);}break;}
+    case'tl':{const key=s.tl.tab?'tweetsF':'tweets',n=(s.tl[key]||[]).length,pr=s.exp.tlPress!==false;
+      for(let k=1;k<=n;k++){
+        const tw=s.tl[key][k-1],kd=pr?[tw.liked?'like':'',tw.rted?'rt':''].filter(Boolean):[];
+        const cut=c=>{c.tl[key]=c.tl[key].slice(0,k);c.tl._sc=1;};
+        const st=(c,j)=>{const q=c.tl[key][k-1];q.liked=!!tw.liked&&(!kd.includes('like')||kd.indexOf('like')<=j);q.rted=!!tw.rted&&(!kd.includes('rt')||kd.indexOf('rt')<=j);};
+        for(const t of [.25,.5,.8])push(c=>{cut(c);c.tl._tlt=t;st(c,-1);},50/sp);
+        if(kd.length){push(c=>{cut(c);st(c,-1);},D*.6);kd.forEach((x,j)=>{for(const t of [.3,.75])push(c=>{cut(c);st(c,j);c.tl._pop={k:k-1,kind:x,t};},70/sp);});}
+        push(c=>{cut(c);},k===n?hold:D);
+      }break;}
     case'gallery':{const n=Math.min(s.gallery.items.length,40);for(let k=0;k<=n;k++)push(c=>{c.gallery.items=c.gallery.items.slice(0,k);},k===n?hold:D*.6);break;}
   }
   return F;
