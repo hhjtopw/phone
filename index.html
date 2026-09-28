@@ -541,9 +541,12 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 /* 입력 중 말풍선: 글자 크기(em) 기준이라 말풍선 크기 바와 함께 커지고 작아짐 */
 .scr .dots{align-items:center;gap:.28em;padding:0 .12em;min-height:1.42em}
 .scr .dots i{width:.48em;height:.48em}
-/* 상대 이름 살짝 키움 */
-.scr .kt-n{font-size:14px;margin-bottom:5px;opacity:.88}
-.scr .ln-n{font-size:13.5px;margin-bottom:4px}
+/* 상단 헤더 상대 이름 살짝 키움 */
+.scr .kt-name{font-size:18px}
+.scr .im-nm{font-size:13px;margin-top:4px}
+.scr .ig-who b{font-size:16px}
+.scr .ln-name{font-size:18px}
+.scr .tg-who b{font-size:16.5px}
 </style>
 </head>
 <body>
@@ -1041,7 +1044,7 @@ function E_msgs(){
       ${area(`chat.messages.${i}.text`,'메시지 내용')}
       <div class="item-f">${imgMini(`chat.messages.${i}.img`)}${m.side==='right'?`<div style="width:120px">${tog(`chat.messages.${i}.unread`,'안읽음 1')}</div>`:''}</div></div>`).join('')}
     <div class="g2"><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="left">＋ 상대방</button><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="right">＋ 나</button></div>
-    <div class="sep"></div>${tog('chat.typing','대화 끝에 "입력 중…" 말풍선 유지 (PNG · GIF · 영상)')}${tog('exp.typing','영상 · GIF: 상대 메시지 전에 "입력 중…"')}${tog('exp.typingMe','영상 · GIF: 내 메시지 전에도 "입력 중…"')}${tog('chat.autoRead','상대가 읽으면 카톡 "1" 자동 사라짐')}`);
+    <div class="sep"></div>${tog('chat.typing','입력 중… 말풍선 표시 (정지 화면 · PNG용, 영상 · GIF엔 안 나와요)')}${tog('exp.typing','영상 · GIF: 상대 메시지 전에 "입력 중…"')}${tog('exp.typingMe','영상 · GIF: 내 메시지 전에도 "입력 중…"')}${tog('chat.autoRead','상대가 읽으면 카톡 "1" 자동 사라짐')}`);
 }
 function E_chat(){
   return card('대화방',`${fld('테마',sws('chat.theme',KT.map((t,i)=>[i,`linear-gradient(135deg,${t.bg} 55%,${t.r} 55%)`,t.n])))}
@@ -1152,9 +1155,8 @@ function chatPlan(s){
     if(s.exp.typingMe&&m.side==='right'&&firstOfSide)mk(c=>{take(c,k-1);c._typing='right';},gap*.7,`tr${k}`);
     let sound=m.side;
     if(s.exp.smooth)for(const t of [.3,.62,.88]){mk(c=>{take(c,k);c._slide=t;},45,`s${k}_${t}`,sound);sound=undefined;}
-    mk(c=>take(c,k),k===n?(s.chat.typing?gap*.9:Math.max(1600,gap*1.6)):gap*.7,`k${k}`,sound);
+    mk(c=>take(c,k),k===n?Math.max(1600,gap*1.6):gap*.7,`k${k}`,sound);
   }
-  if(s.chat.typing&&n)mk(c=>{take(c,n);c._typing=true;},1800,'tend');
   return F;
 }
 /* ── 영상통화용 영상 · 전화 애니메이션 ── */
@@ -1498,10 +1500,8 @@ function buildFrames(s){
       for(let k=1;k<=n;k++){
         if(s.exp.typing&&ms[k-1].side==='left'&&(k===1||ms[k-2].side!=='left'))push(c=>{take(c,k-1);c._typing=true;},D*.9);
         if(s.exp.typingMe&&ms[k-1].side==='right'&&(k===1||ms[k-2].side!=='right'))push(c=>{take(c,k-1);c._typing='right';},D*.7);
-        push(c=>take(c,k),k===n?(s.chat.typing?D:hold):D);
-      }
-      if(s.chat.typing&&n)push(c=>{take(c,n);c._typing=true;},hold);
-      break;}
+        push(c=>take(c,k),k===n?hold:D);
+      }break;}
     case'face':{
       const m=s.face.status.match(/(\d{1,2}):(\d{2})(?!.*\d{1,2}:\d{2})/);
       if(!m){push(()=>{},hold);break;}
