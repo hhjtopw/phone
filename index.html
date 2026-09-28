@@ -541,12 +541,8 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 /* 입력 중 말풍선: 글자 크기(em) 기준이라 말풍선 크기 바와 함께 커지고 작아짐 */
 .scr .dots{align-items:center;gap:.28em;padding:0 .12em;min-height:1.42em}
 .scr .dots i{width:.48em;height:.48em}
-/* 상단 헤더 상대 이름 살짝 키움 */
-.scr .kt-name{font-size:18px}
-.scr .im-nm{font-size:13px;margin-top:4px}
-.scr .ig-who b{font-size:16px}
-.scr .ln-name{font-size:18px}
-.scr .tg-who b{font-size:16.5px}
+/* 아이메시지 상단 이름만 살짝 키움 */
+.scr .im-nm{font-size:14px;margin-top:4px}
 </style>
 </head>
 <body>
@@ -673,7 +669,7 @@ function defaults(){
     face:{other:null,me:null,name:'이름',status:'00:00',pip:true},
     call:{name:'이름',sub:'휴대전화',photo:null},
     gallery:{title:'최근 항목',cols:3,items:[]},
-    exp:{scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',sfx:'all',sfxVol:80,gifMode:'single',gifScreens:['lock','chat','sms'],gifAnim:true},
+    exp:{scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',gifScreens:['lock','chat','sms'],gifAnim:true},
   };
 }
 function merge(base,src){
@@ -1225,6 +1221,23 @@ async function playPreview(){
   playing=false;
   renderPreview();
 }
+const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(u){let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CRC_T[(c^u[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function zipStore(ents){
+  const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+  const d=new Date(),dt=((d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1))&0xFFFF,dd=(((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate())&0xFFFF;
+  for(const e of ents){
+    const nm=enc.encode(e.name),h=new DataView(new ArrayBuffer(30+nm.length));
+    h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0,true);h.setUint16(8,0,true);h.setUint16(10,dt,true);h.setUint16(12,dd,true);h.setUint32(14,e.crc,true);h.setUint32(18,e.size,true);h.setUint32(22,e.size,true);h.setUint16(26,nm.length,true);h.setUint16(28,0,true);
+    new Uint8Array(h.buffer).set(nm,30);parts.push(h.buffer,e.blob);
+    const c=new DataView(new ArrayBuffer(46+nm.length));
+    c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0,true);c.setUint16(10,0,true);c.setUint16(12,dt,true);c.setUint16(14,dd,true);c.setUint32(16,e.crc,true);c.setUint32(20,e.size,true);c.setUint32(24,e.size,true);c.setUint16(28,nm.length,true);c.setUint16(30,0,true);c.setUint16(32,0,true);c.setUint16(34,0,true);c.setUint16(36,0,true);c.setUint32(38,0,true);c.setUint32(42,off,true);
+    new Uint8Array(c.buffer).set(nm,46);cen.push(c.buffer);off+=h.byteLength+e.size;
+  }
+  const cs=cen.reduce((a,b)=>a+b.byteLength,0),end=new DataView(new ArrayBuffer(22));
+  end.setUint32(0,0x06054b50,true);end.setUint16(8,ents.length,true);end.setUint16(10,ents.length,true);end.setUint32(12,cs,true);end.setUint32(16,off,true);
+  return new Blob([...parts,...cen,end.buffer],{type:'application/zip'});
+}
 async function preloadFonts(){
   try{const s=S.chat.messages.map(m=>m.text||'').join('')+S.chat.name+S.face.name+S.call.name+S.call.sub+S.lock.notis.map(n=>n.title+n.body).join('');
     const t=[...new Set(s)].join('');
@@ -1235,15 +1248,26 @@ async function exportVideo(){
   playing=false;
   const faceVid=S.screen==='face'&&VID.other&&VID.other.file&&S.exp.vidAudio;
   const ok=(S.exp.sfx!=='off'||faceVid)?await sfxInit():false;
-  const plan=videoPlan(),sc=S.exp.vidScale,bg=S.exp.vidBg,TR=bg==='transparent';
+  const fmt=S.exp.vidFmt||'mp4',plan=videoPlan(),sc=S.exp.vidScale,KEY=S.exp.keyColor||'#00ff00',CK=(S.exp.vidBg==='transparent'&&fmt==='mp4'),bg=(CK||S.exp.vidBg==='key')?KEY:S.exp.vidBg,TR=bg==='transparent',PNGSEQ=fmt==='png';
   const uniq=[...new Map(plan.map(f=>[f.key,f])).values()],store=new Map();
   try{
     busy('글꼴 준비 중…',.01);await preloadFonts();
     for(let i=0;i<uniq.length;i++){
       busy(`프레임 렌더링 중… ${i+1}/${uniq.length}`,.02+.7*(i/uniq.length));
       const c=await capture(await stateOf(uniq[i]),sc,TR?null:bg);
-      store.set(uniq[i].key,{w:c.width,h:c.height,blob:await new Promise(r=>TR?c.toBlob(r,'image/png'):c.toBlob(r,'image/jpeg',.94))});
+      store.set(uniq[i].key,{w:c.width,h:c.height,blob:await new Promise(r=>(TR||PNGSEQ)?c.toBlob(r,'image/png'):c.toBlob(r,'image/jpeg',.94))});
       await tick();
+    }
+    if(PNGSEQ){
+      busy('PNG 시퀀스 묶는 중…',.8);
+      const FPS=30,starts=[];let acc=0;plan.forEach(f=>{starts.push(acc);acc+=f.delay/1000;});
+      const N=Math.max(1,Math.round(acc*FPS)),info=new Map();
+      for(const [k,v] of store){const u=new Uint8Array(await v.blob.arrayBuffer());info.set(k,{blob:v.blob,crc:crc32(u),size:u.length});}
+      const ents=[];let pi=0;
+      for(let n=0;n<N;n++){const t=n/FPS;while(pi<plan.length-1&&starts[pi+1]<=t+1e-6)pi++;ents.push({name:`frame_${String(n+1).padStart(5,'0')}.png`,...info.get(plan[pi].key)});}
+      await download(zipStore(ents),`chat_frames_${stamp()}.zip`);
+      toast(`PNG 시퀀스 저장 완료 — ${N}프레임 · ${FPS}fps${TR?' · 투명':''}`);
+      return;
     }
     const f0=store.get(plan[0].key),W=f0.w&~1,H=f0.h&~1;
     const cv=document.createElement('canvas');cv.width=W;cv.height=H;
@@ -1287,7 +1311,7 @@ async function exportVideo(){
     clearInterval(iv);await sleep(300);rec.stop();await stopped;
     busy('저장 중…',.99);
     await download(new Blob(chunks,{type:isMp4?'video/mp4':'video/webm'}),`chat_video_${stamp()}.${isMp4?'mp4':'webm'}`);
-    toast(TR?'투명 영상 저장 완료 (WebM)':`영상 저장 완료 (${isMp4?'MP4':'WebM'})`);
+    toast(TR?'투명 영상 저장 완료 (WebM)':CK?'MP4 저장 완료 — 크로마키 배경, 편집 앱에서 키 색을 지우세요':`영상 저장 완료 (${isMp4?'MP4':'WebM'})`);
   }catch(err){console.error(err);toast('영상 저장에 실패했어요');}
   finally{busyOff();renderPreview();}
 }
@@ -1317,8 +1341,10 @@ function E_video(){
   return card('영상 (MP4 · WebM)',`<div class="hint box">지금 화면 <b>(${nm})</b> → ${anim}. 폰 목업이면 프레임까지 그대로 녹화돼요.</div>
     ${rng('exp.vidGap',0.5,3,0.1,'메시지 간격','초')}
     ${fld('화질',seg('exp.vidScale',[[1,'보통'],[1.5,'선명'],[2,'최고']]))}
-    ${fld('배경색',seg('exp.vidBg',[['#ffffff','흰색'],['#000000','검정'],['#00ff00','크로마키'],['transparent','투명']]))}
-    ${S.exp.vidBg==='transparent'?'<div class="hint" style="margin:-4px 0 10px">투명 배경은 <b>WebM(VP9 알파)</b>로만 저장돼요. MP4는 투명을 지원하지 않아요. 폰 프레임 없이 말풍선만 뽑으려면 \'화면 · 기기\' 탭에서 "배경 끄기"를 켜세요.</div>':fld('저장 형식',seg('exp.vidFmt',[['mp4','MP4'],['webm','WebM']]))}
+    ${fld('배경색',seg('exp.vidBg',[['#ffffff','흰색'],['#000000','검정'],['key','크로마키'],['transparent','투명']]))}
+    ${(S.exp.vidBg==='key'||(S.exp.vidBg==='transparent'&&S.exp.vidFmt==='mp4'))?fld('크로마키 색',sws('exp.keyColor',[['#00ff00','#00ff00','초록'],['#0000ff','#0000ff','파랑'],['#ff00ff','#ff00ff','마젠타']]))+'<div class="hint" style="margin:-6px 0 10px">말풍선이 초록 · 민트 계열(LINE · 문자 · 카톡 민트)이면 파랑이나 마젠타를 고르세요. 안 그러면 말풍선까지 같이 지워져요.</div>':''}
+    ${fld('저장 형식',seg('exp.vidFmt',[['mp4','MP4'],['webm','WebM'],['png','PNG 시퀀스 (zip)']]))}
+    <div class="hint" style="margin:-4px 0 10px">${S.exp.vidFmt==='png'?'프레임마다 PNG를 30fps로 묶어 zip으로 저장해요. 배경을 \'투명\'으로 두면 진짜 투명이에요 (소리는 안 들어가요). 프리미어 · 애프터이펙트 · 다빈치에서 \'이미지 시퀀스\'로 불러오세요.':S.exp.vidBg==='transparent'?(S.exp.vidFmt==='webm'?'<b>WebM(VP9 알파)</b>로 투명하게 저장돼요. 재생·편집 앱이 알파를 읽어야 투명으로 보여요.':'MP4는 투명을 저장할 수 없어서 <b>크로마키 색 배경</b>으로 저장해요. 편집 앱의 크로마키(색상 키)로 그 색을 지우세요. 진짜 투명은 PNG 시퀀스를 쓰세요.'):'투명이 필요하면 배경색을 \'투명\'으로 고르세요.'}</div>
     
     ${S.screen==='face'?fld('영상통화 프레임',seg('exp.faceFps',[[8,'8fps'],[10,'10fps'],[15,'15fps']]))+tog('exp.vidAudio','넣은 영상의 소리 포함'):''}${S.screen==='call'?fld('전화 애니메이션 길이',seg('exp.callSec',[[3,'3초'],[5,'5초'],[8,'8초']])):''}${tog('exp.smooth','부드러운 스크롤 애니메이션')}${tog('exp.typing','상대 메시지 전에 "입력 중…" 넣기')}${tog('exp.typingMe','내 메시지 전에도 "입력 중…" 넣기')}
     ${fld('효과음',seg('exp.sfx',[['off','끄기'],['me','내 메시지'],['all','모든 메시지']]))}
