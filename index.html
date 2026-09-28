@@ -472,11 +472,11 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .scr.pm .ln-b{font-size:15.6px;padding:9px 13px;max-width:246px}
 .scr.pm .tg-b{font-size:15.6px;padding:8px 12px 7px;max-width:258px}
 /* 상단·하단 UI 끄기 */
-.scr.noTop .sb,.scr.noTop .kt-head,.scr.noTop .im-head,.scr.noTop .ig-head,.scr.noTop .ln-head,.scr.noTop .tg-head{display:none!important}
-.scr.noBottom .kt-in,.scr.noBottom .im-in,.scr.noBottom .ig-in,.scr.noBottom .ln-in,.scr.noBottom .tg-in,.scr.noBottom .home{display:none!important}
+.scr.noTop .sb,.scr.noTop .kt-head,.scr.noTop .im-head,.scr.noTop .ig-head,.scr.noTop .ln-head,.scr.noTop .tg-head,.scr.noTop .tw-head{display:none!important}
+.scr.noBottom .kt-in,.scr.noBottom .im-in,.scr.noBottom .ig-in,.scr.noBottom .ln-in,.scr.noBottom .tg-in,.scr.noBottom .tw-in,.scr.noBottom .home{display:none!important}
 /* 배경 끄기: 말풍선만 */
 .scr.bgoff{background:transparent!important;color:#111}
-.scr.bgoff .bgl,.scr.bgoff .sb,.scr.bgoff .home,.scr.bgoff .kt-head,.scr.bgoff .im-head,.scr.bgoff .ig-head,.scr.bgoff .ln-head,.scr.bgoff .tg-head,.scr.bgoff .kt-in,.scr.bgoff .im-in,.scr.bgoff .ig-in,.scr.bgoff .ln-in,.scr.bgoff .tg-in,.scr.bgoff .kt-dw,.scr.bgoff .im-date,.scr.bgoff .ig-date,.scr.bgoff .ln-dw,.scr.bgoff .tg-dw,.scr.bgoff .islandc,.scr.bgoff .notchc,.scr.bgoff .punchc{display:none!important}
+.scr.bgoff .bgl,.scr.bgoff .sb,.scr.bgoff .home,.scr.bgoff .kt-head,.scr.bgoff .im-head,.scr.bgoff .ig-head,.scr.bgoff .ln-head,.scr.bgoff .tg-head,.scr.bgoff .tw-head,.scr.bgoff .tw-in,.scr.bgoff .tw-dw,.scr.bgoff .kt-in,.scr.bgoff .im-in,.scr.bgoff .ig-in,.scr.bgoff .ln-in,.scr.bgoff .tg-in,.scr.bgoff .kt-dw,.scr.bgoff .im-date,.scr.bgoff .ig-date,.scr.bgoff .ln-dw,.scr.bgoff .tg-dw,.scr.bgoff .islandc,.scr.bgoff .notchc,.scr.bgoff .punchc{display:none!important}
 /* 공통 */
 .mrow{display:flex}
 .cimg{border-radius:16px;overflow:hidden;position:relative;flex:none}
@@ -532,6 +532,26 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .crt{display:inline-block;width:1.5px;height:1.15em;margin-left:1px;border-radius:1px;opacity:.85;flex:none}
 .sndb{border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
 .kt-in .f.has{display:flex;align-items:center;padding:0 14px;font-size:14.5px;min-width:0}
+/* 트위터(X) DM */
+.tw-head{height:56px;flex:none;display:flex;align-items:center;gap:10px;padding:0 14px;background:var(--xb);border-bottom:1px solid var(--xl);color:var(--xt)}
+.tw-av{width:28px;height:28px;border-radius:50%;background:#cfd9de;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;flex:none;margin-right:8px}
+.tw-av.ph{background:none}.tw-av.lg{width:34px;height:34px;margin:0 0 0 2px}
+.tw-who{flex:1;line-height:1.25;min-width:0}.tw-who b{display:block;font-size:16px;font-weight:700;color:var(--xt);letter-spacing:-.2px}.tw-who span{font-size:12.5px;color:var(--xs)}
+.tw-inner{padding:6px 14px 12px}
+.tw-dw{text-align:center;font-size:12.5px;color:var(--xs);margin:8px 0 10px}
+.tw-row{margin-top:3px;align-items:flex-start}.tw-row.first{margin-top:12px}.tw-row.r{justify-content:flex-end}
+.tw-col{display:flex;flex-direction:column;min-width:0}.tw-row.r .tw-col{align-items:flex-end}
+.tw-line{display:flex;align-items:flex-end}
+.tw-b{max-width:246px;padding:10px 15px;font-size:15px;line-height:1.32;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;letter-spacing:-.2px}
+.tw-t{font-size:12px;color:var(--xs);margin:4px 2px 0 0;line-height:1.3}.tw-row.l .tw-t{margin-left:calc(36px*var(--bo,1))}
+.tw-row .cimg{border-radius:22px}
+.tw-in{flex:none;display:flex;align-items:center;gap:14px;padding:8px 14px 32px;background:var(--xb);border-top:1px solid var(--xl)}
+.tw-f{flex:1;height:38px;border-radius:19px;background:var(--xf);padding:0 8px 0 15px;display:flex;align-items:center;justify-content:space-between;color:var(--xs);font-size:15px;min-width:0}
+.twgif{border:1.7px solid #1d9bf0;color:#1d9bf0;border-radius:6px;font-size:9.5px;font-weight:800;line-height:1;padding:3px 3.5px;letter-spacing:.2px}
+.scr.scr.scr .tw-b{font-size:calc(15px*var(--bs,1));padding:calc(10px*var(--bs,1)) calc(15px*var(--bs,1));max-width:calc(246px*min(var(--bs,1),1.06))}
+.scr.scr.scr.pm .tw-b{font-size:calc(15.6px*var(--bs,1));padding:calc(11px*var(--bs,1)) calc(16px*var(--bs,1));max-width:calc(258px*min(var(--bs,1),1.06))}
+.scr.scr.scr .tw-t{font-size:calc(12px*var(--bo,1))}
+.scr.scr.scr .tw-av:not(.lg){width:calc(28px*var(--bo,1));height:calc(28px*var(--bo,1));margin-right:calc(8px*var(--bo,1))}
 /* 말풍선 크기 조절 (--bs) */
 .scr.scr.scr .kt-pf{width:calc(38px*var(--bo,1));height:calc(38px*var(--bo,1));border-radius:calc(14px*var(--bo,1));margin-right:calc(8px*var(--bo,1))}
 .scr.scr.scr .kt-pf.kph{height:1px}
@@ -631,9 +651,10 @@ const UI={
 
 UI.ig='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="16.8" cy="7.2" r=".6" fill="currentColor"/></svg>';
 UI.line='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 4c-4.6 0-8 2.8-8 6.3 0 3.1 2.7 5.5 6.3 6.2l-.2 2.5 3.6-2.6c3.4-.7 6.3-3 6.3-6.1C20 6.8 16.6 4 12 4z"/></svg>';
+UI.tw='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg>';
 UI.tg='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21 4L3 11l6 2.2L11 20l3-4.2L18.5 19z"/><path d="M9 13.2L21 4"/></svg>';
 /* ═════════════ Data tables ═════════════ */
-const SCREENS=[['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램']];
+const SCREENS=[['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램'],['tw','트위터']];
 const WALLS=[
   ['linear-gradient(170deg,#4a4a50 0%,#1c1c1f 100%)','그라파이트'],
   ['linear-gradient(170deg,#f1f1f4 0%,#d3d4da 100%)','라이트 그레이',1],
@@ -688,6 +709,7 @@ function defaults(){
     chat:{bs:100,theme:0,autoRead:true,status:'',name:'이름',profile:null,bgImg:null,date:`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ${WD[d.getDay()]}요일`,unread:0,typing:false,
       messages:mkMsgs(SAMPLE,kt)},
     sms:{service:'imessage',dateLine:`오늘 ${kt}`,read:'읽음'},
+    tw:{mode:'light'},
     face:{other:null,me:null,name:'이름',status:'00:00',pip:true},
     call:{name:'이름',sub:'휴대전화',photo:null},
     gallery:{title:'최근 항목',cols:3,items:[]},
@@ -749,12 +771,14 @@ function statusColor(s){
   switch(s.screen){
     case'lock':return (isDarkColor(lockTimeColor(s))||wallLight(s))?'#000':'#fff';
     case'chat':return KT[s.chat.theme].dark?'#fff':'#000';
+    case'tw':return (s.tw&&s.tw.mode)==='dark'?'#fff':'#000';
     case'face':case'call':return'#fff';
     default:return'#000';
   }
 }
 function homeColor(s){
   switch(s.screen){
+    case'tw':return (s.tw&&s.tw.mode)==='dark'?'rgba(255,255,255,.85)':'#111';
     case'ig':case'line':case'tg':return'#111';
     case'chat':return KT[s.chat.theme].dark?'rgba(255,255,255,.85)':'#111';
     case'sms':case'gallery':return'#111';
@@ -883,7 +907,7 @@ function screenGallery(s){
   return{bg,body};
 }
 /* ── 인스타 DM · LINE · 텔레그램 ── */
-const CHATLIKE=['chat','sms','ig','line','tg'];
+const CHATLIKE=['chat','sms','ig','line','tg','tw'];
 function cmsgs(s){const ms=s.chat.messages.filter(visibleMsg).slice();if(s._typing||s.chat.typing)ms.push({side:s._typing==='right'?'right':'left',_t:1,time:''});return ms;}
 const pfOf=(s,c)=>s.chat.profile?.url?bgImg(s.chat.profile):I.person(c);
 const SND_SVG=(bg,fg='#fff',z=28)=>`<span class="sndb" style="width:${z}px;height:${z}px;background:${bg}"><svg width="${Math.round(z*.5)}" height="${Math.round(z*.5)}" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="${fg}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
@@ -944,7 +968,25 @@ function screenTg(s){
   return{bg,body};
 }
 
-const SCREEN_FN={lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg};
+function screenTw(s){
+  const C=s.chat, ms=cmsgs(s), dk=(s.tw&&s.tw.mode)==='dark', R=(s.sms.read||'').trim(), lr=lastRightIdx(ms), BL='#1d9bf0';
+  const V=dk?'--xb:#000;--xl:#2f3336;--xt:#e7e9ea;--xs:#71767b;--xr:#2f3336;--xf:#202327':'--xb:#fff;--xl:#eff3f4;--xt:#0f1419;--xs:#536471;--xr:#eff3f4;--xf:#eff3f4';
+  const rows=ms.map((m,i)=>{
+    const p=ms[i-1],n=ms[i+1],first=!p||p.side!==m.side,last=!n||n.side!==m.side,lastT=!n||n.side!==m.side||n.time!==m.time,L=m.side==='left';
+    const st=`border-radius:${L?`22px 22px 22px ${last?4:22}px`:`22px 22px ${last?4:22}px 22px`};${L?'background:var(--xr);color:var(--xt)':`background:${BL};color:#fff`}`;
+    const bub=m._t?`<div class="tw-b" style="${st}">${dots3(L?(dk?'#8b98a5':'#8899a6'):'rgba(255,255,255,.85)')}</div>`:m.img?.url?cimg(m,230):`<div class="tw-b" style="${st}">${esc(m.text)}</div>`;
+    const rd=i===lr&&R,tm=(!m._t&&lastT&&(m.time||rd))?`<div class="tw-t">${esc(m.time||'')}${rd?`${m.time?' · ':''}${esc(R)}`:''}</div>`:'';
+    const av=L?(last?`<div class="tw-av">${pfOf(s,'#fff')}</div>`:'<div class="tw-av ph"></div>'):'';
+    return`<div class="mrow tw-row ${L?'l':'r'} ${first?'first':''}"><div class="tw-col"><div class="tw-line">${av}${bub}</div>${tm}</div></div>`;
+  }).join('');
+  const bg=`<div class="bgl" style="background:${dk?'#000':'#fff'}"></div>`;
+  const ic=dk?'#e7e9ea':'#0f1419', sw=`fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"`;
+  const body=`<div class="tw-head" style="${V}"><svg width="22" height="22" viewBox="0 0 24 24" ${sw} style="color:${ic};flex:none"><path d="M20 12H5M11 5l-7 7 7 7"/></svg><div class="tw-av lg">${pfOf(s,'#fff')}</div><div class="tw-who"><b>${esc(C.name)}</b><span>${esc(C.status||'@username')}</span></div><svg width="24" height="24" viewBox="0 0 24 24" ${sw} style="color:${ic};flex:none"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.8v.01"/></svg></div>
+  <div class="list"><div class="inner tw-inner" style="${V}">${C.date?`<div class="tw-dw">${esc(C.date)}</div>`:''}${rows}</div></div>
+  <div class="tw-in" style="${V}"><svg width="24" height="24" viewBox="0 0 24 24" ${sw} style="color:${BL};flex:none"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/></svg><span class="twgif">GIF</span><div class="tw-f">${hasDraft(s)?draftEl(s,195,15,ic):'<span>메시지 시작하기</span>'}<svg width="22" height="22" viewBox="0 0 24 24" style="color:${BL};flex:none;opacity:${hasDraft(s)?1:.45}"><path d="M21 3L3 10.5l7 2.5 2.5 7z" fill="currentColor"/></svg></div></div>`;
+  return{bg,body};
+}
+const SCREEN_FN={lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw};
 
 let BOX=1;
 function stageHTML(s,opt={}){
@@ -1073,7 +1115,7 @@ function E_msgs(){
       ${area(`chat.messages.${i}.text`,'메시지 내용')}
       <div class="item-f">${imgMini(`chat.messages.${i}.img`)}<div style="width:120px">${tog(`chat.messages.${i}.unread`,'안읽음 1')}</div></div></div>`).join('')}
     <div class="g2"><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="left">＋ 상대방</button><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="right">＋ 나</button></div>
-    <div class="sep"></div>${tog('chat.typing','입력 중… 말풍선 표시 (정지 화면 · PNG용, 영상 · GIF엔 안 나와요)')}${tog('exp.typing','영상 · GIF: 상대 메시지 전에 "입력 중…"')}${tog('exp.typingMe','영상 · GIF: 내 메시지 전에도 "입력 중…"')}${tog('exp.typeIn','영상 · GIF: 내 메시지를 입력창에 타이핑 (켜면 위 항목 대신)')}${tog('chat.autoRead','상대가 읽으면 카톡 "1" 자동 사라짐')}`);
+    <div class="sep"></div>${tog('chat.typing','입력 중… 말풍선 표시 (정지 화면 · PNG용, 영상 · GIF엔 안 나와요)')}${tog('exp.typing','영상 · GIF: 상대 메시지 전에 "입력 중…"')}${tog('exp.typingMe','영상 · GIF: 내 메시지 전에도 "입력 중…"')}${tog('exp.typeIn','영상 · GIF: 내 메시지를 입력창에 타이핑 (위 "내 메시지 입력 중…"이 켜져 있으면 말풍선도 같이 나와요)')}${tog('chat.autoRead','상대가 읽으면 카톡 "1" 자동 사라짐')}`);
 }
 function E_chat(){
   return card('대화방',`${fld('테마',sws('chat.theme',KT.map((t,i)=>[i,`linear-gradient(135deg,${t.bg} 55%,${t.r} 55%)`,t.n])))}
@@ -1132,7 +1174,7 @@ function E_export(){
     ${fld('속도',seg('exp.gifSpeed',[[0.75,'느리게'],[1,'보통'],[1.5,'빠르게'],[2.5,'아주 빠르게']]))}
     ${fld('화질',seg('exp.gifScale',[[1.5,'보통'],[2,'선명'],[3,'최고 (용량 큼)']]))}
     ${fld('배경',seg('exp.gifBg',[['#ffffff','흰색'],['#f3f3f5','회색'],['#000000','검정'],['transparent','투명']]))}
-    ${tog('exp.typing','상대 메시지 전에 "입력 중…" 넣기')}${tog('exp.typingMe','내 메시지 전에도 "입력 중…" 넣기')}${tog('exp.typeIn','내 메시지: 입력창에 타이핑 (켜면 위 "내 메시지 입력 중" 대신)')}<div class="sep"></div>
+    ${tog('exp.typing','상대 메시지 전에 "입력 중…" 넣기')}${tog('exp.typingMe','내 메시지 전에도 "입력 중…" 넣기')}${tog('exp.typeIn','내 메시지: 입력창에 타이핑 (위 "내 메시지 입력 중…"이 켜져 있으면 말풍선도 같이 나와요)')}<div class="sep"></div>
     <button class="btn full" data-act="gif">GIF 저장</button>`)
   +E_video()+card('프로젝트',`<div class="hint" style="margin-bottom:10px">작업 내용은 이 브라우저에 자동 저장돼요. 파일로 백업하거나 다른 기기로 옮길 수 있어요.</div>
     <div class="g2"><button class="btn ghost" data-act="saveJson">파일로 저장</button><label class="btn ghost upl">불러오기<input type="file" accept=".json,application/json" data-load></label></div>
@@ -1183,7 +1225,7 @@ function chatPlan(s){
     if(s.exp.typing&&m.side==='left'&&firstOfSide)mk(c=>{take(c,k-1);c._typing=true;},gap*.8,`t${k}`);
     const typeIn=s.exp.typeIn&&m.side==='right'&&m.text&&m.text.trim()&&!(m.img&&m.img.url);
     if(typeIn){const ch=[...m.text.trim()],st=Math.min(ch.length,10),tot=Math.max(700,Math.min(2200,ch.length*90));
-      for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');mk(c=>{take(c,k-1);c._draft=txt;},j===st?tot/st+260:tot/st,`d${k}_${j}`);}}
+      for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');mk(c=>{take(c,k-1);c._draft=txt;if(s.exp.typingMe)c._typing='right';},j===st?tot/st+260:tot/st,`d${k}_${j}`);}}
     else if(s.exp.typingMe&&m.side==='right'&&firstOfSide)mk(c=>{take(c,k-1);c._typing='right';},gap*.7,`tr${k}`);
     let sound=m.side;
     if(s.exp.smooth)for(const t of [.3,.62,.88]){mk(c=>{take(c,k);c._slide=t;},45,`s${k}_${t}`,sound);sound=undefined;}
@@ -1437,6 +1479,12 @@ function E_chatlike(t){
     <div class="g2">${fld('읽음 표시',txt('sms.read','비우면 숨김'))}${fld('상태 문구',txt('chat.status','기본 문구'))}</div>
     ${fld('날짜 구분선',txt('chat.date','비우면 숨김'))}${imgField('chat.profile','상대 프로필 사진')}`)+E_msgs();
 }
+function E_tw(){
+  return card('트위터 DM',`${fld('화면',seg('tw.mode',[['light','화이트'],['dark','다크']]))}
+    <div class="g2">${fld('상대 이름',txt('chat.name','이름'))}${fld('아이디',txt('chat.status','@username'))}</div>
+    <div class="g2">${fld('읽음 표시',txt('sms.read','비우면 숨김'))}${fld('날짜 구분선',txt('chat.date','비우면 숨김'))}</div>
+    ${imgField('chat.profile','상대 프로필 사진')}`)+E_msgs();
+}
 function quickCard(){
   const v=S.chat.messages.filter(m=>m.text).map(m=>(m.side==='right'?'> ':'')+m.text).join('\n');
   return card('빠른 입력',`<textarea class="in" id="quickTx" style="min-height:130px;line-height:1.55;padding:9px 11px" placeholder="한 줄에 하나씩. 줄 앞에 > 를 붙이면 내가 보낸 메시지">${esc(v)}</textarea>
@@ -1463,7 +1511,7 @@ function renderEditor(){
   let h='';
   if(ui.tab==='screen'){
     h=`<div class="chips">${SCREENS.map(([k,l])=>`<button class="chip ${S.screen===k?'on':''}" data-act="screen" data-val="${k}">${UI[k]}${l}</button>`).join('')}</div>`
-      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램')})[S.screen]();
+      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램'),tw:E_tw})[S.screen]();
   }else if(ui.tab==='device')h=E_device();
   else if(ui.tab==='ooc')h=E_ooc();
   else h=E_export();
@@ -1601,7 +1649,7 @@ function buildFrames(s){
   const push=(mod,delay)=>{const c=structuredClone(s);c.chat.typing=false;mod(c);F.push({s:c,delay:Math.max(30,Math.round(delay))});};
   switch(s.screen){
     case'lock':{const n=Math.min(s.lock.notis.length,lkMax(s));for(let k=0;k<=n;k++)push(c=>{c.lock.notis=c.lock.notis.slice(0,k);},k===n?hold:(k===0?D*1.2:D));break;}
-    case'chat':case'sms':case'ig':case'line':case'tg':{
+    case'chat':case'sms':case'ig':case'line':case'tg':case'tw':{
       const n=s.chat.messages.filter(visibleMsg).length;
       const take=(c,k)=>{c.chat.messages=c.chat.messages.filter(visibleMsg).slice(0,k);};
       push(c=>take(c,0),D);
@@ -1609,7 +1657,7 @@ function buildFrames(s){
       for(let k=1;k<=n;k++){
         if(s.exp.typing&&ms[k-1].side==='left'&&(k===1||ms[k-2].side!=='left'))push(c=>{take(c,k-1);c._typing=true;},D*.9);
         const mk1=ms[k-1],typeIn=s.exp.typeIn&&mk1.side==='right'&&mk1.text&&mk1.text.trim()&&!(mk1.img&&mk1.img.url);
-        if(typeIn){const ch=[...mk1.text.trim()],st=Math.min(ch.length,5);for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');push(c=>{take(c,k-1);c._draft=txt;},(j===st?D*.55:D*.3));}}
+        if(typeIn){const ch=[...mk1.text.trim()],st=Math.min(ch.length,5);for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');push(c=>{take(c,k-1);c._draft=txt;if(s.exp.typingMe)c._typing='right';},(j===st?D*.55:D*.3));}}
         else if(s.exp.typingMe&&mk1.side==='right'&&(k===1||ms[k-2].side!=='right'))push(c=>{take(c,k-1);c._typing='right';},D*.7);
         push(c=>take(c,k),k===n?hold:D);
       }break;}
