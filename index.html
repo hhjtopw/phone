@@ -781,6 +781,8 @@ function sp(p,v){const ks=p.split('.');let o=S;for(let i=0;i<ks.length-1;i++)o=o
 let SA=380/824;
 const LK_MAX={phone:6,vert:4,horiz:2,four:2};
 const lkMax=s=>LK_MAX[(s.device&&s.device.ratio)||'phone']||6;
+/* 칸 수를 넘는 알림은 아래에서 새로 올라오고, 기존 알림은 한 칸씩 위로 밀려나요 */
+function lkShown(s){const mx=lkMax(s),ns=s.lock.notis;return ns.length>mx?ns.slice(-mx):ns.slice();}
 const DIMS={phone:[380,824],vert:[380,676],horiz:[760,428],four:[600,450]};
 function imgLayout(im,ca){
   const a=im.ar||1,z=Math.max(1,(im.z||100)/100),H=1/ca;
@@ -850,7 +852,7 @@ function screenLock(s){
   const bg=`<div class="bgl" style="background:${WALLS[L.preset]?.[0]||WALLS[0][0]}">${bgImg(L.wall,SA)}${L.dim?`<div class="bgl" style="background:rgba(0,0,0,${L.dim/100})"></div>`:''}</div>`;
   const tsh=L.shadow?(isDarkColor(tc)?'text-shadow:0 1px 10px rgba(255,255,255,.55)':'text-shadow:0 2px 16px rgba(0,0,0,.45),0 1px 4px rgba(0,0,0,.35)'):'';
   const lightBg=isDarkColor(tc)||wallLight(s);const nst=(L.notiStyle==='glass'&&lightBg)?'light':L.notiStyle;const lb=lightBg?'rgba(0,0,0,.07)':'rgba(255,255,255,.16)',li=lightBg?'#111':'#fff';
-  const notis=L.notis.slice(0,lkMax(s)).map(n=>{const a=APPS[n.app]||APPS.kakao;return`<div class="nt ${nst}"><div class="nt-ic" style="background:${a.bg}">${a.ic()}</div><div class="nt-tx"><div class="nt-h"><b>${esc(n.title||a.n)}</b><span>${esc(n.time)}</span></div>${n.body?`<div class="nt-b">${esc(n.body)}</div>`:''}</div></div>`;}).join('');
+  const notis=lkShown(s).map(n=>{const a=APPS[n.app]||APPS.kakao;return`<div class="nt ${nst}"><div class="nt-ic" style="background:${a.bg}">${a.ic()}</div><div class="nt-tx"><div class="nt-h"><b>${esc(n.title||a.n)}</b><span>${esc(n.time)}</span></div>${n.body?`<div class="nt-b">${esc(n.body)}</div>`:''}</div></div>`;}).join('');
   const body=`<div class="lk"><div class="lk-date" style="color:${tc};${tsh}">${esc(L.date)}</div><div class="lk-time" style="color:${tc};font-weight:${L.weight};${tsh}">${esc(L.time)}</div><div class="lk-notis">${notis}</div></div>
    ${L.buttons?`<div class="lk-btn" style="right:44px;background:${lb}">${I.cam(li,20)}</div>`:''}`;
   return{bg,body};
@@ -1181,8 +1183,8 @@ function E_lock(){
     ${fld('굵기',seg('lock.weight',[[300,'얇게'],[500,'보통'],[600,'두껍게'],[800,'아주 두껍게']]))}
     ${tog('lock.shadow','시계 그림자 (밝은 배경에서도 잘 보이게)')}${tog('lock.buttons','카메라 버튼')}`,randBtn('lock'))
   +card('알림',`${fld('스타일',seg('lock.notiStyle',[['glass','투명'],['light','밝게'],['dark','어둡게']]))}
-    <div class="hint" style="margin:-4px 0 10px">화면 비율에 맞춰 최대 <b>${lkMax(S)}개</b>까지만 보여요${lkMax(S)<6?' (4:3 · 16:9 는 2개)':''}.</div>
-    ${L.notis.map((n,i)=>`<div class="item"${i>=lkMax(S)?' style="opacity:.45"':''}><div class="item-h"><span class="badge">알림 ${i+1}${i>=lkMax(S)?' · 숨김':''}</span>${mv('lock.notis',i,L.notis.length)}</div>
+    <div class="hint" style="margin:-4px 0 10px">화면에는 최대 <b>${lkMax(S)}개</b>까지 보여요. ${lkMax(S)}개를 넘는 알림은 숨겨지지 않고 <b>아래에서 새로 올라오며</b>, 기존 알림은 한 칸씩 위로 밀려나고 맨 위는 사라져요.</div>
+    ${L.notis.map((n,i)=>`<div class="item"><div class="item-h"><span class="badge">알림 ${i+1}${i>=lkMax(S)?' · 새로 도착':''}</span>${mv('lock.notis',i,L.notis.length)}</div>
       <div class="g2">${fld('앱',sel(`lock.notis.${i}.app`,Object.entries(APPS).map(([k,a])=>[k,a.n])))}${fld('시간',txt(`lock.notis.${i}.time`,'지금'))}</div>
       ${fld('제목',txt(`lock.notis.${i}.title`,'비우면 앱 이름'))}${fld('내용',area(`lock.notis.${i}.body`,'알림 내용'))}</div>`).join('')}
     <button class="btn line" data-act="add" data-path="lock.notis" data-tpl="noti">＋ 알림 추가</button>`);
@@ -1760,7 +1762,7 @@ function buildFrames(s){
   const sp=s.exp.gifSpeed||1,D=700/sp,hold=1600/sp,F=[];
   const push=(mod,delay)=>{const c=structuredClone(s);c.chat.typing=false;mod(c);F.push({s:c,delay:Math.max(30,Math.round(delay))});};
   switch(s.screen){
-    case'lock':{const n=Math.min(s.lock.notis.length,lkMax(s));for(let k=0;k<=n;k++)push(c=>{c.lock.notis=c.lock.notis.slice(0,k);},k===n?hold:(k===0?D*1.2:D));break;}
+    case'lock':{const n=s.lock.notis.length;for(let k=0;k<=n;k++)push(c=>{c.lock.notis=c.lock.notis.slice(0,k);},k===n?hold:(k===0?D*1.2:D));break;}
     case'chat':case'sms':case'ig':case'line':case'tg':case'tw':{
       const n=s.chat.messages.filter(visibleMsg).length;
       const take=(c,k)=>{c.chat.messages=c.chat.messages.filter(visibleMsg).slice(0,k);};
