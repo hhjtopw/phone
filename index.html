@@ -1233,4 +1233,344 @@ async function exportVideo(){
     rec.start(250);
     const iv=setInterval(()=>{cx.drawImage(cur,0,0,W,H);},33);
     if(aEl){aEl.currentTime=0;aEl.play().catch(()=>{});}
-    const t0=perfo
+    const t0=performance.now();let acc=0;
+    for(let i=0;i<plan.length;i++){
+      const f=plan[i];
+      cur=await getBmp(f.key);cx.drawImage(cur,0,0,W,H);
+      if(dest&&f.snd&&wantSfx(S,f.snd))sfxPlay(dest,S.exp.sfxVol/100);
+      if(plan[i+1])getBmp(plan[i+1].key);
+      busy('영상 녹화 중… 화면을 닫지 마세요',.75+.23*(i/plan.length));
+      acc+=f.delay;const wait=t0+acc-performance.now();if(wait>0)await sleep(wait);
+    }
+    if(aEl)aEl.pause();
+    clearInterval(iv);await sleep(300);rec.stop();await stopped;
+    busy('저장 중…',.99);
+    await download(new Blob(chunks,{type:'video/webm'}),`chat_video_${stamp()}.webm`);
+    toast('영상 저장 완료');
+  }catch(err){console.error(err);toast('영상 저장에 실패했어요');}
+  finally{busyOff();renderPreview();}
+}
+function vidField(k){
+  const v=VID[k],lab=k==='other'?'상대방 화면 영상':'내 화면 영상';
+  return`<div class="imgf"><div class="imgf-top"><div class="th">${v?'▶':'+'}</div><div class="imgf-tx"><b>${lab}</b><span>${v?esc(v.name)+' · '+v.dur.toFixed(1)+'초':'MP4 · WEBM · MOV'}</span></div><label class="btn sm ghost upl">${v?'변경':'영상 넣기'}<input type="file" accept="video/*" data-vid="${k}"></label>${v?`<button class="ib x" data-act="clearVid" data-val="${k}" title="삭제">✕</button>`:''}</div></div>`;
+}
+document.addEventListener('change',async e=>{
+  const el=e.target;if(el.type!=='file'||el.dataset.vid===undefined||!el.files.length)return;
+  const key=el.dataset.vid;
+  try{
+    busy('영상 불러오는 중…',.3);
+    const v=await loadVideoFile(el.files[0]);
+    VID[key]=v;S.face[key]={url:vidToDataURL(v.el),x:50,y:50,z:100,ar:v.w/v.h,vid:true};
+    toast('영상을 넣었어요 — 저장 탭의 "영상 저장"으로 만드세요');
+  }catch(err){console.error(err);toast('영상을 열 수 없어요');}
+  finally{busyOff();}
+  renderEditor();commit();
+});
+function E_video(){
+  const nm=SCREENS.find(x=>x[0]===S.screen)[1],anim=CHATLIKE.includes(S.screen)?'메시지가 하나씩 올라오고 화면이 위로 스크롤돼요':'화면 변화를 프레임으로 만들어요';
+  return card('영상 (WebM)',`<div class="hint box">지금 화면 <b>(${nm})</b> → ${anim}. 폰 목업이면 프레임까지 그대로 녹화돼요.</div>
+    ${rng('exp.vidGap',0.5,3,0.1,'메시지 간격','초')}
+    ${fld('화질',seg('exp.vidScale',[[1,'보통'],[1.5,'선명'],[2,'최고']]))}
+    ${fld('배경색',seg('exp.vidBg',[['#ffffff','흰색'],['#000000','검정'],['#00ff00','크로마키']]))}
+    <div class="hint" style="margin:-4px 0 10px">WebM은 투명을 저장할 수 없어요. 투명이 필요하면 PNG·GIF를 쓰고, 영상은 크로마키(초록)로 뽑아 편집 앱에서 지우세요.</div>
+    ${S.screen==='face'?fld('영상통화 프레임',seg('exp.faceFps',[[8,'8fps'],[10,'10fps'],[15,'15fps']]))+tog('exp.vidAudio','넣은 영상의 소리 포함'):''}${S.screen==='call'?fld('전화 애니메이션 길이',seg('exp.callSec',[[3,'3초'],[5,'5초'],[8,'8초']])):''}${tog('exp.smooth','부드러운 스크롤 애니메이션')}${tog('exp.endClear','대화가 끝나면 말풍선 사라지게')}${tog('exp.typing','상대 메시지 전에 "입력 중…" 넣기')}
+    ${fld('효과음',seg('exp.sfx',[['off','끄기'],['me','내 메시지'],['all','모든 메시지']]))}
+    ${rng('exp.sfxVol',0,100,5,'볼륨','%')}<div class="sep"></div>
+    <div class="g2"><button class="btn ghost" data-act="play">▶ 미리보기</button><button class="btn" data-act="vid">영상 저장</button></div>`);
+}
+function E_chatlike(t){
+  return card(t,`<div class="g2">${fld('상대 이름',txt('chat.name','이름'))}${fld('안읽은 수',txt('chat.unread','0'))}</div>
+    <div class="g2">${fld('읽음 표시',txt('sms.read','비우면 숨김'))}${fld('상태 문구',txt('chat.status','기본 문구'))}</div>
+    ${fld('날짜 구분선',txt('chat.date','비우면 숨김'))}${imgField('chat.profile','상대 프로필 사진')}`)+E_msgs();
+}
+function quickCard(){
+  const v=S.chat.messages.filter(m=>m.text).map(m=>(m.side==='right'?'> ':'')+m.text).join('\n');
+  return card('빠른 입력',`<textarea class="in" id="quickTx" style="min-height:130px;line-height:1.55;padding:9px 11px" placeholder="한 줄에 하나씩. 줄 앞에 > 를 붙이면 내가 보낸 메시지">${esc(v)}</textarea>
+    <div class="hint">적용하면 아래 메시지 목록이 이 내용으로 바뀌어요 (사진·시간은 초기화).</div>
+    <button class="btn full" style="margin-top:8px" data-act="quick">대화 적용</button>`);
+}
+
+const OOC=[
+  ['잠금화면 알림','*[OOC: 이전 RP 중지. 새로운 상황 전개. PC가 아침에 눈을 떠 확인한 휴대폰 잠금화면을 그대로 출력한다. 상단에 시각과 날짜를 표시하고, 아래로 알림 카드들이 순서대로 쌓여 있는 형식을 따른다.\n· 메시지: NPC가 보낸 문자. 저장된 애칭과 함께, 짧고 일상적이지만 다정함이 묻어나는 한 줄.\n· 오늘의 운세: PC를 수신인으로 한 운세 알림. 오늘의 흐름과 행운의 아이템이나 음식을 포함하며, 은근히 두 사람의 관계를 암시하는 문구를 섞는다.\n· 인트라넷 알림: 소속 조직이나 학교의 공지 알림. 오늘의 식단, 일정 공지 등 사소하고 생활감 있는 내용.\n각 알림은 실제 휴대폰 알림처럼 앱 이름, 제목, 본문이 구분된 짧은 형태로 작성하고, 알림 세 개가 모여 PC의 하루가 시작되는 아침 분위기가 드러나도록 할 것.]*'],
+  ['메신저 대화 내역','*[OOC: 이전 RP 중지. 새로운 상황 전개. NPC와 PC가 최근 나누었던 모바일 메신저 대화 내역을 따라 여러 개의 상황으로 나누어 출력한다. 형식은 다음과 같이 작성한다.\n==========\n202X년 X월 X일 (요일)\n==========\n[발신자] (발신시간) : 대화 내용\n각 날짜별로 대화의 주제와 분위기가 완전히 달라야 하며 서로 의미 없는 초성이나 이모티콘, 오타가 포함된 현실적이고 자연스러운 티키타카로 구성한다. 오직 날짜 구분선과 대화 로그만 연속해서 출력할 것. 최소 700자 이상, 5개 이상의 다른 날짜를 서술.]*'],
+];
+function E_ooc(){
+  return OOC.map(([t,txt],i)=>card(t,`<textarea class="in ta ooc" id="ooc${i}" rows="9" spellcheck="false">${esc(txt)}</textarea>
+    <button class="btn full" style="margin-top:10px" data-act="copyOoc" data-i="${i}">복사하기</button>`)).join('')
+    +'<div class="hint" style="padding-top:16px">복사 전에 내용을 고쳐도 돼요. 탭을 다시 열면 원래 문구로 돌아가요.</div>';
+}
+async function copyText(t){
+  try{await navigator.clipboard.writeText(t);return true;}catch(e){}
+  try{const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(a);a.focus();a.select();a.setSelectionRange(0,t.length);const ok=document.execCommand('copy');a.remove();return ok;}catch(e){return false;}
+}
+function renderEditor(){
+  const pb=$('.panel'), top=pb.scrollTop;
+  $('#tabs').innerHTML=[['screen','화면'],['device','화면 · 기기'],['export','저장']].map(([k,l])=>`<button class="${ui.tab===k?'on':''}" data-act="tab" data-val="${k}">${l}</button>`).join('');
+  let h='';
+  if(ui.tab==='screen'){
+    h=`<div class="chips">${SCREENS.map(([k,l])=>`<button class="chip ${S.screen===k?'on':''}" data-act="screen" data-val="${k}">${UI[k]}${l}</button>`).join('')}</div>`
+      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램')})[S.screen]();
+  }else if(ui.tab==='device')h=E_device();
+  else if(ui.tab==='ooc')h=E_ooc();
+  else h=E_export();
+  $('#pbody').innerHTML=h;pb.scrollTop=top;document.querySelectorAll('.nav').forEach(updNav);
+}
+
+/* ═════════════ Events ═════════════ */
+const FMT={
+  time:el=>{let v=el.value.replace(/\D/g,'').slice(0,4);if(v.length>=3)v=v.slice(0,v.length-2)+':'+v.slice(-2);el.value=v;return v;},
+  bat:el=>{let v=el.value.replace(/\D/g,'').slice(0,3);if(+v>100)v='100';el.value=v;return v===''?0:+v;},
+};
+document.addEventListener('input',e=>{
+  const el=e.target;if(el.dataset.navz){setZoom(el.dataset.navz,+el.value);return;}
+  const p=el.dataset.bind;if(!p)return;
+  let v=el.type==='checkbox'?el.checked:el.type==='range'?Number(el.value):el.value;
+  if(el.dataset.fmt)v=FMT[el.dataset.fmt](el);
+  sp(p,v);
+  if(el.type==='range'&&el.nextElementSibling)el.nextElementSibling.textContent=v+(el.dataset.unit||'');
+  if(el.type==='checkbox'||el.tagName==='SELECT')renderEditor();
+  commit();
+});
+const TPL={
+  noti:()=>({id:uid(),app:'kakao',title:'',body:'',time:'지금'}),
+  left:()=>({id:uid(),side:'left',text:'',time:S.chat.messages.at(-1)?.time||'오후 12:00',unread:false,img:null}),
+  right:()=>({id:uid(),side:'right',text:'',time:S.chat.messages.at(-1)?.time||'오후 12:00',unread:false,img:null}),
+};
+function randDate(){const y=new Date().getFullYear();return new Date(y,rnd(0,11),rnd(1,28));}
+const RAND={
+  status:()=>{S.status.time=`${rnd(1,12)}:${pad(rnd(0,59))}`;S.status.battery=rnd(8,100);},
+  lock:()=>{const d=randDate();S.lock.time=`${rnd(1,12)}:${pad(rnd(0,59))}`;S.lock.date=`${d.getMonth()+1}월 ${d.getDate()}일 ${WD[d.getDay()]}요일`;},
+  face:()=>{S.face.status=`${pad(rnd(0,59))}:${pad(rnd(0,59))}`;},
+  chatDate:()=>{const d=randDate();S.chat.date=`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ${WD[d.getDay()]}요일`;},
+};
+const ACT={
+  tab:el=>{ui.tab=el.dataset.val;renderEditor();$('.panel').scrollTop=0;},
+  screen:el=>{S.screen=el.dataset.val;ui.gsel=-1;renderEditor();commit();},
+  set:el=>{sp(el.dataset.path,el.dataset.num!==undefined?Number(el.dataset.val):el.dataset.val);renderEditor();commit();},
+  add:el=>{g(el.dataset.path).push(TPL[el.dataset.tpl]());renderEditor();commit();
+    requestAnimationFrame(()=>{const items=$('#pbody').querySelectorAll('.item');const last=items[items.length-1];if(last){last.scrollIntoView({block:'center',behavior:'smooth'});last.querySelector('textarea,input.in')?.focus({preventScroll:true});}});},
+  del:el=>{const a=g(el.dataset.path);a.splice(+el.dataset.i,1);if(el.dataset.path==='gallery.items')ui.gsel=-1;renderEditor();commit();},
+  move:el=>{const a=g(el.dataset.path),i=+el.dataset.i,j=i+ +el.dataset.d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];if(el.dataset.path==='gallery.items')ui.gsel=j;renderEditor();commit();},
+  clearImg:el=>{sp(el.dataset.path,null);const k=el.dataset.path.replace('face.','');if(VID[k])VID[k]=null;renderEditor();commit();},
+  clearVid:el=>{const k=el.dataset.val;VID[k]=null;if(S.face[k])S.face[k].vid=false;renderEditor();commit();},
+  gifToggle:el=>{const a=S.exp.gifScreens,k=el.dataset.val,i=a.indexOf(k);if(i>=0)a.splice(i,1);else a.push(k);renderEditor();commit();},
+  zoom:el=>{const im=g(el.dataset.path);if(im)setZoom(el.dataset.path,(im.z||100)+ +el.dataset.d);},
+  zoomFit:el=>{const im=g(el.dataset.path);if(!im)return;im.x=50;im.y=50;setZoom(el.dataset.path,100);},
+  copyOoc:async el=>{const t=document.getElementById('ooc'+el.dataset.i).value;toast(await copyText(t)?'복사했어요':'복사가 안 돼요 — 직접 선택해서 복사해 주세요');},
+  gsel:el=>{ui.gsel=ui.gsel===+el.dataset.i?-1:+el.dataset.i;renderEditor();},
+  rand:el=>{RAND[el.dataset.val]();renderEditor();commit();},
+  png:()=>exportPNG(false),copy:()=>exportPNG(true),gif:()=>exportGIF(),vid:()=>exportVideo(),play:()=>playPreview(),
+  quick:()=>{const t=document.getElementById('quickTx');if(!t)return;const tp=nowParts(),time=S.chat.messages.length?S.chat.messages[S.chat.messages.length-1].time:`${tp.ap} ${tp.h12}:${pad(tp.m)}`;const ms=mkMsgs(t.value,time);if(!ms.length){toast('내용을 입력해 주세요');return;}S.chat.messages=ms;renderEditor();commit();toast(`${ms.length}개 메시지를 적용했어요`);},
+  saveJson:()=>download(new Blob([JSON.stringify(S)],{type:'application/json'}),`phone-project_${stamp()}.json`),
+  reset:()=>{if(!confirm('모든 내용을 지우고 처음 상태로 돌릴까요?'))return;S=defaults();ui.gsel=-1;renderEditor();commit();toast('초기화했어요');},
+};
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act]');if(!el||el.disabled)return;
+  e.preventDefault();e.stopPropagation();
+  ACT[el.dataset.act]?.(el);
+});
+function loadImg(file,max=1600){
+  return new Promise((res,rej)=>{
+    const url=URL.createObjectURL(file),im=new Image();
+    im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);
+      c.getContext('2d').drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);
+      const png=/png|gif|webp/.test(file.type);
+      res({url:c.toDataURL(png?'image/png':'image/jpeg',.92),x:50,y:50,z:100,ar:im.width/im.height});};
+    im.onerror=()=>{URL.revokeObjectURL(url);rej(new Error('이미지를 열 수 없어요'));};
+    im.src=url;
+  });
+}
+document.addEventListener('change',async e=>{
+  const el=e.target;if(el.type!=='file'||!el.files.length)return;
+  try{
+    if(el.dataset.img!==undefined){sp(el.dataset.img,await loadImg(el.files[0]));}
+    else if(el.dataset.gallery!==undefined){for(const f of el.files)S.gallery.items.push({id:uid(),img:await loadImg(f,900)});}
+    else if(el.dataset.load!==undefined){const t=await el.files[0].text();S=merge(defaults(),JSON.parse(t));ui.gsel=-1;if(!(S.exp.gifScale>=1.5))S.exp.gifScale=2;if(![0.75,1,1.5,2.5].includes(S.exp.gifSpeed))S.exp.gifSpeed=1.5;toast('프로젝트를 불러왔어요');}
+    renderEditor();commit();
+  }catch(err){console.error(err);toast('파일을 읽지 못했어요');}
+});
+
+/* ═════════════ Busy / toast / download ═════════════ */
+let toastT=0;
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2400);}
+function busy(msg,p){$('#busy').classList.add('on');$('#busyTx').textContent=msg;$('#busyBar').style.width=Math.round((p||0)*100)+'%';}
+function busyOff(){$('#busy').classList.remove('on');}
+function stamp(){const d=new Date();return`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;}
+async function download(blob,name){
+  try{
+    if(window.claude&&window.claude.use){const d=await window.claude.use('downloads');if(d){await d.save({filename:name,data:blob});return;}}
+  }catch(e){if(e&&e.code==='declined')return;}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+}
+const tick=()=>new Promise(r=>setTimeout(r,0));
+
+/* ═════════════ Capture ═════════════ */
+async function capture(st,scale,bg){
+  try{await document.fonts.ready;}catch(e){}
+  const host=$('#off');host.innerHTML=stageHTML(st,{exp:true});
+  const el=host.firstElementChild;applySlide(el,st);
+  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  let c=null;
+  try{
+    // 브라우저가 직접 글자를 배치하는 방식 → 사파리에서도 글씨가 밀리지 않음
+    if(window.modernScreenshot)c=await modernScreenshot.domToCanvas(el,{scale,backgroundColor:bg||null,timeout:20000});
+  }catch(e){console.warn('modern-screenshot 실패, html2canvas로 대체',e);c=null;}
+  if(!c){
+    if(typeof html2canvas==='undefined'){host.innerHTML='';throw new Error('capture library not loaded');}
+    c=await html2canvas(el,{scale,backgroundColor:bg,logging:false,useCORS:true});
+  }
+  host.innerHTML='';
+  return c;
+}
+const bgVal=v=>v==='transparent'?null:v;
+async function exportPNG(copy){
+  busy('이미지 렌더링 중…',.4);
+  try{
+    const c=await capture(S,S.exp.scale,bgVal(S.exp.bg));
+    busy('마무리 중…',.9);
+    const blob=await new Promise(r=>c.toBlob(r,'image/png'));
+    if(copy){await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);toast('클립보드에 복사했어요');}
+    else{download(blob,`phone_${S.screen}_${stamp()}.png`);toast('PNG 저장 완료');}
+  }catch(err){console.error(err);toast(copy?'이 브라우저에선 복사가 안 돼요 — PNG 저장을 써 주세요':'저장에 실패했어요');}
+  finally{busyOff();}
+}
+
+/* ═════════════ GIF frames ═════════════ */
+function buildFrames(s){
+  const sp=s.exp.gifSpeed||1,D=700/sp,hold=1600/sp,F=[];
+  const push=(mod,delay)=>{const c=structuredClone(s);c.chat.typing=false;mod(c);F.push({s:c,delay:Math.max(30,Math.round(delay))});};
+  switch(s.screen){
+    case'lock':{const n=s.lock.notis.length;for(let k=0;k<=n;k++)push(c=>{c.lock.notis=c.lock.notis.slice(0,k);},k===n?hold:(k===0?D*1.2:D));break;}
+    case'chat':case'sms':case'ig':case'line':case'tg':{
+      const n=s.chat.messages.filter(visibleMsg).length;
+      const take=(c,k)=>{c.chat.messages=c.chat.messages.filter(visibleMsg).slice(0,k);};
+      push(c=>take(c,0),D);
+      const ms=s.chat.messages.filter(visibleMsg);
+      for(let k=1;k<=n;k++){
+        if(s.exp.typing&&ms[k-1].side==='left'&&(k===1||ms[k-2].side!=='left'))push(c=>{take(c,k-1);c._typing=true;},D*.9);
+        push(c=>take(c,k),k===n?hold:D);
+      }break;}
+    case'face':{
+      const m=s.face.status.match(/(\d{1,2}):(\d{2})(?!.*\d{1,2}:\d{2})/);
+      if(!m){push(()=>{},hold);break;}
+      let sec=+m[1]*60+ +m[2];
+      for(let i=0;i<4;i++){const t=sec+i,str=`${pad(Math.floor(t/60)%100)}:${pad(t%60)}`;push(c=>{c.face.status=s.face.status.slice(0,m.index)+str+s.face.status.slice(m.index+m[0].length);},1000/sp);}
+      break;}
+    case'call':{for(let i=0;i<20;i++)push(c=>{c._ct=i*.12;},120/sp);break;}
+    case'gallery':{const n=Math.min(s.gallery.items.length,40);for(let k=0;k<=n;k++)push(c=>{c.gallery.items=c.gallery.items.slice(0,k);},k===n?hold:D*.6);break;}
+  }
+  return F;
+}
+
+/* ═════════════ GIF encoder (median-cut palette + LZW + frame diff) ═════════════ */
+function buildPalette(list,max){
+  let total=0;for(const d of list)total+=d.length>>2;
+  const step=Math.max(1,Math.floor(total/220000));
+  const sample=[];
+  for(const d of list){for(let i=0,n=0;i<d.length;i+=4,n++){if(n%step)continue;if(d[i+3]<128)continue;sample.push((d[i]<<16)|(d[i+1]<<8)|d[i+2]);}}
+  if(!sample.length)sample.push(0);
+  const info=b=>{let r0=255,r1=0,g0=255,g1=0,b0=255,b1=0;for(const p of b){const r=p>>16&255,gg=p>>8&255,bb=p&255;if(r<r0)r0=r;if(r>r1)r1=r;if(gg<g0)g0=gg;if(gg>g1)g1=gg;if(bb<b0)b0=bb;if(bb>b1)b1=bb;}
+    const rr=r1-r0,gr=g1-g0,br=b1-b0,m=Math.max(rr,gr,br);return{ch:m===gr?8:(m===rr?16:0),range:m};};
+  const boxes=[sample],infos=[info(sample)];
+  while(boxes.length<max){
+    let bi=-1,best=0;
+    for(let i=0;i<boxes.length;i++){if(!infos[i].range)continue;const sc=infos[i].range*Math.log2(boxes[i].length+1);if(sc>best){best=sc;bi=i;}}
+    if(bi<0)break;
+    const b=boxes[bi],sh=infos[bi].ch;b.sort((x,y)=>((x>>sh)&255)-((y>>sh)&255));
+    const mid=b.length>>1,a1=b.slice(0,mid),a2=b.slice(mid);
+    boxes.splice(bi,1,a1,a2);infos.splice(bi,1,info(a1),info(a2));
+  }
+  return boxes.map(b=>{let r=0,gg=0,bb=0;for(const p of b){r+=p>>16&255;gg+=p>>8&255;bb+=p&255;}const n=b.length||1;return[Math.round(r/n),Math.round(gg/n),Math.round(bb/n)];});
+}
+function lzw(ix,min){
+  let out=new Uint8Array(Math.max(4096,ix.length>>1)),p=0;
+  const put=b=>{if(p===out.length){const n=new Uint8Array(out.length*2);n.set(out);out=n;}out[p++]=b;};
+  const clear=1<<min,eoi=clear+1;let size=min+1,next=eoi+1,cur=0,shift=0;
+  const emit=c=>{cur|=c<<shift;shift+=size;while(shift>=8){put(cur&255);cur>>>=8;shift-=8;}};
+  let dict=new Map();
+  emit(clear);
+  let prefix=ix[0];
+  for(let i=1;i<ix.length;i++){
+    const k=ix[i],key=(prefix<<8)|k,c=dict.get(key);
+    if(c!==undefined){prefix=c;continue;}
+    emit(prefix);
+    if(next===4096){emit(clear);next=eoi+1;size=min+1;dict=new Map();}
+    else{if(next>=(1<<size))size++;dict.set(key,next++);}
+    prefix=k;
+  }
+  emit(prefix);emit(eoi);
+  if(shift>0)put(cur&255);
+  return out.subarray(0,p);
+}
+function subBlocks(d){const n=d.length,o=new Uint8Array(n+Math.ceil(n/255)+1);let j=0;for(let i=0;i<n;i+=255){const l=Math.min(255,n-i);o[j++]=l;o.set(d.subarray(i,i+l),j);j+=l;}o[j++]=0;return o.subarray(0,j);}
+class GifEnc{
+  constructor(w,h,pal){this.w=w;this.h=h;this.pal=pal;this.lut=new Int16Array(1<<21).fill(-1);this.prev=null;this.frames=[];}
+  near(r,g,b){const k=((r>>1)<<14)|((g>>1)<<7)|(b>>1);let v=this.lut[k];if(v>=0)return v;let bd=1e12;const P=this.pal;
+    for(let i=0;i<P.length;i++){const q=P[i],dr=q[0]-r,dg=q[1]-g,db=q[2]-b,d=dr*dr*3+dg*dg*4+db*db*2;if(d<bd){bd=d;v=i;}}this.lut[k]=v;return v;}
+  add(data,delay){
+    const{w,h}=this,n=w*h,cur=new Uint8Array(n);
+    for(let i=0,j=0;i<n;i++,j+=4)cur[i]=data[j+3]<128?255:this.near(data[j],data[j+1],data[j+2]);
+    let x0=0,y0=0,x1=w-1,y1=h-1;const pv=this.prev;
+    if(pv){x0=w;y0=h;x1=-1;y1=-1;
+      for(let y=0;y<h;y++){const o=y*w;for(let x=0;x<w;x++)if(cur[o+x]!==pv[o+x]){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;y1=y;}}
+      if(x1<0){this.frames[this.frames.length-1].delay+=delay;return;}}
+    const fw=x1-x0+1,fh=y1-y0+1,sub=new Uint8Array(fw*fh);
+    for(let y=0;y<fh;y++){const so=(y+y0)*w+x0;for(let x=0;x<fw;x++){const v=cur[so+x];sub[y*fw+x]=(pv&&pv[so+x]===v)?255:v;}}
+    this.frames.push({x:x0,y:y0,w:fw,h:fh,delay,data:subBlocks(lzw(sub,8))});this.prev=cur;
+  }
+  finish(){
+    const u=v=>[v&255,(v>>8)&255],str=s=>[...s].map(c=>c.charCodeAt(0));
+    const parts=[new Uint8Array([...str('GIF89a'),...u(this.w),...u(this.h),0xF7,0,0])];
+    const gct=new Uint8Array(768);this.pal.forEach((c,i)=>{gct[i*3]=c[0];gct[i*3+1]=c[1];gct[i*3+2]=c[2];});parts.push(gct);
+    parts.push(new Uint8Array([0x21,0xFF,0x0B,...str('NETSCAPE2.0'),3,1,0,0,0]));
+    for(const f of this.frames){
+      parts.push(new Uint8Array([0x21,0xF9,4,(1<<2)|1,...u(Math.max(2,Math.round(f.delay/10))),255,0,0x2C,...u(f.x),...u(f.y),...u(f.w),...u(f.h),0,8]));
+      parts.push(f.data);
+    }
+    parts.push(new Uint8Array([0x3B]));
+    return new Blob(parts,{type:'image/gif'});
+  }
+}
+function gifPlan(){
+  const e=S.exp;
+  if(e.gifMode!=='multi'){const f=buildFrames(S);return{frames:f,keys:[0,f.length-1],name:S.screen};}
+  const list=e.gifScreens.length?e.gifScreens:[S.screen];
+  const frames=[],keys=[],hold=Math.round(1400/(e.gifSpeed||1));
+  for(const k of list){
+    const c=structuredClone(S);c.screen=k;
+    const seg=e.gifAnim?buildFrames(c):[{s:c,delay:hold}];
+    keys.push(frames.length,frames.length+seg.length-1);
+    frames.push(...seg);
+  }
+  return{frames,keys:[...new Set(keys)],name:list.join('-')};
+}
+async function exportGIF(){
+  const {frames,keys,name}=gifPlan(),n=frames.length,sc=S.exp.gifScale,bg=bgVal(S.exp.gifBg);
+  try{
+    const grab=async i=>{const c=await capture(frames[i].s,sc,bg);return{w:c.width,h:c.height,data:c.getContext('2d').getImageData(0,0,c.width,c.height).data};};
+    const cache=new Map();
+    for(let j=0;j<keys.length;j++){busy(`색상 분석 중… ${j+1}/${keys.length}`,.02+.08*(j/keys.length));cache.set(keys[j],await grab(keys[j]));}
+    const pal=buildPalette([...cache.values()].map(f=>f.data),255);
+    const ref=cache.get(keys[0]),W=ref.w,H=ref.h;
+    const enc=new GifEnc(W,H,pal);
+    for(let i=0;i<n;i++){
+      busy(`프레임 캡처 중… ${i+1}/${n}`,.1+.85*(i/n));
+      let f=cache.has(i)?cache.get(i):await grab(i);
+      if(f.w!==W||f.h!==H){const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');const t=document.createElement('canvas');t.width=f.w;t.height=f.h;t.getContext('2d').putImageData(new ImageData(f.data,f.w,f.h),0,0);x.drawImage(t,0,0);f={data:x.getImageData(0,0,W,H).data};}
+      enc.add(f.data,frames[i].delay);cache.delete(i);await tick();
+    }
+    busy('GIF 만드는 중…',.98);await tick();
+    const blob=enc.finish();
+    download(blob,`phone_${name}_${stamp()}.gif`);
+    toast(n>1?`GIF 저장 완료 · ${n}프레임 · ${blob.size<1048576?Math.round(blob.size/1024)+'KB':(blob.size/1048576).toFixed(1)+'MB'}`:'움직일 요소가 없어 정지 GIF로 저장했어요');
+  }catch(err){console.error(err);toast('GIF 저장에 실패했어요');}
+  finally{busyOff();}
+}
+
+/* ═════════════ Boot ═════════════ */
+renderEditor();renderPreview();
+if(document.fonts)document.fonts.ready.then(fit);
+</script>
+</body>
+</html>
+
