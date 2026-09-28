@@ -585,6 +585,32 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .scr .dots i{width:.48em;height:.48em}
 /* 아이메시지 상단 이름만 살짝 키움 */
 .scr .im-nm{font-size:14px;margin-top:4px}
+
+/* timeline */
+.tl-head{flex:none;background:var(--xb);border-bottom:1px solid var(--xl);color:var(--xt)}
+.tl-top{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.tl-av,.tl-pf{border-radius:50%;background:#cfd9de;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;flex:none}
+.tl-av{width:30px;height:30px}.tl-pf{width:40px;height:40px}
+.tl-tabs{display:flex}
+.tl-tabs div{flex:1;text-align:center;padding:10px 0 12px;font-size:14.5px;font-weight:500;color:var(--xs);position:relative}
+.tl-tabs div.on{color:var(--xt);font-weight:700}
+.tl-tabs div.on:after{content:'';position:absolute;left:50%;margin-left:-28px;width:56px;bottom:0;height:4px;border-radius:2px;background:#1d9bf0}
+.tl-list{flex:1;min-height:0;overflow:hidden;background:var(--xb);color:var(--xt)}
+.tl-t{display:flex;gap:10px;padding:11px 14px 9px;border-bottom:1px solid var(--xl)}
+.tl-c{flex:1;min-width:0}
+.tl-n{display:flex;align-items:center;gap:3px;font-size:14.5px;line-height:1.2;white-space:nowrap}
+.tl-n b{font-weight:700;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.tl-n span{color:var(--xs);overflow:hidden;text-overflow:ellipsis;min-width:0;margin-left:2px}
+.tl-x{font-size:14.5px;line-height:1.38;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;margin-top:3px;letter-spacing:-.2px}
+.tl-im{position:relative;margin-top:9px;aspect-ratio:16/9;border-radius:16px;overflow:hidden;border:1px solid var(--xl)}
+.tl-act{display:flex;justify-content:space-between;margin-top:10px;padding-right:6px;color:var(--xs);font-size:12px}
+.tl-act span{display:inline-flex;align-items:center;gap:5px}
+.tl-in{flex:none;display:flex;justify-content:space-around;align-items:center;padding:10px 14px 34px;background:var(--xb);border-top:1px solid var(--xl);color:var(--xt)}
+.tl-fab{position:absolute;right:16px;bottom:104px;width:52px;height:52px;border-radius:50%;background:#1d9bf0;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:6}
+.scr.noTop .tl-head{display:none!important}
+.scr.noBottom .tl-in,.scr.noBottom .tl-fab{display:none!important}
+.scr.bgoff .tl-head,.scr.bgoff .tl-in,.scr.bgoff .tl-fab{display:none!important}
+.scr.bgoff .tl-list{background:transparent!important}
 </style>
 </head>
 <body>
@@ -653,8 +679,9 @@ UI.ig='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="curre
 UI.line='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 4c-4.6 0-8 2.8-8 6.3 0 3.1 2.7 5.5 6.3 6.2l-.2 2.5 3.6-2.6c3.4-.7 6.3-3 6.3-6.1C20 6.8 16.6 4 12 4z"/></svg>';
 UI.tw='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg>';
 UI.tg='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21 4L3 11l6 2.2L11 20l3-4.2L18.5 19z"/><path d="M9 13.2L21 4"/></svg>';
+UI.tl='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>';
 /* ═════════════ Data tables ═════════════ */
-const SCREENS=[['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램'],['tw','트위터']];
+const SCREENS=[['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램'],['tw','트위터'],['tl','타임라인']];
 const WALLS=[
   ['linear-gradient(170deg,#4a4a50 0%,#1c1c1f 100%)','그라파이트'],
   ['linear-gradient(170deg,#f1f1f4 0%,#d3d4da 100%)','라이트 그레이',1],
@@ -710,6 +737,10 @@ function defaults(){
       messages:mkMsgs(SAMPLE,kt)},
     sms:{service:'imessage',dateLine:`오늘 ${kt}`,read:'읽음'},
     tw:{mode:'light'},
+    tl:{mode:'light',tab:0,fab:true,me:null,tweets:[
+      {id:uid(),name:'이름',handle:'@username',ver:true,text:'오늘 날씨 진짜 좋다 #일상',time:'2시간',replies:'128',rts:'1,024',likes:'1.2만',views:'32만',av:null,img:null},
+      {id:uid(),name:'이름',handle:'@username',ver:false,text:'다들 점심 뭐 먹었어?',time:'5시간',replies:'34',rts:'12',likes:'890',views:'1.4만',av:null,img:null},
+      {id:uid(),name:'이름',handle:'@username',ver:false,text:'월요일은 언제나 힘들어 ㅠㅠ',time:'1일',replies:'9',rts:'3',likes:'241',views:'5,210',av:null,img:null}]},
     face:{other:null,me:null,name:'이름',status:'00:00',pip:true},
     call:{name:'이름',sub:'휴대전화',photo:null},
     gallery:{title:'최근 항목',cols:3,items:[]},
@@ -754,6 +785,7 @@ function bgImg(im,ca=1){
 }
 function aspectOf(p,im){
   if(/^(lock\.wall|face\.other|call\.photo|chat\.bgImg)$/.test(p))return SA;
+  if(/^tl\.tweets\.\d+\.img$/.test(p))return 16/9;
   if(p==='face.me')return 104/156;
   if(/^chat\.messages\.\d+\.img$/.test(p)){const a=im?.ar||1;return S.screen==='sms'?200/Math.min(280,Math.round(200/a)):190/Math.min(260,Math.round(190/a));}
   return 1;
@@ -772,6 +804,7 @@ function statusColor(s){
     case'lock':return (isDarkColor(lockTimeColor(s))||wallLight(s))?'#000':'#fff';
     case'chat':return KT[s.chat.theme].dark?'#fff':'#000';
     case'tw':return (s.tw&&s.tw.mode)==='dark'?'#fff':'#000';
+    case'tl':return s.tl.mode==='dark'?'#fff':'#000';
     case'face':case'call':return'#fff';
     default:return'#000';
   }
@@ -779,6 +812,7 @@ function statusColor(s){
 function homeColor(s){
   switch(s.screen){
     case'tw':return (s.tw&&s.tw.mode)==='dark'?'rgba(255,255,255,.85)':'#111';
+    case'tl':return s.tl.mode==='dark'?'rgba(255,255,255,.85)':'#111';
     case'ig':case'line':case'tg':return'#111';
     case'chat':return KT[s.chat.theme].dark?'rgba(255,255,255,.85)':'#111';
     case'sms':case'gallery':return'#111';
@@ -986,7 +1020,34 @@ function screenTw(s){
   <div class="tw-in" style="${V}"><svg width="24" height="24" viewBox="0 0 24 24" ${sw} style="color:${BL};flex:none"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 9"/></svg><span class="twgif">GIF</span><div class="tw-f">${hasDraft(s)?draftEl(s,195,15,ic):'<span>메시지 시작하기</span>'}<svg width="22" height="22" viewBox="0 0 24 24" style="color:${BL};flex:none;opacity:${hasDraft(s)?1:.45}"><path d="M21 3L3 10.5l7 2.5 2.5 7z" fill="currentColor"/></svg></div></div>`;
   return{bg,body};
 }
-const SCREEN_FN={lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw};
+function screenTl(s){
+  const T=s.tl,dk=T.mode==='dark',nT=T.tweets.length;
+  const V=dk?'--xb:#000;--xl:#2f3336;--xt:#e7e9ea;--xs:#71767b':'--xb:#fff;--xl:#eff3f4;--xt:#0f1419;--xs:#536471';
+  const ic=(d,z=17,w=1.8)=>`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+  const P={rep:'<path d="M12 4C7 4 3 7.2 3 11.2c0 2.5 1.6 4.7 4 6l-.8 3 3.5-2c.8.2 1.5.2 2.3.2 5 0 9-3.2 9-7.2S17 4 12 4z"/>',
+    rt:'<path d="M4 11V9a3 3 0 0 1 3-3h11M15 3l3 3-3 3M20 13v2a3 3 0 0 1-3 3H6M9 21l-3-3 3-3"/>',
+    like:'<path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/>',
+    view:'<path d="M5 20V12M11 20V5M17 20V9"/>',
+    share:'<path d="M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>'};
+  const vf='<svg width="16" height="16" viewBox="0 0 24 24" style="flex:none"><path fill="#1d9bf0" d="M12 1.5l2.6 1.9 3.2-.2 1 3.1 2.6 1.9-1 3 1 3-2.6 1.9-1 3.1-3.2-.2L12 22.5l-2.6-1.9-3.2.2-1-3.1L2.6 15.8l1-3-1-3 2.6-1.9 1-3.1 3.2.2z"/><path d="M8 12.2l2.7 2.6L16 9.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const fmt=t=>esc(t).replace(/(^|\s)([#@][^\s<]+)/g,'$1<span style="color:#1d9bf0">$2</span>');
+  const a=(k,v)=>`<span>${ic(P[k],17)}${v?esc(v):''}</span>`;
+  const rows=T.tweets.map((t,i)=>{
+    const av=t.av&&t.av.url?bgImg(t.av):I.person('#fff');
+    const im=t.img&&t.img.url?`<div class="tl-im">${bgImg(t.img,16/9)}</div>`:'';
+    let an='';if(T._tlt!=null&&T._tlt<1&&i===nT-1){const e=1-Math.pow(1-T._tlt,3);an=` style="opacity:${Math.min(1,e*1.4).toFixed(2)};transform:translateY(${((1-e)*28).toFixed(1)}px)"`;}
+    return`<div class="tl-t"${an}><div class="tl-pf">${av}</div><div class="tl-c"><div class="tl-n"><b>${esc(t.name)}</b>${t.ver?vf:''}<span>${esc(t.handle)}${t.time?' · '+esc(t.time):''}</span></div>${t.text?`<div class="tl-x">${fmt(t.text)}</div>`:''}${im}<div class="tl-act">${a('rep',t.replies)}${a('rt',t.rts)}${a('like',t.likes)}${a('view',t.views)}${ic(P.share,17)}</div></div></div>`;
+  }).join('');
+  const me=T.me&&T.me.url?bgImg(T.me):I.person('#fff');
+  const xl='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>';
+  const bg=`<div class="bgl" style="background:${dk?'#000':'#fff'}"></div>`;
+  const body=`<div class="tl-head" style="${V}"><div class="tl-top"><div class="tl-av">${me}</div>${xl}<span style="width:30px"></span></div><div class="tl-tabs"><div class="${T.tab?'':'on'}">추천</div><div class="${T.tab?'on':''}">팔로잉</div></div></div>
+  <div class="tl-list" style="${V}">${rows}</div>
+  <div class="tl-in" style="${V}">${ic('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',24,2.2)}${ic('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5l5 5"/>',24)}${ic('<path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4"/>',24)}${ic('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',24)}</div>
+  ${T.fab?`<div class="tl-fab">${ic('<path d="M12 5v14M5 12h14"/>',24,2.4)}</div>`:''}`;
+  return{bg,body};
+}
+const SCREEN_FN={lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw,tl:screenTl};
 
 let BOX=1;
 function stageHTML(s,opt={}){
@@ -1161,7 +1222,7 @@ function E_device(){
     ${tog('status.showPct','배터리 % 숫자')}${tog('status.charging','충전 중')}`,randBtn('status'));
 }
 function E_export(){
-  const e=S.exp, gifDesc={lock:'알림이 하나씩 도착',chat:'메시지가 하나씩 도착',sms:'메시지가 하나씩 도착',face:'통화 시간이 1초씩 증가',call:'수락 버튼이 울림',gallery:'사진이 하나씩 추가'}[S.screen]||'메시지가 하나씩 도착';
+  const e=S.exp, gifDesc={lock:'알림이 하나씩 도착',chat:'메시지가 하나씩 도착',sms:'메시지가 하나씩 도착',face:'통화 시간이 1초씩 증가',call:'수락 버튼이 울림',gallery:'사진이 하나씩 추가',tl:'트윗이 아래에서 올라오며 하나씩 등장'}[S.screen]||'메시지가 하나씩 도착';
   return fcard('png','이미지 (PNG)',`${fld('해상도',seg('exp.scale',[[2,'2x'],[3,'3x'],[4,'4x (최고화질)']]))}
     ${fld('배경',seg('exp.bg',[['transparent','투명'],['#ffffff','흰색'],['#f3f3f5','회색'],['#000000','검정']]))}
     ${tog('exp.shadow','기기 그림자')}<div class="sep"></div>
@@ -1474,6 +1535,21 @@ function E_video(){
     ${rng('exp.sfxVol',0,100,5,'볼륨','%')}${rng('exp.sfxOff',-300,300,10,'효과음 싱크 보정','ms')}<div class="sep"></div>
     <div class="g2"><button class="btn ghost" data-act="play">▶ 미리보기</button><button class="btn" data-act="vid">영상 저장</button></div>`);
 }
+function E_tl(){
+  const T=S.tl,ts=T.tweets;
+  return card('타임라인',`${fld('화면',seg('tl.mode',[['light','화이트'],['dark','다크']]))}
+    ${fld('상단 탭',seg('tl.tab',[[0,'추천'],[1,'팔로잉']]))}
+    ${imgField('tl.me','내 프로필 사진',false)}${tog('tl.fab','글쓰기 버튼')}
+    <div class="hint" style="margin-top:6px">GIF · 영상 · ▶ 미리보기에서 트윗이 아래에서 부드럽게 올라오며 하나씩 나타나요.</div>`)
+  +card('트윗',ts.map((t,i)=>`<div class="item"><div class="item-h"><span class="badge">트윗 ${i+1}</span>${mv('tl.tweets',i,ts.length)}</div>
+    <div class="g2">${fld('이름',txt(`tl.tweets.${i}.name`,'이름'))}${fld('아이디',txt(`tl.tweets.${i}.handle`,'@username'))}</div>
+    ${area(`tl.tweets.${i}.text`,'트윗 내용 (#해시태그 · @멘션은 파랗게)')}
+    <div class="g2">${fld('시간',txt(`tl.tweets.${i}.time`,'2시간'))}${fld('댓글 수',txt(`tl.tweets.${i}.replies`,'128'))}</div>
+    <div class="g3">${fld('리트윗 수',txt(`tl.tweets.${i}.rts`,'1,024'))}${fld('하트 수',txt(`tl.tweets.${i}.likes`,'1.2만'))}${fld('조회수',txt(`tl.tweets.${i}.views`,'32만'))}</div>
+    ${tog(`tl.tweets.${i}.ver`,'인증 배지')}
+    ${imgField(`tl.tweets.${i}.av`,'프로필 사진',false)}${imgField(`tl.tweets.${i}.img`,'첨부 사진')}</div>`).join('')
+    +`<button class="btn line" data-act="add" data-path="tl.tweets" data-tpl="tweet">＋ 트윗 추가</button>`);
+}
 function E_chatlike(t){
   return card(t,`<div class="g2">${fld('상대 이름',txt('chat.name','이름'))}${fld('안읽은 수',txt('chat.unread','0'))}</div>
     <div class="g2">${fld('읽음 표시',txt('sms.read','비우면 숨김'))}${fld('상태 문구',txt('chat.status','기본 문구'))}</div>
@@ -1511,7 +1587,7 @@ function renderEditor(){
   let h='';
   if(ui.tab==='screen'){
     h=`<div class="chips">${SCREENS.map(([k,l])=>`<button class="chip ${S.screen===k?'on':''}" data-act="screen" data-val="${k}">${UI[k]}${l}</button>`).join('')}</div>`
-      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램'),tw:E_tw})[S.screen]();
+      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램'),tw:E_tw,tl:E_tl})[S.screen]();
   }else if(ui.tab==='device')h=E_device();
   else if(ui.tab==='ooc')h=E_ooc();
   else h=E_export();
@@ -1535,6 +1611,7 @@ document.addEventListener('input',e=>{
 });
 const TPL={
   noti:()=>({id:uid(),app:'kakao',title:'',body:'',time:'지금'}),
+  tweet:()=>({id:uid(),name:'이름',handle:'@username',ver:false,text:'',time:'1시간',replies:'',rts:'',likes:'',views:'',av:null,img:null}),
   left:()=>({id:uid(),side:'left',text:'',time:S.chat.messages.at(-1)?.time||'오후 12:00',unread:false,img:null}),
   right:()=>({id:uid(),side:'right',text:'',time:S.chat.messages.at(-1)?.time||'오후 12:00',unread:false,img:null}),
 };
@@ -1668,6 +1745,7 @@ function buildFrames(s){
       for(let i=0;i<4;i++){const t=sec+i,str=`${pad(Math.floor(t/60)%100)}:${pad(t%60)}`;push(c=>{c.face.status=s.face.status.slice(0,m.index)+str+s.face.status.slice(m.index+m[0].length);},1000/sp);}
       break;}
     case'call':{for(let i=0;i<20;i++)push(c=>{c._ct=i*.12;},120/sp);break;}
+    case'tl':{const n=s.tl.tweets.length;for(let k=1;k<=n;k++){for(const t of [.4,.8])push(c=>{c.tl.tweets=c.tl.tweets.slice(0,k);c.tl._tlt=t;},50/sp);push(c=>{c.tl.tweets=c.tl.tweets.slice(0,k);},k===n?hold:D);}break;}
     case'gallery':{const n=Math.min(s.gallery.items.length,40);for(let k=0;k<=n;k++)push(c=>{c.gallery.items=c.gallery.items.slice(0,k);},k===n?hold:D*.6);break;}
   }
   return F;
