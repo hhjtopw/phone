@@ -1115,7 +1115,7 @@ function E_msgs(){
       ${area(`chat.messages.${i}.text`,'메시지 내용')}
       <div class="item-f">${imgMini(`chat.messages.${i}.img`)}<div style="width:120px">${tog(`chat.messages.${i}.unread`,'안읽음 1')}</div></div></div>`).join('')}
     <div class="g2"><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="left">＋ 상대방</button><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="right">＋ 나</button></div>
-    <div class="sep"></div>${tog('chat.typing','입력 중… 말풍선 표시 (정지 화면 · PNG용, 영상 · GIF엔 안 나와요)')}${tog('exp.typing','영상 · GIF: 상대 메시지 전에 "입력 중…"')}${tog('exp.typingMe','영상 · GIF: 내 메시지 전에도 "입력 중…"')}${tog('exp.typeIn','영상 · GIF: 내 메시지를 입력창에 타이핑 (위 "내 메시지 입력 중…"이 켜져 있으면 말풍선도 같이 나와요)')}${tog('chat.autoRead','상대가 읽으면 카톡 "1" 자동 사라짐')}`);
+    <div class="sep"></div>${tog('chat.typing','입력 중… 말풍선 표시 (정지 화면 · PNG용, 영상 · GIF엔 안 나와요)')}${tog('exp.typing','영상 · GIF: 상대 메시지 전에 "입력 중…"')}${tog('exp.typingMe','영상 · GIF: 내 메시지 전에도 "입력 중…"')}${tog('exp.typeIn','영상 · GIF: 내 메시지를 입력창에 타이핑 (타이핑하는 동안 "입력 중…" 말풍선도 같이 나와요)')}${tog('chat.autoRead','상대가 읽으면 카톡 "1" 자동 사라짐')}`);
 }
 function E_chat(){
   return card('대화방',`${fld('테마',sws('chat.theme',KT.map((t,i)=>[i,`linear-gradient(135deg,${t.bg} 55%,${t.r} 55%)`,t.n])))}
@@ -1174,7 +1174,7 @@ function E_export(){
     ${fld('속도',seg('exp.gifSpeed',[[0.75,'느리게'],[1,'보통'],[1.5,'빠르게'],[2.5,'아주 빠르게']]))}
     ${fld('화질',seg('exp.gifScale',[[1.5,'보통'],[2,'선명'],[3,'최고 (용량 큼)']]))}
     ${fld('배경',seg('exp.gifBg',[['#ffffff','흰색'],['#f3f3f5','회색'],['#000000','검정'],['transparent','투명']]))}
-    ${tog('exp.typing','상대 메시지 전에 "입력 중…" 넣기')}${tog('exp.typingMe','내 메시지 전에도 "입력 중…" 넣기')}${tog('exp.typeIn','내 메시지: 입력창에 타이핑 (위 "내 메시지 입력 중…"이 켜져 있으면 말풍선도 같이 나와요)')}<div class="sep"></div>
+    ${tog('exp.typing','상대 메시지 전에 "입력 중…" 넣기')}${tog('exp.typingMe','내 메시지 전에도 "입력 중…" 넣기')}${tog('exp.typeIn','내 메시지: 입력창에 타이핑 (타이핑하는 동안 "입력 중…" 말풍선도 같이 나와요)')}<div class="sep"></div>
     <button class="btn full" data-act="gif">GIF 저장</button>`)
   +E_video()+card('프로젝트',`<div class="hint" style="margin-bottom:10px">작업 내용은 이 브라우저에 자동 저장돼요. 파일로 백업하거나 다른 기기로 옮길 수 있어요.</div>
     <div class="g2"><button class="btn ghost" data-act="saveJson">파일로 저장</button><label class="btn ghost upl">불러오기<input type="file" accept=".json,application/json" data-load></label></div>
@@ -1225,7 +1225,7 @@ function chatPlan(s){
     if(s.exp.typing&&m.side==='left'&&firstOfSide)mk(c=>{take(c,k-1);c._typing=true;},gap*.8,`t${k}`);
     const typeIn=s.exp.typeIn&&m.side==='right'&&m.text&&m.text.trim()&&!(m.img&&m.img.url);
     if(typeIn){const ch=[...m.text.trim()],st=Math.min(ch.length,10),tot=Math.max(700,Math.min(2200,ch.length*90));
-      for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');mk(c=>{take(c,k-1);c._draft=txt;if(s.exp.typingMe)c._typing='right';},j===st?tot/st+260:tot/st,`d${k}_${j}`);}}
+      for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');mk(c=>{take(c,k-1);c._draft=txt;c._typing='right';},j===st?tot/st+260:tot/st,`d${k}_${j}`);}}
     else if(s.exp.typingMe&&m.side==='right'&&firstOfSide)mk(c=>{take(c,k-1);c._typing='right';},gap*.7,`tr${k}`);
     let sound=m.side;
     if(s.exp.smooth)for(const t of [.3,.62,.88]){mk(c=>{take(c,k);c._slide=t;},45,`s${k}_${t}`,sound);sound=undefined;}
@@ -1657,7 +1657,7 @@ function buildFrames(s){
       for(let k=1;k<=n;k++){
         if(s.exp.typing&&ms[k-1].side==='left'&&(k===1||ms[k-2].side!=='left'))push(c=>{take(c,k-1);c._typing=true;},D*.9);
         const mk1=ms[k-1],typeIn=s.exp.typeIn&&mk1.side==='right'&&mk1.text&&mk1.text.trim()&&!(mk1.img&&mk1.img.url);
-        if(typeIn){const ch=[...mk1.text.trim()],st=Math.min(ch.length,5);for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');push(c=>{take(c,k-1);c._draft=txt;if(s.exp.typingMe)c._typing='right';},(j===st?D*.55:D*.3));}}
+        if(typeIn){const ch=[...mk1.text.trim()],st=Math.min(ch.length,5);for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');push(c=>{take(c,k-1);c._draft=txt;c._typing='right';},(j===st?D*.55:D*.3));}}
         else if(s.exp.typingMe&&mk1.side==='right'&&(k===1||ms[k-2].side!=='right'))push(c=>{take(c,k-1);c._typing='right';},D*.7);
         push(c=>take(c,k),k===n?hold:D);
       }break;}
