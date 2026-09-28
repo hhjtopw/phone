@@ -1243,6 +1243,45 @@ async function preloadFonts(){
     const t=[...new Set(s)].join('');
     await Promise.all(['400','500','600','700'].map(w=>document.fonts.load(`${w} 16px "Noto Sans KR"`,t)));await document.fonts.ready;}catch(e){}
 }
+/* 정확한 길이의 영상 인코딩 — 실시간 녹화(MediaRecorder) 대신 프레임 단위로 WebCodecs 인코딩 */
+async function encodeExact({plan,store,bg,TR,fmt,ok,faceVid}){
+  try{
+    const M=await import('https://cdn.jsdelivr.net/npm/mediabunny@1.60.0/+esm');
+    const FPS=30,f0=store.get(plan[0].key),W=f0.w&~1,H=f0.h&~1,webm=TR||fmt==='webm',vc=webm?'vp9':'avc';
+    if(!await M.canEncodeVideo(vc,{width:W,height:H,bitrate:8e6}))return null;
+    const T=[0];plan.forEach((f,i)=>T.push(T[i]+f.delay/1000));
+    const total=T[plan.length],N=Math.max(1,Math.round(total*FPS));
+    const ff=webm?new M.WebMOutputFormat():new M.Mp4OutputFormat();
+    const out=new M.Output({format:ff,target:new M.BufferTarget()});
+    const cv=document.createElement('canvas');cv.width=W;cv.height=H;const cx=cv.getContext('2d',{alpha:true});
+    const vs=new M.CanvasSource(cv,TR?{codec:vc,bitrate:12e6,alpha:'keep'}:{codec:vc,bitrate:8e6});
+    out.addVideoTrack(vs,{frameRate:FPS});
+    let as=null,abuf=null;
+    if(ok){
+      const ac=await M.getFirstEncodableAudioCodec(ff.getSupportedAudioCodecs(),{numberOfChannels:2,sampleRate:48000});
+      if(ac){
+        const oc=new OfflineAudioContext(2,Math.ceil(total*48000),48000),g=S.exp.sfxVol/100,off=(S.exp.sfxOff||0)/1000;
+        plan.forEach((f,i)=>{if(f.snd&&wantSfx(S,f.snd)&&sfxBuf){const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=sfxBuf;gn.gain.value=g;b.connect(gn);gn.connect(oc.destination);b.start(Math.max(0,T[i]+off));}});
+        if(faceVid){try{const fb=await actx.decodeAudioData(await VID.other.file.arrayBuffer());const b=oc.createBufferSource();b.buffer=fb;b.loop=true;b.connect(oc.destination);b.start(0);}catch(e){console.warn('영상 소리 디코딩 실패',e);}}
+        abuf=await oc.startRendering();
+        as=new M.AudioBufferSource({codec:ac,bitrate:128e3});out.addAudioTrack(as);
+      }
+    }
+    await out.start();
+    const ap=as?as.add(abuf):null;
+    let pi=-1;
+    for(let n=0;n<N;n++){
+      const t=n/FPS;let q=Math.max(pi,0);while(q<plan.length-1&&T[q+1]<=t+1e-6)q++;
+      if(q!==pi){pi=q;const b=await createImageBitmap(store.get(plan[q].key).blob);
+        if(TR)cx.clearRect(0,0,W,H);else{cx.fillStyle=bg;cx.fillRect(0,0,W,H);}cx.drawImage(b,0,0,W,H);b.close();}
+      await vs.add(t,1/FPS);
+      if(n%10===0){busy(`영상 인코딩 중… ${n}/${N}`,.78+.2*(n/N));await tick();}
+    }
+    if(ap)await ap;
+    await out.finalize();
+    return{blob:new Blob([out.target.buffer],{type:webm?'video/webm':'video/mp4'}),mp4:!webm};
+  }catch(e){console.warn('정밀 인코딩 실패 → 기존 방식으로 대체',e);return null;}
+}
 async function exportVideo(){
   if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream){toast('이 브라우저는 영상 저장을 지원하지 않아요 (크롬·엣지 권장)');return;}
   playing=false;
@@ -1268,6 +1307,12 @@ async function exportVideo(){
       await download(zipStore(ents),`chat_frames_${stamp()}.zip`);
       toast(`PNG 시퀀스 저장 완료 — ${N}프레임 · ${FPS}fps${TR?' · 투명':''}`);
       return;
+    }
+    if(window.VideoEncoder){
+      busy('영상 인코딩 준비 중…',.76);
+      const r=await encodeExact({plan,store,bg,TR,fmt,ok,faceVid});
+      if(r){await download(r.blob,`chat_video_${stamp()}.${r.mp4?'mp4':'webm'}`);
+        toast(TR?'투명 영상 저장 완료 (WebM)':CK?'MP4 저장 완료 — 크로마키 배경, 편집 앱에서 키 색을 지우세요':`영상 저장 완료 (${r.mp4?'MP4':'WebM'})`);return;}
     }
     const f0=store.get(plan[0].key),W=f0.w&~1,H=f0.h&~1;
     const cv=document.createElement('canvas');cv.width=W;cv.height=H;
