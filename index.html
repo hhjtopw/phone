@@ -694,6 +694,23 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .gv-film{display:flex;gap:3px;padding:0 10px;overflow:hidden;height:44px}
 .gv-fi{flex:0 0 34px;height:34px;border-radius:5px;overflow:hidden;position:relative;opacity:.55}
 .gv-fi.on{opacity:1;outline:2px solid #fff;outline-offset:1px}
+
+.lk-notis.top{top:214px;bottom:auto;justify-content:flex-start;max-height:none;padding-bottom:0}
+.ig-head{border-bottom:0;height:60px}.ig-avw{width:40px;height:40px}
+.ig-ring{width:40px;height:40px;border-radius:50%;padding:2.5px;background:conic-gradient(from 200deg,#f9ce34,#ee2a7b,#6228d7,#f9ce34)}
+.ig-ring .ig-av.lg{width:35px;height:35px;border:2px solid #fff;box-sizing:border-box}
+.ig-avw .on{width:12px;height:12px;right:-1px;bottom:0}
+.ig-who b{display:flex;align-items:center}
+.ig-in{margin:0 12px 28px;padding:4px 14px 4px 4px;border-radius:26px;background:#efefef}
+.ig-f{border:0;background:none;padding:0 0 0 12px;height:40px;color:#7a7a80}.ig-fi{gap:13px;align-items:center}
+.gv-p{border-right:14px solid #000}.gv-fi{transition:none}
+@keyframes swn{0%,55%,100%{left:4px}78%{left:calc(4px + 60px)}}
+@keyframes swt{from{background-position:120% 0}to{background-position:-20% 0}}
+@keyframes cbk{50%{opacity:0}}
+.swk.lv{animation:swn 2s ease-in-out infinite}
+.swl{background:linear-gradient(100deg,rgba(255,255,255,.45) 35%,#fff 50%,rgba(255,255,255,.45) 65%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+.swl.lv{animation:swt 2.2s linear infinite}
+.crt2{display:inline-block;width:2px;height:20px;background:#0a84ff;margin:0 1px;vertical-align:-4px}.crt2.lv{animation:cbk 1s steps(1) infinite}
 </style>
 </head>
 <body>
@@ -819,7 +836,7 @@ function defaults(){
     screen:'chat',
     device:{model:'island',frame:'black',bezel:true,statusColor:'auto',homeBar:true,ratio:'phone',uiTop:true,uiBottom:true,bgOff:false},
     status:{show:true,time:`${t.h12}:${pad(t.m)}`,battery:82,signal:4,net:'5G',showPct:false,charging:false},
-    lock:{wall:null,preset:0,dim:0,date:`${d.getMonth()+1}월 ${d.getDate()}일 ${WD[d.getDay()]}요일`,time:`${t.h12}:${pad(t.m)}`,timeColor:'auto',weight:600,buttons:true,shadow:true,notiStyle:'glass',
+    lock:{wall:null,preset:0,dim:0,date:`${d.getMonth()+1}월 ${d.getDate()}일 ${WD[d.getDay()]}요일`,time:`${t.h12}:${pad(t.m)}`,timeColor:'auto',weight:600,buttons:true,shadow:true,newTop:true,shake:true,notiStyle:'glass',
       notis:[{id:uid(),app:'sms',title:'이름',body:'알림 내용',time:'지금'},{id:uid(),app:'alarm',title:'알람',body:'알림 내용',time:'지금'}]},
     chat:{bs:100,theme:0,autoRead:true,status:'',name:'이름',profile:null,bgImg:null,date:`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ${WD[d.getDay()]}요일`,unread:0,typing:false,
       messages:mkMsgs(SAMPLE,kt)},
@@ -841,8 +858,8 @@ function defaults(){
       {id:uid(),name:'이름',handle:'@username',ver:false,text:'다들 점심 뭐 먹었어?',time:'5시간',replies:'34',rts:'12',likes:'890',views:'1.4만',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false},
       {id:uid(),name:'이름',handle:'@username',ver:false,text:'월요일은 언제나 힘들어 ㅠㅠ',time:'1일',replies:'9',rts:'3',likes:'241',views:'5,210',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false}]},
     face:{other:null,me:null,name:'이름',status:'00:00',pip:true},
-    call:{name:'이름',sub:'휴대전화',photo:null},
-    gallery:{title:'최근 항목',cols:3,items:[],view:'grid',cur:1},
+    call:{name:'이름',sub:'휴대전화',photo:null,style:'full',swipe:true},
+    gallery:{title:'최근 항목',cols:3,items:[],view:'grid',cur:1,scroll:false},
     exp:{pop:{on:false,app:'sms',title:'이름',body:'메시지 내용',time:'지금',style:'light',at:1,dur:4,snd:true,vol:100,still:true},scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',fx:'none',fxY:60,vidMode:'single',vidSeq:['lock','chat'],trans:'cut',shutter:'none',scrollFx:false,gifScreens:['lock','chat','sms'],gifAnim:true,tlPress:true},
   };
 }
@@ -942,8 +959,8 @@ function screenLock(s){
   const bg=`<div class="bgl" style="background:${WALLS[L.preset]?.[0]||WALLS[0][0]}">${bgImg(L.wall,SA)}${L.dim?`<div class="bgl" style="background:rgba(0,0,0,${L.dim/100})"></div>`:''}</div>`;
   const tsh=L.shadow?(isDarkColor(tc)?'text-shadow:0 1px 10px rgba(255,255,255,.55)':'text-shadow:0 2px 16px rgba(0,0,0,.45),0 1px 4px rgba(0,0,0,.35)'):'';
   const lightBg=isDarkColor(tc)||wallLight(s);const nst=(L.notiStyle==='glass'&&lightBg)?'light':L.notiStyle;const lb=lightBg?'rgba(0,0,0,.07)':'rgba(255,255,255,.16)',li=lightBg?'#111':'#fff';
-  const notis=lkShown(s).map(n=>{const a=APPS[n.app]||APPS.kakao;return`<div class="nt ${nst}"><div class="nt-ic" style="background:${a.bg}">${a.ic()}</div><div class="nt-tx"><div class="nt-h"><b>${esc(n.title||a.n)}</b><span>${esc(n.time)}</span></div>${n.body?`<div class="nt-b">${esc(n.body)}</div>`:''}</div></div>`;}).join('');
-  const body=`<div class="lk"><div class="lk-lock"><svg width="15" height="19" viewBox="0 0 16 20"><rect x="1.5" y="8" width="13" height="10.5" rx="2.5" fill="${tc}"/><path d="M4.3 8V6a3.7 3.7 0 0 1 7.4 0v2" fill="none" stroke="${tc}" stroke-width="1.8"/></svg></div><div class="lk-date" style="color:${tc};${tsh}">${esc(L.date)}</div><div class="lk-time" style="color:${tc};font-weight:${L.weight};${tsh}">${esc(L.time)}</div><div class="lk-notis">${notis}</div></div>
+  const LQ=s._lq,LS=s._lsh,arr0=lkShown(s),arr=L.newTop!==false?arr0.slice().reverse():arr0,nw=L.newTop!==false?0:arr.length-1;const notis=arr.map((n,ni)=>{const a=APPS[n.app]||APPS.kakao;return`<div class="nt ${nst}" style="${x_ntFx(ni===nw,LQ,LS)}"><div class="nt-ic" style="background:${a.bg}">${a.ic()}</div><div class="nt-tx"><div class="nt-h"><b>${esc(n.title||a.n)}</b><span>${esc(n.time)}</span></div>${n.body?`<div class="nt-b">${esc(n.body)}</div>`:''}</div></div>`;}).join('');
+  const body=`<div class="lk"><div class="lk-lock"><svg width="15" height="19" viewBox="0 0 16 20"><rect x="1.5" y="8" width="13" height="10.5" rx="2.5" fill="${tc}"/><path d="M4.3 8V6a3.7 3.7 0 0 1 7.4 0v2" fill="none" stroke="${tc}" stroke-width="1.8"/></svg></div><div class="lk-date" style="color:${tc};${tsh}">${esc(L.date)}</div><div class="lk-time" style="color:${tc};font-weight:${L.weight};${tsh}">${esc(L.time)}</div><div class="lk-notis${L.newTop!==false?' top':''}">${notis}</div></div>
    ${L.buttons?`<div class="lk-btn" style="left:44px;background:${lb}">${I.flash(li,20)}</div><div class="lk-btn" style="right:44px;background:${lb}">${I.cam(li,20)}</div>`:''}`;
   return{bg,body};
 }
@@ -1011,7 +1028,7 @@ function screenFace(s){
   <div class="fc-bar"><div class="fc-btn">${I.speaker('#fff')}</div><div class="fc-btn">${I.video('#fff')}</div><div class="fc-btn">${I.mic('#fff')}</div><div class="fc-btn red">${I.phone('#fff',28,135)}</div></div>`;
   return{bg,body};
 }
-function screenCall(s){
+function screenCall0(s){
   const cf=s.device.ratio==='four'||s.device.ratio==='horiz',C=s.call, p=s._pulse||0, t=s._ct, anim=t!=null;
   const z=anim?1+Math.min(.07,t*.014):1;
   const photo=C.photo?.url?`<div class="${!anim&&!s._still?'lvz':''}" style="position:absolute;left:0;top:0;right:0;bottom:0;transform:scale(${z.toFixed(4)})">${bgImg(C.photo,SA)}</div><div class="bgl" style="background:rgba(0,0,0,.38)"></div>`:'';
@@ -1027,7 +1044,7 @@ function screenCall(s){
   const eo=anim?1-Math.pow(1-Math.min(1,t/.7),3):1;
   const st1=eo<1?`opacity:${eo.toFixed(2)};transform:translateY(${((1-eo)*-14).toFixed(1)}px)`:'',st2=eo<1?`opacity:${eo.toFixed(2)};transform:translateY(${((1-eo)*46).toFixed(1)}px)`:'';
   const body=`<div class="cl${cf?' cf':''}" style="${st1}"><div class="cl-sub">${esc(C.sub)}</div><div class="cl-name">${esc(C.name)}</div></div>
-  <div class="cl-bot${cf?' cf':''}" style="${st2}"><div class="cl-row" style="margin-bottom:${cf?26:46}px"><div class="cl-it"><div class="c s">${I.alarm('#fff',22)}</div>리마인더</div><div class="cl-it"><div class="c s">${I.msg('#fff',22)}</div>메시지</div></div>
+  <div class="cl-bot${cf?' cf':''}" style="${st2}${C.swipe?';display:none':''}"><div class="cl-row" style="margin-bottom:${cf?26:46}px"><div class="cl-it"><div class="c s">${I.alarm('#fff',22)}</div>리마인더</div><div class="cl-it"><div class="c s">${I.msg('#fff',22)}</div>메시지</div></div>
   <div class="cl-row"><div class="cl-it"><div class="c b" style="background:#ff3b30">${I.phone('#fff',34,135)}</div>거절</div><div class="cl-it"><div class="c b" style="background:#34c759;${ring}">${rings}<span class="${live?'lvw':''}" style="display:flex;transform:rotate(${wig.toFixed(1)}deg)">${I.phone('#fff',34)}</span></div>수락</div></div></div>`;
   return{bg,body};
 }
@@ -1042,7 +1059,7 @@ function screenGallery(s){
     c=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>`];
   const tab=[['보관함',1],['For You',0],['앨범',0],['검색',0]].map(([t,on],i)=>`<div class="${on?'on':''}">${GI[i](on?'#111':'#a1a1a6')}${t}</div>`).join('');
   const body=`<div class="gl-head"><h3>${esc(G.title)}</h3><span class="gl-sel">선택</span></div><div class="gl-sub">사진 ${n}장</div>
-  <div class="gl-grid" style="grid-template-columns:repeat(${cols},1fr)">${tiles}</div><div class="gl-tab">${tab}</div>`;
+  <div style="flex:1;min-height:0;overflow:hidden"><div class="gl-grid" style="grid-template-columns:repeat(${cols},1fr);${x_glS(s)}">${tiles}</div></div><div class="gl-tab">${tab}</div>`;
   return{bg,body};
 }
 /* ── 인스타 DM · LINE · 텔레그램 ── */
@@ -1062,15 +1079,15 @@ function screenIg(s){
   const rows=ms.map((m,i)=>{
     const p=ms[i-1],n=ms[i+1],first=!p||p.side!==m.side,last=!n||n.side!==m.side,L=m.side==='left';
     const rad=L?`${first?21:4}px 21px 21px ${last?21:4}px`:`21px ${first?21:4}px ${last?21:4}px 21px`;
-    const st=`border-radius:${rad};${L?'background:#efefef;color:#000':'background:#3797f0;color:#fff'}`;
+    const st=`border-radius:${rad};${L?'background:#efefef;color:#000':`background:${x_igG(i,ms.length)};color:#fff`}`;
     const bub=m._t?`<div class="ig-b" style="${st}">${dots3(L?'#8e8e93':'rgba(255,255,255,.85)')}</div>`:m.img?.url?cimg(m,210):`<div class="ig-b" style="${st}">${esc(m.text)}</div>`;
     const av=L?(last?`<div class="ig-av">${pfOf(s,'#fff')}</div>`:'<div class="ig-av ph"></div>'):'';
     return`<div class="mrow ig-row ${L?'l':'r'} ${first?'first':''}">${av}${bub}</div>${(i===lr||i===ll)&&R?`<div class="ig-seen${L?' l':''}">${esc(R)}</div>`:''}`;
   }).join('');
   const bg='<div class="bgl" style="background:#fff"></div>';
-  const body=`<div class="ig-head"><div class="ig-back">${I.chevL('#111',19)}${hasUnread(C.unread)?`<span>${esc(C.unread)}</span>`:''}</div><div class="ig-avw"><div class="ig-av lg">${pfOf(s,'#fff')}</div><i class="on"></i></div><div class="ig-who"><b>${esc(C.name)}</b><span>${esc(C.status||'활동 중')}</span></div><div class="ig-ic">${I.phone('#111',22)}${I.video('#111',26)}</div></div>
+  const body=`<div class="ig-head"><div class="ig-back">${I.chevL('#111',19)}${hasUnread(C.unread)?`<span>${esc(C.unread)}</span>`:''}</div><div class="ig-avw"><div class="ig-ring"><div class="ig-av lg">${pfOf(s,'#fff')}</div></div><i class="on"></i></div><div class="ig-who"><b>${esc(C.name)}<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="margin-left:3px"><path d="M9 4l8 8-8 8"/></svg></b><span>${esc(C.status||'활동 중')}</span></div><div class="ig-ic">${I.phone('#111',22)}${I.video('#111',26)}</div></div>
   <div class="list"><div class="inner ig-inner">${C.date?`<div class="ig-date">${esc(C.date)}</div>`:''}${rows}</div></div>
-  <div class="ig-in"><div class="ig-cam">${I.cam('#fff',20)}</div><div class="ig-f">${hasDraft(s)?`${draftEl(s,175,14.5,'#111')}<b style="color:#3797f0;font-size:14.5px;font-weight:600;flex:none;margin-left:8px">보내기</b>`:`<span>메시지...</span><span class="ig-fi">${I.mic('#111',20)}${I.plus('#111',22)}</span>`}</div></div>`;
+  <div class="ig-in"><div class="ig-cam">${I.cam('#fff',20)}</div><div class="ig-f">${hasDraft(s)?`${draftEl(s,175,14.5,'#111')}<b style="color:#3797f0;font-size:14.5px;font-weight:600;flex:none;margin-left:8px">보내기</b>`:`<span>메시지 보내기...</span><span class="ig-fi">${I.mic('#111',20)}${X_IMG}${X_STK}${I.plus('#111',22)}</span>`}</div></div>`;
   return{bg,body};
 }
 function screenLine(s){
@@ -1325,16 +1342,16 @@ function screenRecents(s){
   return{bg:'<div class="bgl" style="background:#fff"></div>',body:`<div style="padding:50px 16px 0"><div style="display:flex;align-items:center;justify-content:space-between;height:44px"><span style="color:#0a84ff;font-size:17px;width:44px">편집</span>${seg}<span style="width:44px"></span></div><div style="font-size:34px;font-weight:700;letter-spacing:.3px;margin:2px 0 8px;color:#000">${esc(R.title)}</div></div>${rows}${bar}`};
 }
 function screenProfile(s){
-  const P=s.profile,pt=s._pt!=null?s._pt:(P.stage==='new'?1:0),st=P.change==='photo'?0:pt,pp=P.change==='status'?0:pt;
-  const av=(im,o)=>im&&im.url?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:${o.toFixed(2)}">${bgImg(im)}</div>`:'';
-  const both=av(P.photo,1-pp)+av(P.newPhoto,pp),has=(P.photo&&P.photo.url)||(P.newPhoto&&P.newPhoto.url);
-  const bg=`<div class="bgl" style="background:linear-gradient(170deg,#4a4a50,#1b1b1e 70%)"><div class="bgl" style="filter:blur(26px);transform:scale(1.3);opacity:.55">${both}</div><div class="bgl" style="background:rgba(0,0,0,.35)"></div></div>`;
+  const cf4=s.device.ratio==='four'||s.device.ratio==='horiz',P=s.profile,pt=s._pt!=null?s._pt:(P.stage==='new'?1:0),st=P.change==='photo'?0:pt,pp=P.change==='status'?0:pt;
+  const av=(im,o,ca=1)=>im&&im.url?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:${o.toFixed(2)}">${bgImg(im,ca)}</div>`:'';
+  const both=av(P.photo,1-pp)+av(P.newPhoto,pp),bgb=av(P.photo,1-pp,SA)+av(P.newPhoto,pp,SA),has=(P.photo&&P.photo.url)||(P.newPhoto&&P.newPhoto.url);
+  const bg=`<div class="bgl" style="background:linear-gradient(170deg,#4a4a50,#1b1b1e 70%)"><div class="bgl" style="filter:blur(26px);transform:scale(1.3);opacity:.55">${bgb}</div><div class="bgl" style="background:rgba(0,0,0,.35)"></div></div>`;
   const ln=(t,o,y)=>`<div style="position:absolute;left:0;right:0;text-align:center;opacity:${o.toFixed(2)};transform:translateY(${y.toFixed(1)}px)">${esc(t)}</div>`;
   const x='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>';
   const it=(ic,l)=>`<div class="cl-it"><div class="c s">${ic}</div>${l}</div>`;
-  const body=`<div style="display:flex;justify-content:space-between;align-items:center;padding:58px 18px 0;position:relative;z-index:2">${x}<span style="color:#fff;font-size:15px;opacity:.85">프로필 관리</span></div>
-  <div class="cl" style="padding-top:96px"><div style="width:104px;height:104px;border-radius:38px;background:#8e8e93;position:relative;overflow:hidden;margin:0 auto;display:flex;align-items:flex-end;justify-content:center">${has?both:I.person('#fff')}</div><div style="font-size:22px;font-weight:600;margin-top:16px">${esc(P.name)}</div><div style="position:relative;height:22px;margin-top:8px;font-size:15px;opacity:.9">${ln(P.status,1-st,-st*6)}${ln(P.newStatus,st,(1-st)*6)}</div></div>
-  <div class="cl-bot" style="bottom:52px;padding:0 24px"><div class="cl-row" style="justify-content:space-around">${it(I.msg('#fff',22),'나와의 채팅')}${it(I.cam('#fff',22),'프로필 편집')}${it(I.person('#fff'),'카카오스토리')}</div></div>`;
+  const body=`<div style="display:flex;justify-content:space-between;align-items:center;padding:${cf4?26:58}px 18px 0;position:relative;z-index:2">${x}<span style="color:#fff;font-size:15px;opacity:.85">프로필 관리</span></div>
+  <div class="cl" style="padding-top:${cf4?12:96}px"><div style="width:${cf4?72:104}px;height:${cf4?72:104}px;border-radius:${cf4?26:38}px;background:#8e8e93;position:relative;overflow:hidden;margin:0 auto;display:flex;align-items:flex-end;justify-content:center">${has?both:I.person('#fff')}</div><div style="font-size:22px;font-weight:600;margin-top:${cf4?8:16}px">${esc(P.name)}</div><div style="position:relative;height:22px;margin-top:8px;font-size:15px;opacity:.9">${ln(P.status,1-st,-st*6)}${ln(P.newStatus,st,(1-st)*6)}</div></div>
+  <div class="cl-bot" style="bottom:${cf4?12:52}px;padding:0 24px"><div class="cl-row" style="justify-content:space-around">${it(I.msg('#fff',22),'나와의 채팅')}${it(I.cam('#fff',22),'프로필 편집')}${it(I.person('#fff'),'카카오스토리')}</div></div>`;
   return{bg,body};
 }
 function E_profile(){
@@ -1472,7 +1489,7 @@ const imgMini=p=>{const im=g(p);return im&&im.url
   ?`<div class="row"><div class="th" style="width:32px;height:32px;border-radius:8px;background-image:url('${im.url}')"></div><button class="mini" data-act="clearImg" data-path="${p}">사진 빼기</button></div>`
   :`<label class="mini upl" style="display:inline-flex;align-items:center">＋ 사진 메시지<input type="file" accept="image/*" data-img="${p}"></label>`;};
 
-function E_lock(){
+function E_lock0(){
   const L=S.lock;
   return card('배경',`${fld('프리셋',sws('lock.preset',WALLS.map((w,i)=>[i,w[0],w[1]])))}
     ${imgField('lock.wall','배경 사진')}<div class="sep"></div>${rng('lock.dim',0,70,1,'어둡게','%')}`)
@@ -1517,7 +1534,7 @@ function E_face(){
     ${imgField('face.other','상대방 화면 (전체) · 사진/영상',true,'other')}<div class="sep"></div>${tog('face.pip','내 화면 (작은 창) 표시')}${S.face.pip?imgField('face.me','내 화면 (작은 창) · 사진/영상',true,'me'):''}
     <div class="hint" style="margin-top:8px">영상을 넣으면 프레임으로 잘라 재생돼요(최대 30초, 소리 포함 가능). 영상이 없으면 통화 시간만 1초씩 흘러가요. 저장 탭 → 영상 저장.</div>`);
 }
-function E_call(){
+function E_call0(){
   return card('전화 수신',`<div class="g2">${fld('이름',txt('call.name','이름'))}${fld('보조 문구',txt('call.sub','휴대전화'))}</div>
     ${imgField('call.photo','배경 사진')}<div class="hint" style="margin-top:8px">전화가 오는 애니메이션(수락 버튼 파동 · 벨소리처럼 흔들림 · 배경 줌)이 GIF·영상 저장 때 재생돼요. ▶ 미리보기로 확인하세요.</div>`);
 }
@@ -1533,13 +1550,13 @@ function screenGalleryViewer(s){
   const heart=`<svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>`;
   const info=`<svg width="23" height="23" viewBox="0 0 24 24" ${sw}><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.6v.4"/></svg>`;
   const trash=`<svg width="22" height="22" viewBox="0 0 24 24" ${sw}><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m-9 0 1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/></svg>`;
-  const film=n>1?`<div class="gv-film">${G.items.map((it,i)=>`<div class="gv-fi ${i===idx?'on':''}">${it.img&&it.img.url?bgImg(it.img):''}</div>`).join('')}</div>`:'';
-  const body=`<div class="gv-stage"><div class="gv-track" style="transform:translateX(${(-q*100).toFixed(2)}%)"><div class="gv-p">${im(cur)}</div><div class="gv-p">${im(nxt)}</div></div></div>
-  <div class="gv-top">${back}<span>${idx+1} / ${Math.max(n,1)}</span>${more}</div>
+  const film=n>1?`<div class="gv-film">${G.items.map((it,i)=>`<div class="gv-fi ${i===(q>.5?(idx+1)%n:idx)?'on':''}" style="transform:translateX(${Math.round(DIMS[s.device.ratio||'phone'][0]/2-27-(idx+q)*37)}px)">${it.img&&it.img.url?bgImg(it.img):''}</div>`).join('')}</div>`:'';
+  const body=`<div class="gv-stage"><div class="gv-track" style="transform:translateX(${(-q*50).toFixed(2)}%)"><div class="gv-p">${im(cur)}</div><div class="gv-p">${im(nxt)}</div></div></div>
+  <div class="gv-top">${back}<span>${(q>.5?(idx+1)%Math.max(n,1):idx)+1} / ${Math.max(n,1)}</span>${more}</div>
   <div class="gv-bot">${film}<div class="gv-tools">${shareIc}<span></span>${heart}<span></span>${info}<span></span>${trash}</div></div>`;
   return{bg:'<div class="bgl" style="background:#000"></div>',body};
 }
-function E_gallery(){
+function E_gallery0(){
   const G=S.gallery, sel=G.items[ui.gsel], n=G.items.length;
   return card('갤러리',`<div class="g2">${fld('보기 방식',seg('gallery.view',[['grid','격자'],['viewer','한 장씩 넘겨보기']]))}${G.view==='viewer'?fld('시작 사진 번호',txt('gallery.cur','1')):fld('열 개수',seg('gallery.cols',[[3,'3'],[4,'4'],[5,'5']]))}</div>
     ${G.view==='viewer'?`<div class="hint box">사진과 사진 사이가 옆으로 넘어가요. ▶ 미리보기 · GIF · 영상에서 순서대로 넘어가며 재생돼요. (사진 ${n}장)</div>`:''}
@@ -1790,7 +1807,7 @@ function planFor(s){
   if(CHATLIKE.includes(s.screen))return chatPlan(s);
   if(s.screen==='face'&&(VID.other||VID.me))return facePlan(s);
   if(s.screen==='call')return callPlan(s);
-  return buildFrames(s).map((f,i)=>({...f,key:'b'+i,snd:(s.screen==='lock'&&i>0)?'left':undefined}));
+  return buildFrames(s).map((f,i)=>({...f,key:'b'+i,snd:(s.screen==='lock'&&f.s&&f.s._lq===.15)?'left':undefined}));
 }
 function fxTail(p,s){
   const fx=s.exp.fx,last=p[p.length-1];
@@ -1824,7 +1841,7 @@ function videoPlan(){
 }
 let playing=false,blankPreview=false;
 document.addEventListener('click',e=>{if(blankPreview&&e.target.closest('#view')){blankPreview=false;renderPreview();}});
-async function playPreview(){
+async function playPreview0(){
   if(playing){playing=false;return;}
   blankPreview=false;playing=true;toast('미리보기 재생 중 — 다시 누르면 멈춰요');
   const ok=(S.exp.sfx!=='off'||popOn())?await sfxInit():false;
@@ -2312,7 +2329,7 @@ function buildFrames(s){
   const sp=s.exp.gifSpeed||1,D=700/sp,hold=1600/sp,F=[];
   const push=(mod,delay)=>{const c=structuredClone(s);c.chat.typing=false;mod(c);F.push({s:c,delay:Math.max(30,Math.round(delay))});};
   switch(s.screen){
-    case'lock':{const n=s.lock.notis.length;for(let k=0;k<=n;k++)push(c=>{c.lock.notis=c.lock.notis.slice(0,k);},k===n?hold:(k===0?D*1.2:D));break;}
+    case'lock':{const n=s.lock.notis.length,cut=(c,k)=>{c.lock.notis=c.lock.notis.slice(0,k);};push(c=>cut(c,0),D*1.2);for(let k=1;k<=n;k++){for(const q of [.15,.4,.68,.88,1])push(c=>{cut(c,k);c._lq=q;},48/sp);if(s.lock.shake!==false)for(const j of [.08,.22,.36,.5,.66,.82])push(c=>{cut(c,k);c._lq=1;c._lsh=j;},42/sp);push(c=>cut(c,k),k===n?hold:D*.55);}break;}
     case'chat':case'sms':case'ig':case'line':case'tg':case'tw':{
       const n=s.chat.messages.filter(visibleMsg).length;
       const take=(c,k)=>{c.chat.messages=c.chat.messages.filter(visibleMsg).slice(0,k);};
@@ -2354,7 +2371,7 @@ function buildFrames(s){
         for(let j=1;j<=n;j++){push(c=>{c.story._cur=i;c.story._p=j/n;},(j===n&&i===sl.length-1)?hold*.6:(vo?1000/fps:1000/fps/sp));F[F.length-1].sv={i,t:(j-1)/fps};}
       });break;}
     case'profile':{push(c=>{c._pt=0;},D*1.3);for(const t of [.12,.25,.4,.55,.7,.85])push(c=>{c._pt=t;},75/sp);push(c=>{c._pt=1;},hold);break;}
-    case'search':{const n=[...s.search.query].length,st=Math.min(n,16);push(c=>{c.search._n=0;},D);for(let j=1;j<=st;j++){const cnt=Math.round(n*j/st);push(c=>{c.search._n=cnt;},j===st?hold:150/sp);}break;}
+    case'search':{const n=[...s.search.query].length,st=Math.min(n,30);push(c=>{c.search._n=0;c.search._j=0;},D*.8);for(let j=1;j<=st;j++){const cnt=Math.round(n*j/st);push(c=>{c.search._n=cnt;c.search._j=j;},125/sp);}for(let j=1;j<=4;j++)push(c=>{c.search._n=n;c.search._j=st+j;},j===4?hold:130/sp);break;}
     case'recents':{const n=s.recents.items.length;push(c=>{c.recents.items=[];},D*.8);for(let k=1;k<=n;k++){for(const t of [.35,.7])push(c=>{c.recents.items=c.recents.items.slice(0,k);c._rp=t;},55/sp);push(c=>{c.recents.items=c.recents.items.slice(0,k);},k===n?hold:D*.55);}break;}
     case'gallery':{
       if(s.gallery.view==='viewer'){
@@ -2363,11 +2380,11 @@ function buildFrames(s){
         for(let k=0;k<n;k++){
           const i=(start+k)%n;
           push(c=>{c._gi=i;c._gq=0;},k===0?hold*.7:D*.5);
-          if(k<n-1||s.exp.gifMode!=='single')for(const t of [.3,.6,.85,1])push(c=>{c._gi=i;c._gq=t;},70/sp);
+          if(k<n-1||s.exp.gifMode!=='single')for(const t of [.04,.14,.3,.52,.74,.9,.97,1])push(c=>{c._gi=i;c._gq=t;},48/sp);
         }
         push(c=>{c._gi=(start+n-1)%n;c._gq=0;},hold);break;
       }
-      const n=Math.min(s.gallery.items.length,40);for(let k=0;k<=n;k++)push(c=>{c.gallery.items=c.gallery.items.slice(0,k);},k===n?hold:D*.6);break;}
+      const n=Math.min(s.gallery.items.length,40),sc=s.gallery.scroll&&n>s.gallery.cols*4;for(let k=0;k<=n;k++)push(c=>{c.gallery.items=c.gallery.items.slice(0,k);},(k===n&&!sc)?hold:D*.6);if(sc)for(let i=1;i<=18;i++){const e=(1-Math.cos(Math.PI*i/18))/2;push(c=>{c._gs=e;},i===18?hold:65/sp);}break;}
   }
   return F;
 }
@@ -2477,6 +2494,67 @@ async function exportGIF(){
     toast(n>1?`GIF 저장 완료 · ${n}프레임 · ${blob.size<1048576?Math.round(blob.size/1024)+'KB':(blob.size/1048576).toFixed(1)+'MB'}`:'움직일 요소가 없어 정지 GIF로 저장했어요');
   }catch(err){console.error(err);toast('GIF 저장에 실패했어요');}
   finally{busyOff();}
+}
+
+
+/* ═════ 추가 기능: 알림 스택 · 전화 배너/스와이프/벨소리 · 갤러리 · 검색 · IG ═════ */
+const x_eo=t=>1-Math.pow(1-t,3),x_ss=e=>e*e*(3-2*e);
+function x_ntFx(isNew,q,sh){
+  if(!isNew)return '';
+  if(q!=null&&q<1){const e=x_eo(q);return`max-height:${(e*78).toFixed(0)}px;opacity:${e.toFixed(2)};transform:translateY(${((1-e)*-22).toFixed(1)}px);overflow:hidden`;}
+  if(sh!=null)return`transform:translateX(${(Math.sin(sh*Math.PI*7)*(1-sh)*8).toFixed(1)}px)`;
+  return '';
+}
+function x_glS(s){
+  if(s._gs==null)return '';const g=s._gs,av=DIMS[s.device.ratio||'phone'][1]-216;
+  return`transform:translateY(calc(${(-g*100).toFixed(2)}% + ${(g*av).toFixed(1)}px))`;
+}
+function x_igG(i,n){const w=Math.min(8,n),k=Math.max(0,i-(n-w)),t=w>1?k/(w-1):0,a=[207,0,199],b=[91,60,245];return`rgb(${a.map((x,m)=>Math.round(x+(b[m]-x)*t))})`;}
+const X_IMG='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5"/><circle cx="9" cy="9" r="1.6"/><path d="M4 17l5-5 4 4 3-3 4 4"/></svg>';
+const X_STK='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M20.5 12A8.5 8.5 0 1 1 12 3.500h5A3.500 3.500 0 0 1 20.500 7z"/><path d="M20.500 12c-4.500.5-8 1.500-8.500 8.500"/><circle cx="9" cy="10" r=".6" fill="#111"/><circle cx="14" cy="10" r=".6" fill="#111"/><path d="M8.500 14c1.800 1.800 4.200 1.800 5.500 0"/></svg>';
+function x_swipe(s){
+  const C=s.call,t=s._ct,anim=t!=null,live=!anim&&!s._still,q=anim?x_ss(Math.min(1,Math.max(0,(t-1.5)/1.4))):0;
+  return`<div style="position:absolute;left:26px;right:26px;bottom:60px;height:64px;border-radius:32px;background:rgba(255,255,255,.2);overflow:hidden;z-index:3;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.28)"><div class="swl${live?' lv':''}" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-left:52px;font-size:19px;letter-spacing:-.3px;opacity:${Math.max(0,1-q*1.7).toFixed(2)}">밀어서 응답</div><div class="swk${live?' lv':''}" style="position:absolute;top:4px;left:calc(4px + (100% - 64px)*${q.toFixed(3)});width:56px;height:56px;border-radius:50%;background:#34c759;display:flex;align-items:center;justify-content:center">${I.phone('#fff',28)}</div></div>`;
+}
+function x_banner(s){
+  const C=s.call,t=s._ct,anim=t!=null,e=anim?x_eo(Math.min(1,t/.6)):1,p=anim?(t%1.2)/1.2:0;
+  const bg=`<div class="bgl" style="background:${WALLS[s.lock.preset]?.[0]||WALLS[0][0]}">${bgImg(s.lock.wall,SA)}<div class="bgl" style="background:rgba(0,0,0,.18)"></div></div>`;
+  const av=C.photo?.url?bgImg(C.photo,1):I.person('#fff');
+  const ring=anim?`<i class="rp" style="left:${(-p*10).toFixed(1)}px;top:${(-p*10).toFixed(1)}px;right:${(-p*10).toFixed(1)}px;bottom:${(-p*10).toFixed(1)}px;opacity:${(.7*(1-p)).toFixed(2)};border-width:2px"></i>`:'<i class="rp lv" style="border-width:2px"></i>';
+  const body=`<div style="position:absolute;left:10px;right:10px;top:54px;z-index:5;transform:translateY(${((1-e)*-130).toFixed(1)}px);opacity:${Math.min(1,e*1.4).toFixed(2)};background:rgba(38,38,42,.94);color:#fff;border-radius:28px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,.35)"><div style="width:46px;height:46px;border-radius:50%;background:#8e8e93;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;flex:none">${av}</div><div style="flex:1;min-width:0"><div style="font-size:18px;font-weight:600;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(C.name)}</div><div style="font-size:13px;opacity:.65">${esc(C.sub)}</div></div><div style="width:44px;height:44px;border-radius:50%;background:#ff3b30;display:flex;align-items:center;justify-content:center;flex:none">${I.phone('#fff',22,135)}</div><div style="width:44px;height:44px;border-radius:50%;background:#34c759;display:flex;align-items:center;justify-content:center;position:relative;flex:none">${ring}${I.phone('#fff',22)}</div></div>`;
+  return{bg,body};
+}
+function screenCall(s){
+  if(s.call.style==='banner')return x_banner(s);
+  const r=screenCall0(s);if(s.call.swipe)r.body+=x_swipe(s);return r;
+}
+let RING=null;
+document.addEventListener('change',e=>{const f=e.target.matches?.('[data-ring]')&&e.target.files[0];if(!f)return;if(RING)URL.revokeObjectURL(RING.url);RING={url:URL.createObjectURL(f),name:f.name};renderEditor();toast('벨소리를 넣었어요 — ▶ 미리보기에서 재생돼요');});
+async function playPreview(){
+  if(playing)return playPreview0();
+  const a=(S.screen==='call'&&RING)?new Audio(RING.url):null;if(a){a.loop=true;a.play().catch(()=>{});}
+  try{await playPreview0();}finally{if(a)a.pause();}
+}
+function E_lock(){return E_lock0()+card('알림 연출',`${tog('lock.newTop','새 알림이 위에 쌓이고, 기존 알림은 아래로 밀리기')}${tog('lock.shake','알림이 뜰 때 팝업 흔들림(진동)')}<div class="hint" style="margin-top:6px">▶ 미리보기 · GIF · 영상에서 알림이 하나씩 떨어지며 연달아 쌓여요.</div>`);}
+function E_call(){const C=S.call;return E_call0()+card('수신 화면 옵션',`${fld('화면 스타일',seg('call.style',[['full','전체 화면'],['banner','상단 배너']]))}${C.style!=='banner'?tog('call.swipe','밀어서 수락 애니메이션'):''}<label class="btn line upl">＋ 벨소리 mp3 넣기<input type="file" accept="audio/*" data-ring></label><div class="hint" style="margin-top:8px">${RING?esc(RING.name)+' 적용됨 · ':''}벨소리는 ▶ 미리보기에서 재생돼요. (GIF·영상 파일에는 소리가 들어가지 않아요)</div>`);}
+function E_gallery(){const G=S.gallery;return E_gallery0()+(G.view==='grid'?card('스크롤',`${tog('gallery.scroll','사진이 채워진 뒤 아래로 스크롤')}<div class="hint" style="margin-top:6px">사진이 ${G.cols*4}장보다 많을 때 적용돼요.</div>`):'');}
+function screenSearch(s){
+  const Q=s.search,ch=[...(Q.query||'')],anim=Q._n!=null,n=anim?Math.min(Q._n,ch.length):ch.length,typed=ch.slice(0,n).join(''),j=Q._j||0;
+  const tall=DIMS[s.device.ratio||'phone'][1]>=676,live=!anim&&!s._still;
+  const mg='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2" stroke-linecap="round" style="flex:none"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/></svg>';
+  const sg=(Q.sugg||'').split('\n').map(x=>x.trim()).filter(Boolean);
+  const rows=n>0?sg.map((t,i)=>{const o=anim?Math.min(1,Math.max(0,(j-1-i*.7)/2)):1,hi=t.startsWith(typed);return`<div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:.5px solid #ececf0;opacity:${o.toFixed(2)};transform:translateY(${((1-o)*7).toFixed(1)}px)">${mg}<div style="flex:1;font-size:16px;color:#3a3a3c;letter-spacing:-.2px">${hi?`<b style="color:#000;font-weight:600">${esc(typed)}</b>${esc(t.slice(typed.length))}`:esc(t)}</div><span style="color:#c7c7cc;font-size:15px">↖</span></div>`;}).join(''):'';
+  const car=`<i class="crt2${live?' lv':''}" style="${anim?`opacity:${j%2?0:1}`:''}"></i>`;
+  const clr=n>0?'<span style="margin-left:auto;width:18px;height:18px;border-radius:50%;background:#c7c7cc;color:#fff;font-size:12px;line-height:18px;text-align:center;flex:none">×</span>':'';
+  const bar=`<div style="display:flex;align-items:center;gap:12px;padding:54px 14px 8px"><div style="flex:1;display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-radius:12px;background:#eeeef1;min-width:0">${mg}<span style="font-size:16px;color:${n?'#000':'#a0a0a5'};white-space:nowrap;overflow:hidden;letter-spacing:-.2px">${n?esc(typed)+car:car+esc(Q.ph)}</span>${clr}</div><span style="color:#0a84ff;font-size:16px">취소</span></div>`;
+  let kb='';
+  if(tall&&(n>0||anim)){
+    const R=['ㅂㅈㄷㄱㅅㅛㅕㅑㅐㅔ','ㅁㄴㅇㄹㅎㅗㅓㅏㅣ','ㅋㅌㅊㅍㅠㅜㅡ'],all=R.join(''),pr=n>0&&anim?(typed.codePointAt(n-1)||0)%all.length:-1,kq=anim?x_eo(Math.min(1,j/2.5)):1;let c=0;
+    const key=(l,w,bg)=>`<div style="flex:${w||1};height:42px;border-radius:6px;background:${bg||'#fff'};box-shadow:0 1px 0 rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:19px;color:#111">${l}</div>`;
+    const rw=R.map((r,ri)=>`<div style="display:flex;gap:5px;padding:0 ${ri===1?12:ri===2?38:3}px">${[...r].map(l=>{const on=c++===pr;return key(l,1,on?'#b9bcc4':'');}).join('')}</div>`).join('');
+    kb=`<div style="position:absolute;left:0;right:0;bottom:0;height:262px;padding:8px 0 0;background:#d2d4da;display:flex;flex-direction:column;gap:11px;transform:translateY(${((1-kq)*262).toFixed(0)}px);z-index:6">${rw}<div style="display:flex;gap:5px;padding:0 3px">${key('123',1.4,'#adb1ba')}${key('스페이스',5)}${key('검색',2,'#0a84ff').replace('color:#111','color:#fff;font-weight:600;font-size:16px')}</div></div>`;
+  }
+  return{bg:'<div class="bgl" style="background:#fff"></div>',body:bar+rows+kb};
 }
 
 /* ═════════════ Boot ═════════════ */
