@@ -1047,6 +1047,29 @@ body.dr-on #drawer{transform:none}
 .scr .fc-btn.red{background:#ff3b30;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4),0 6px 18px rgba(255,59,48,.4)}
 .scr .fc-pip{top:auto!important;bottom:150px;right:16px;border-radius:22px;box-shadow:0 10px 28px rgba(0,0,0,.42),0 0 0 1px rgba(255,255,255,.22)}
 @media (prefers-reduced-motion:reduce){.ein,.fph-r.lv,.fc-ph.lvb,.fc-dot.lv{animation:none}}
+
+/* ═════ v10 · 버튼 폭 · 카톡 프사 · 카메라 · 인스타 ═════ */
+.acts .btn.sm{padding:0 11px}
+.acts .btn.play{padding:0 24px;min-width:108px}
+@media (max-width:900px){.acts .btn{flex:.88 1 0;padding:0 2px}.acts .btn.play{flex:1.5 1 0;padding:0 2px}}
+.scr.scr.scr .kt-pf{width:calc(33px*var(--bo,1));height:calc(33px*var(--bo,1));border-radius:calc(12px*var(--bo,1));margin-right:calc(7px*var(--bo,1))}
+.scr.scr.scr .kt-pf.kph{height:1px}
+.scr .cam-th{box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.scr .cam-vf{border-radius:0}
+.ig-head{background:rgba(255,255,255,.94);box-shadow:0 .5px 0 rgba(0,0,0,.08)}
+.ig-b{box-shadow:0 1px 1.5px rgba(0,0,0,.05);line-height:1.34}
+.ig-row.r .ig-b{box-shadow:0 2px 6px rgba(98,40,215,.18)}
+.ig-cam{background:linear-gradient(135deg,#0a95ff,#7a3cff);box-shadow:0 2px 6px rgba(80,90,255,.32)}
+.ig-in{box-shadow:inset 0 0 0 .5px rgba(0,0,0,.06)}
+.ig-avw .on{box-shadow:0 0 0 0 rgba(63,209,94,.5);animation:igon 2s ease-out infinite}
+@keyframes igon{to{box-shadow:0 0 0 7px rgba(63,209,94,0)}}
+@media (prefers-reduced-motion:reduce){.ig-avw .on{animation:none}}
+
+/* ═════ v11 · 트위터 헤더 프로필 고정 ═════ */
+.scr .tl-top{position:relative;height:48px;padding:0 16px}
+.scr.scr.scr .tl-top .tl-av{width:32px!important;height:32px!important;transform:none!important;margin:0!important;flex:none}
+.scr .tl-top .tl-sp{width:32px;flex:none}
+.scr .tl-top>svg:not(.tl-av svg){position:absolute;left:50%;top:50%;width:24px;height:24px;margin:-12px 0 0 -12px}
 </style>
 </head>
 <body>
@@ -1597,7 +1620,7 @@ function screenTl(s){
   const me=T.me&&T.me.url?bgImg(T.me):I.person('#fff');
   const xl='<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="display:block"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>';
   const bg=`<div class="bgl" style="background:${dk?'#000':'#fff'}"></div>`;
-  const body=`<div class="tl-head" style="${V}"><div class="tl-top"><div class="tl-av" style="width:${+T.meS||30}px;height:${+T.meS||30}px;transform:translate(${+T.meX||0}px,${+T.meY||0}px)">${me}</div>${xl}<span style="width:${+T.meS||30}px"></span></div><div class="tl-tabs"><div class="${T.tab?'':'on'}">추천</div><div class="${T.tab?'on':''}">팔로잉</div></div></div>
+  const body=`<div class="tl-head" style="${V}"><div class="tl-top"><div class="tl-av">${me}</div>${xl}<span class="tl-sp"></span></div><div class="tl-tabs"><div class="${T.tab?'':'on'}">추천</div><div class="${T.tab?'on':''}">팔로잉</div></div></div>
   <div class="tl-list${rise?' rise':''}" style="${V}"><div class="tl-inner">${rows}</div></div>
   <div class="tl-in" style="${V}">${ic('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',24,2.2)}${ic('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5l5 5"/>',24)}${ic('<path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4"/>',24)}${ic('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',24)}</div>
   ${T.fab?`<div class="tl-fab">${ic('<path d="M12 5v14M5 12h14"/>',24,2.4)}</div>`:''}`;
@@ -1937,7 +1960,7 @@ function screenCamera(s){
     :`<div style="flex:none;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 26px">${iFlash}${midIc}${U26?dots6:iLive}</div>`;
   // 줌 알약 (iPhone: 반투명 캡슐 안에 .5 · 1× · 2 · 3)
   const pill=z=>{const on=z===zc,lb=(z==='.5'?'.5':z)+(on?'×':'');const sz=on?36:30;return`<span style="display:flex;align-items:center;justify-content:center;width:${sz}px;height:${sz}px;border-radius:50%;background:${on?'rgba(20,20,20,.62)':'transparent'};color:${on?YL:'#fff'};font-size:${on?13.5:12.5}px;font-weight:600;letter-spacing:-.2px">${lb}</span>`;};
-  const pills0=`<div style="display:flex;align-items:center;gap:2px;padding:3px;border-radius:26px;background:rgba(15,15,15,.38)">${['.5','1','2','3'].map(pill).join('')}</div>`;
+  const pills0=`<div style="display:flex;align-items:center;gap:2px;padding:3px;border-radius:26px;background:rgba(15,15,15,.38);box-shadow:inset 0 .5px 0 rgba(255,255,255,.3);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)">${['.5','1','2','3'].map(pill).join('')}</div>`;
   const macroBtn=`<span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:rgba(15,15,15,.55)">${ic('<circle cx="12" cy="10" r="2.400"/><path d="M12 4.500c1.500 0 2.400 1.300 2.400 2.700M12 4.500c-1.500 0-2.400 1.300-2.400 2.700M17.500 8c-1 1.100-2.600 1.200-3.700.6M6.500 8c1 1.100 2.600 1.200 3.700.6M16 14.500c-1.500.4-2.800-.3-3.400-1.500M8 14.500c1.500.4 2.800-.3 3.400-1.500M12 12.500V20M12 17c-2.500 0-3.800-1-4.200-2.600"/>',YL,20,1.5)}</span>`;
   const pills=C.macro?`<div style="display:flex;align-items:center;gap:8px">${macroBtn}${pills0}</div>`:pills0;
   // 초점 박스 (노란 사각형 + 눈금 + 노출 해)
@@ -1968,20 +1991,21 @@ function screenCamera(s){
   const asp={ '43':'4:3','11':'1:1','169':'16:9'}[C.aspect]||'4:3';
   const menuRow=(C.menu&&!LAND)?`<div style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:0 20px">${mIcon('<path d="M13.200 2.800L5.600 13.400h5.600l-.9 7.800 8.100-11h-5.700z"'+(C.flash?' fill="'+YL+'"':'')+'/>'+(C.flash?'':'<path d="M4 4l16 16"/>'),C.flash,'')}${mIcon('<path d="M20 14.500A8 8 0 0 1 9.500 4a8 8 0 1 0 10.500 10.500z"/>',C.night,'')}${mIcon('<circle cx="12" cy="12" r="2.600"/><circle cx="12" cy="12" r="6.200"/><circle cx="12" cy="12" r="9.600" stroke-dasharray="1.200 3.050"/>',C.live,'')}<span style="display:flex;align-items:center;justify-content:center;min-width:44px;height:44px;font-size:13px;font-weight:700;color:${yc(C.aspect!=='43')}">${asp}</span>${mIcon('<path d="M12 4v2M12 13V9M5.500 9.500A8 8 0 1 0 12 5"/>',+C.timer>0,+C.timer>0?C.timer+'초':'')}${mIcon('<circle cx="9" cy="9" r="5"/><circle cx="15" cy="9" r="5"/><circle cx="12" cy="15" r="5"/>',false,'')}</div>`:'';
   const th=`<div class="cam-th" style="width:50px;height:50px;border-radius:10px;background:#2c2c2e;position:relative;overflow:hidden;border:1.5px solid rgba(255,255,255,.28);flex:none">${thumb&&thumb.url?bgImg(thumb,1):''}</div>`;
-  const shD=(isRec&&md==='video')?32:(q.press?54:60);
-  const sh=`<div style="width:74px;height:74px;border-radius:50%;border:4px solid #fff;box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex:none"><div style="width:${shD}px;height:${shD}px;border-radius:${(isRec&&md==='video')?'9px':'50%'};background:${md==='video'?'#ff453a':'#fff'}"></div></div>`;
+  const shD=(isRec&&md==='video')?32:(q.press?58:66);
+  const sh=`<div style="width:80px;height:80px;border-radius:50%;border:4px solid #fff;box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex:none"><div style="width:${shD}px;height:${shD}px;border-radius:${(isRec&&md==='video')?'9px':'50%'};background:${md==='video'?'#ff453a':'#fff'}"></div></div>`;
   const flip=`<div style="width:48px;height:48px;border-radius:50%;background:rgba(120,120,128,.36);display:flex;align-items:center;justify-content:center;flex:none">${ic('<path d="M4 12a8 8 0 0 1 13.5-5.8L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 0 1-13.5 5.8L4 15.5M4 20v-4.5h4.5"/>','#fff',22,1.8)}</div>`;
   const thR=q.rec!==undefined?'<div style="width:50px;height:50px;flex:none"></div>':th,flipR=q.rec!==undefined?'<div style="width:48px;height:48px;border-radius:50%;background:#fff;box-shadow:inset 0 0 0 2.5px #000,inset 0 0 0 3.5px #fff;flex:none"></div>':flip;
   const bgc='<div class="bgl" style="background:#000"></div>';
   const vfBase=`position:relative;overflow:hidden;background:linear-gradient(160deg,#5b6068,#22252a)`;
+  const sway=q.rec!==undefined?`transform:translate(${(Math.sin(q.rec*1.7)*3).toFixed(1)}px,${(Math.cos(q.rec*1.3)*2.5).toFixed(1)}px) scale(1.04)`:'';
   let body;
   if(LAND){
     const RC=ratio==='horiz'?170:150,ca=(W-46-RC)/(H-SBH);
-    body=`<div class="cam-wrap" style="position:relative;flex:1;min-height:0;display:flex;flex-direction:row;background:#000;color:#fff">${topBar}<div class="cam-vf" style="${vfBase};flex:1;min-width:0"><div class="cam-ph" style="position:absolute;left:0;top:0;right:0;bottom:0">${bgImg(C.photo,ca)}</div>${foc}<div style="position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center">${pills}</div>${fl}</div><div style="flex:none;width:${RC}px;display:flex;flex-direction:row;align-items:stretch"><div style="flex:1;min-width:0;padding:6px 0">${modesR}</div><div style="flex:none;width:${ratio==='horiz'?104:92}px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:14px 0 ${ratio==='horiz'?22:16}px">${flipR}${sh}${thR}</div></div></div>`;
+    body=`<div class="cam-wrap" style="position:relative;flex:1;min-height:0;display:flex;flex-direction:row;background:#000;color:#fff">${topBar}<div class="cam-vf" style="${vfBase};flex:1;min-width:0"><div class="cam-ph" style="position:absolute;left:0;top:0;right:0;bottom:0;${sway}">${bgImg(C.photo,ca)}</div>${foc}<div style="position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center">${pills}</div>${fl}</div><div style="flex:none;width:${RC}px;display:flex;flex-direction:row;align-items:stretch"><div style="flex:1;min-width:0;padding:6px 0">${modesR}</div><div style="flex:none;width:${ratio==='horiz'?104:92}px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:14px 0 ${ratio==='horiz'?22:16}px">${flipR}${sh}${thR}</div></div></div>`;
   }else if(VERT||fullPhone){
-    body=`<div class="cam-wrap" style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column;background:#000;color:#fff">${topBar}<div class="cam-vf" style="${vfBase};flex:1;min-height:0"><div class="cam-ph" style="position:absolute;left:0;top:0;right:0;bottom:0">${bgImg(C.photo,W/(H-SBH-44))}</div>${foc}<div class="cam-gr" style="position:absolute;left:0;right:0;bottom:0;padding:34px 0 30px;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.5) 42%,rgba(0,0,0,.62));display:flex;flex-direction:column;align-items:center;gap:14px"><div>${pills}</div>${menuRow}<div style="width:100%;padding:0 20px">${modesR}</div><div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 34px">${thR}${sh}${flipR}</div></div>${fl}</div></div>`;
+    body=`<div class="cam-wrap" style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column;background:#000;color:#fff">${topBar}<div class="cam-vf" style="${vfBase};flex:1;min-height:0"><div class="cam-ph" style="position:absolute;left:0;top:0;right:0;bottom:0;${sway}">${bgImg(C.photo,W/(H-SBH-44))}</div>${foc}<div class="cam-gr" style="position:absolute;left:0;right:0;bottom:0;padding:34px 0 30px;background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.5) 42%,rgba(0,0,0,.62));display:flex;flex-direction:column;align-items:center;gap:14px"><div>${pills}</div>${menuRow}<div style="width:100%;padding:0 20px">${modesR}</div><div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 34px">${thR}${sh}${flipR}</div></div>${fl}</div></div>`;
   }else{
-    body=`<div class="cam-wrap" style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column;background:#000;color:#fff">${topBar}<div class="cam-vw" style="width:100%;aspect-ratio:3/4;flex:none;display:flex;align-items:center;background:#000"><div class="cam-vf" style="${vfBase};width:100%;aspect-ratio:${C.aspect==='11'?'1/1':'3/4'};flex:none"><div class="cam-ph" style="position:absolute;left:0;top:0;right:0;bottom:0">${bgImg(C.photo,C.aspect==='11'?1:3/4)}</div>${foc}<div style="position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center">${pills}</div>${fl}</div></div><div style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:${C.menu?8:18}px;padding:0 0 38px">${menuRow}<div style="width:100%;padding:0 16px">${modesR}</div><div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 34px">${thR}${sh}${flipR}</div></div></div>`;
+    body=`<div class="cam-wrap" style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column;background:#000;color:#fff">${topBar}<div class="cam-vw" style="width:100%;aspect-ratio:3/4;flex:none;display:flex;align-items:center;background:#000"><div class="cam-vf" style="${vfBase};width:100%;aspect-ratio:${C.aspect==='11'?'1/1':'3/4'};flex:none"><div class="cam-ph" style="position:absolute;left:0;top:0;right:0;bottom:0;${sway}">${bgImg(C.photo,C.aspect==='11'?1:3/4)}</div>${foc}<div style="position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center">${pills}</div>${fl}</div></div><div style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:${C.menu?8:18}px;padding:0 0 38px">${menuRow}<div style="width:100%;padding:0 16px">${modesR}</div><div style="width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 34px">${thR}${sh}${flipR}</div></div></div>`;
   }
   return{bg:bgc,body};
 }
@@ -2663,9 +2687,9 @@ function seekTo(v,t){
     const h=()=>{v.removeEventListener('seeked',h);r();};v.addEventListener('seeked',h);v.currentTime=d;
   });
 }
-async function frameUrl(vo,t){await seekTo(vo.el,t);return vidToDataURL(vo.el);}
+const FU=new Map();async function frameUrl(vo,t){const k=vo.url+'|'+Math.round(t*60);if(FU.has(k))return FU.get(k);await seekTo(vo.el,t);const u=vidToDataURL(vo.el,600,.8);FU.set(k,u);if(FU.size>300)FU.delete(FU.keys().next().value);return u;}
 function facePlan(s){
-  const fps=s.exp.faceFps||10,dO=VID.other?VID.other.dur:0,dM=VID.me?VID.me.dur:0;
+  const fps=s.exp.faceFps||24,dO=VID.other?VID.other.dur:0,dM=VID.me?VID.me.dur:0;
   const total=Math.min(30,Math.max(dO,dM)||3),n=Math.max(1,Math.round(total*fps));
   const m=s.face.status.match(/(\d{1,2}):(\d{2})(?!.*\d{1,2}:\d{2})/),F=[];
   for(let i=0;i<n;i++){const t=i/fps;F.push({vt:t,delay:1000/fps,key:'v'+i,base:s,sec:Math.floor(t),m});}
@@ -2679,7 +2703,7 @@ async function faceState(f){
   return c;
 }
 function callPlan(s){
-  const fps=12,n=Math.round((s.exp.callSec||5)*fps),F=[];
+  const fps=20,n=Math.round((s.exp.callSec||5)*fps),F=[];
   for(let i=0;i<n;i++)F.push({s:{...s,_ct:i/fps},delay:1000/fps,key:'c'+i});
   return F;
 }
@@ -2689,7 +2713,7 @@ async function storyState(f){
   return c;
 }
 function camVidPlan(s){
-  const fps=8,sec=Math.max(2,Math.min(30,+s.camera.recSec||6)),n=Math.round(sec*fps),F=[];
+  const fps=15,sec=Math.max(2,Math.min(30,+s.camera.recSec||6)),n=Math.round(sec*fps),F=[];
   const mk=(q,d,cv)=>F.push({s:{...s,_cs:q},delay:d,key:'cv'+F.length,cv});
   mk({pre:1},700,0);
   for(const f of [.25,.5,.75,1])mk({pre:1,focus:f},55,0);
@@ -2956,7 +2980,7 @@ function E_video(){
     ${S.exp.vidMode==='seq'?fld('화면 전환 효과',seg('exp.trans',[['cut','없음'],['fade','페이드'],['slide','밀어내기']])):''}
     ${fld('스크린샷 셔터 효과 (영상 맨 끝)',seg('exp.shutter',[['none','없음'],['flash','번쩍']]))}
     ${fld('강조 효과 (마지막 장면에서)',seg('exp.fx',[['none','없음'],['zoom','줌인'],['shake','흔들림']]))}${S.exp.fx==='zoom'?rng('exp.fxY',0,100,5,'확대 중심 세로 위치','%'):''}
-    ${S.screen==='face'?fld('영상통화 프레임',seg('exp.faceFps',[[8,'8fps'],[10,'10fps'],[15,'15fps']]))+tog('exp.vidAudio','넣은 영상의 소리 포함'):''}${S.screen==='call'?fld('전화 애니메이션 길이',seg('exp.callSec',[[3,'3초'],[5,'5초'],[8,'8초']])):''}${tog('exp.smooth','부드러운 스크롤 애니메이션')}${typOpts()}
+    ${S.screen==='face'?fld('영상통화 프레임',seg('exp.faceFps',[[10,'10fps'],[15,'15fps'],[24,'24fps'],[30,'30fps']]))+tog('exp.vidAudio','넣은 영상의 소리 포함'):''}${S.screen==='call'?fld('전화 애니메이션 길이',seg('exp.callSec',[[3,'3초'],[5,'5초'],[8,'8초']])):''}${tog('exp.smooth','부드러운 스크롤 애니메이션')}${typOpts()}
     ${fld('효과음',seg('exp.sfx',[['off','끄기'],['me','내 메시지'],['all','모든 메시지']]))}
     ${rng('exp.sfxVol',0,100,5,'볼륨','%')}${rng('exp.sfxOff',-300,300,10,'효과음 싱크 보정','ms')}<div class="sep"></div>
     <div class="g2"><button class="btn ghost" data-act="play">▶ 미리보기</button><button class="btn" data-act="vid">영상 저장</button></div>`);
@@ -2965,10 +2989,10 @@ function E_tl(){
   const T=S.tl,key=T.tab?'tweetsF':'tweets',b='tl.'+key+'.';
   if(!Array.isArray(T[key]))T[key]=[];const ts=T[key];
   ts.forEach(t=>{if(!Array.isArray(t.imgs))t.imgs=[t.img||null,null,null,null];while(t.imgs.length<4)t.imgs.push(null);if(!t.q)t.q={on:false,name:'',handle:'',ver:false,text:'',time:'',av:null,img:null};if(t.replyTo==null)t.replyTo='';});
-  if(T.meX==null)T.meX=0;if(T.meY==null)T.meY=0;if(T.meS==null)T.meS=30;
+  if(T.sync==null)T.sync=true;
   return card('타임라인',`${fld('상단 탭 (탭마다 트윗이 따로예요)',seg('tl.tab',[[0,'추천'],[1,'팔로잉']]))}
     ${fld('화면',seg('tl.mode',[['light','화이트'],['dark','다크']]))}
-    ${imgField('tl.me','내 프로필 사진 (상단 왼쪽 아이콘 · 사진 위치 조절 가능)')}${rng('tl.meX',-60,60,1,'내 프로필 아이콘 · 좌우 위치','px')}${rng('tl.meY',-20,20,1,'내 프로필 아이콘 · 상하 위치','px')}${rng('tl.meS',20,48,1,'내 프로필 아이콘 · 크기','px')}${tog('tl.fab','글쓰기 버튼')}${tog('tl.rise','최신 트윗이 맨 위 · 아래에서부터 쌓이며 올라오기 (트윗 1이 가장 아래, 마지막 트윗이 맨 위)')}
+    ${imgField('tl.me','내 프로필 사진 (상단 왼쪽 아이콘 · 위치·크기는 고정)')}${tog('tl.sync','이름이 같으면 프로필 사진 · 아이디 자동 통일')}${tog('tl.fab','글쓰기 버튼')}${tog('tl.rise','최신 트윗이 맨 위 · 아래에서부터 쌓이며 올라오기 (트윗 1이 가장 아래, 마지막 트윗이 맨 위)')}
     ${fld('GIF · 영상 스크롤 방식',seg('tl.scrollMode',[['add','트윗이 하나씩 올라옴'],['down','사람이 아래로 스크롤'],['up','맨 아래에서 위로']]))}
     ${T.scrollMode!=='add'?'<div class="hint" style="margin:-4px 0 8px">디스패치처럼 전체 트윗이 이미 떠 있고, 사람이 손가락으로 훅 내렸다 멈췄다 하듯 스크롤돼요. 트윗이 화면보다 길게(여러 개) 있어야 움직여요.</div>':''}
     ${tog('exp.tlPress','GIF · 영상: 하트 · 리트윗 누르는 애니메이션')}
@@ -3095,11 +3119,26 @@ document.addEventListener('input',e=>{
   const p=el.dataset.bind;if(!p)return;
   let v=el.type==='checkbox'?el.checked:el.type==='range'?Number(el.value):el.value;
   if(el.dataset.fmt)v=FMT[el.dataset.fmt](el);
-  sp(p,v);
+  sp(p,v);tlSync(p);
   if(el.type==='range'&&el.nextElementSibling)el.nextElementSibling.textContent=v+(el.dataset.unit||'');
   if(el.type==='checkbox'||el.tagName==='SELECT')renderEditor();
   commit();
 });
+function tlSync(p){
+  const T=S.tl;if(T.sync===false)return;
+  const m=String(p).match(/^tl\.(tweets|tweetsF)\.(\d+)\.(name|handle|av)$/);if(!m)return;
+  const t=(T[m[1]]||[])[+m[2]];if(!t)return;
+  const nm=x=>String(x&&x.name||'').trim().toLowerCase(),k=nm(t);if(!k)return;
+  const all=[];['tweets','tweetsF'].forEach(a=>(T[a]||[]).forEach((x,j)=>{if(x!==t&&nm(x)===k)all.push([a,j,x]);}));
+  if(!all.length)return;
+  const setIn=(a,j,v)=>{const e=document.querySelector(`[data-bind="tl.${a}.${j}.handle"]`);if(e&&e!==document.activeElement)e.value=v;};
+  if(m[3]==='name'){
+    const src=all.find(o=>o[2].handle)||all[0],sa=all.find(o=>o[2].av&&o[2].av.url);
+    if(src[2].handle){t.handle=src[2].handle;setIn(m[1],+m[2],t.handle);}
+    if(sa)t.av={...sa[2].av};
+  }else all.forEach(([a,j,x])=>{if(m[3]==='handle'){x.handle=t.handle;setIn(a,j,t.handle);}else x.av=t.av?{...t.av}:null;});
+}
+document.addEventListener('change',e=>{const b=e.target&&e.target.dataset&&e.target.dataset.bind;if(b&&/^tl\.tweets(F)?\.\d+\.name$/.test(b))renderEditor();});
 const TPL={
   slot:()=>({id:uid(),img:null}),
   pphoto:()=>({id:uid(),img:null}),
@@ -3172,7 +3211,7 @@ document.addEventListener('change',async e=>{
       const sm=el.dataset.img.match(/^story\.slots\.(\d+)\.img$/);
       if(sm)await setStorySlots(+sm[1],[...el.files]);
       else if(fv&&f.type.startsWith('video/'))await setVideo(vk,f);
-      else{if(fv)VID[vk]=null;sp(el.dataset.img,await loadImg(f));}
+      else{if(fv)VID[vk]=null;sp(el.dataset.img,await loadImg(f));tlSync(el.dataset.img);}
     }
     else if(el.dataset.storymulti!==undefined){await fillStoryBulk([...el.files]);}
     else if(el.dataset.gallery!==undefined){for(const f of el.files)S.gallery.items.push({id:uid(),img:await loadImg(f,900)});}
@@ -3588,8 +3627,8 @@ function screenSearch(s){
   const cur=`<span style="flex:1;min-width:0;font-size:17px;color:${n?'#000':'#8e8e93'};white-space:nowrap;overflow:hidden;letter-spacing:-.2px">${n?esc(typed)+car:car+esc(Q.ph)}</span>`;
   const clrN=n>0?`<span style="width:${GG?24:20}px;height:${GG?24:20}px;border-radius:50%;background:${GG?'transparent':'#b9b9bf'};display:flex;align-items:center;justify-content:center;flex:none">${gi('<path d="M6 6l12 12M18 6L6 18"/>',GG?'#5f6368':'#fff',GG?20:11)}</span>`:'';
   const barN=NV
-    ?`<div style="display:flex;align-items:center;justify-content:space-between;padding:48px 16px 0">${NWORD(21)}<span style="display:flex;gap:14px;align-items:center;opacity:.75">${gi('<circle cx="12" cy="8" r="3.6"/><path d="M4.500 20c.8-4 3.600-6 7.500-6s6.700 2 7.500 6"/>','#555',22)}${gi('<path d="M4 6.500h16M4 12h16M4 17.500h16"/>','#555',22)}</span></div><div style="display:flex;align-items:center;padding:2px 12px 8px"><div style="flex:1;display:flex;align-items:center;gap:8px;height:46px;padding:0 4px 0 10px;border-radius:10px;border:2.5px solid #03c75a;box-shadow:0 1px 4px rgba(3,199,90,.18);background:#fff;min-width:0">${NLOGO(24)}${cur}${clrN}${n?'':GDOT}<span style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex:none">${gi('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/>','#03c75a',23)}</span></div></div><div style="height:1px;background:#e5e5e5"></div>`
-    :`<div style="display:flex;align-items:center;justify-content:space-between;padding:48px 18px 0">${GWORD(27)}<span style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#8ab4f8,#4285f4);display:flex;align-items:center;justify-content:center;overflow:hidden"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="8.500" r="4"/><path d="M4 21c.6-4.500 4-7 8-7s7.400 2.500 8 7z"/></svg></span></div><div style="display:flex;align-items:center;gap:10px;padding:4px 12px 8px"><span style="flex:none;display:flex;padding:0 2px">${gi('<path d="M19 12H5M11 6l-6 6 6 6"/>','#202124',24)}</span><div style="flex:1;display:flex;align-items:center;gap:8px;height:46px;padding:0 14px 0 18px;border-radius:23px;background:#fff;box-shadow:0 1px 6px rgba(32,33,36,.28);min-width:0">${cur}${clrN}${n?'':gi('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.500 11.500a6.500 6.500 0 0 0 13 0M12 18v3"/>','#4285f4',22)+LENS}</div></div><div style="height:1px;background:#ebebeb"></div>`;
+    ?`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px 2px">${NWORD(21)}<span style="display:flex;gap:14px;align-items:center;opacity:.75">${gi('<circle cx="12" cy="8" r="3.6"/><path d="M4.500 20c.8-4 3.600-6 7.500-6s6.700 2 7.500 6"/>','#555',22)}${gi('<path d="M4 6.500h16M4 12h16M4 17.500h16"/>','#555',22)}</span></div><div style="display:flex;align-items:center;padding:2px 12px 8px"><div style="flex:1;display:flex;align-items:center;gap:8px;height:46px;padding:0 4px 0 10px;border-radius:10px;border:2.5px solid #03c75a;box-shadow:0 1px 4px rgba(3,199,90,.18);background:#fff;min-width:0">${NLOGO(24)}${cur}${clrN}${n?'':GDOT}<span style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex:none">${gi('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/>','#03c75a',23)}</span></div></div><div style="height:1px;background:#e5e5e5"></div>`
+    :`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 18px 4px">${GWORD(27)}<span style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#8ab4f8,#4285f4);display:flex;align-items:center;justify-content:center;overflow:hidden"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="8.500" r="4"/><path d="M4 21c.6-4.500 4-7 8-7s7.400 2.500 8 7z"/></svg></span></div><div style="display:flex;align-items:center;gap:10px;padding:4px 12px 8px"><span style="flex:none;display:flex;padding:0 2px">${gi('<path d="M19 12H5M11 6l-6 6 6 6"/>','#202124',24)}</span><div style="flex:1;display:flex;align-items:center;gap:8px;height:46px;padding:0 14px 0 18px;border-radius:23px;background:#fff;box-shadow:0 1px 6px rgba(32,33,36,.28);min-width:0">${cur}${clrN}${n?'':gi('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.500 11.500a6.500 6.500 0 0 0 13 0M12 18v3"/>','#4285f4',22)+LENS}</div></div><div style="height:1px;background:#ebebeb"></div>`;
   const rows=SK==='ios'?rows0:rowsN,bar=SK==='ios'?bar0:barN;
   let kb='';
   if(Q.kb!==false&&tall&&(n>0||anim)){
