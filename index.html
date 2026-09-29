@@ -669,7 +669,7 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .st-av{width:32px;height:32px;border-radius:50%;background:#8e8e93;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;flex:none}
 .st-head b{font-size:14px;font-weight:600}.st-head span{font-size:13px;opacity:.7}
 .st-r{margin-left:auto;display:flex;gap:16px;align-items:center}
-.st-sp{flex:1}
+.st-sp{flex:1}.tl-list.rise{display:flex;flex-direction:column}.tl-list.rise .tl-inner{margin-top:auto}.kbp{padding-bottom:8px!important}#preview .stx{cursor:move;touch-action:none;pointer-events:auto}.stx-h{position:absolute;right:-12px;bottom:-12px;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid #0a84ff;cursor:nwse-resize;box-shadow:0 1px 4px rgba(0,0,0,.4)}
 .stx{position:absolute;left:24px;right:24px;transform:translateY(-50%);text-align:center;color:#fff;font-size:24px;font-weight:700;line-height:1.35;text-shadow:0 2px 12px rgba(0,0,0,.45);white-space:pre-wrap;word-break:keep-all;z-index:3}
 .stx.box{text-shadow:none;color:#111;background:#fff;border-radius:10px;padding:8px 14px;left:50%;right:auto;transform:translate(-50%,-50%);width:max-content;max-width:300px}
 .st-in{display:flex;align-items:center;gap:14px;padding:8px 14px 32px;flex:none}
@@ -956,7 +956,7 @@ function defaults(){
     status:{show:true,time:`${t.h12}:${pad(t.m)}`,battery:82,signal:4,net:'5G',showPct:false,charging:false},
     lock:{wall:null,preset:0,dim:0,date:`${d.getMonth()+1}월 ${d.getDate()}일 ${WD[d.getDay()]}요일`,time:`${t.h12}:${pad(t.m)}`,timeColor:'auto',weight:600,buttons:true,shadow:true,newTop:true,shake:true,snd:true,notiStyle:'glass',
       notis:[{id:uid(),app:'sms',title:'이름',body:'알림 내용',time:'지금'},{id:uid(),app:'alarm',title:'알람',body:'알림 내용',time:'지금'}]},
-    chat:{ring:true,bs:100,theme:0,autoRead:true,status:'',name:'이름',profile:null,bgImg:null,date:`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ${WD[d.getDay()]}요일`,unread:0,typing:false,
+    chat:{kb:true,kbStill:false,ring:true,bs:100,theme:0,autoRead:true,status:'',name:'이름',profile:null,bgImg:null,date:`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ${WD[d.getDay()]}요일`,unread:0,typing:true,
       messages:mkMsgs(SAMPLE,kt)},
     sms:{kb:true,kbStill:false,service:'imessage',dateLine:`오늘 ${kt}`,read:'읽음'},
     tw:{mode:'light'},
@@ -966,8 +966,8 @@ function defaults(){
     profile:{y:60,name:'이름',status:'이전 상태 메시지',newStatus:'새 상태 메시지',photo:null,newPhoto:null,change:'status',stage:'old'},
     search:{kb:true,style:'google',cps:7,snd:true,query:'아이폰 최근 통화 기록 삭제',ph:'검색어를 입력하세요',sugg:'아이폰 최근 통화 기록 삭제 복구\n아이폰 최근 통화 기록 삭제 안됨\n아이폰 최근 통화 기록 전체 삭제'},
     recents:{title:'최근 통화',items:[{id:uid(),name:'이름',kind:'missed',time:'오후 3:24'},{id:uid(),name:'이름',kind:'missed',time:'오후 3:21'},{id:uid(),name:'이름',kind:'out',time:'오후 3:18'}]},
-    story:{slots:[{id:uid(),img:null},{id:uid(),img:null},{id:uid(),img:null}],avatar:null,name:'username',time:'3시간',cur:1,prog:40,imgSec:3,text:'',textStyle:'plain',textY:50,hint:'메시지 보내기...'},
-    tl:{scrollMode:'add',mode:'light',tab:0,fab:true,me:null,tweetsF:[
+    story:{slots:[{id:uid(),img:null},{id:uid(),img:null},{id:uid(),img:null}],avatar:null,name:'username',time:'3시간',cur:1,prog:40,imgSec:3,text:'',textStyle:'plain',textY:50,textX:50,textSize:100,textRot:0,hint:'메시지 보내기...'},
+    tl:{rise:true,scrollMode:'add',mode:'light',tab:0,fab:true,me:null,tweetsF:[
       {id:uid(),name:'팔로우 중인 계정',handle:'@following',ver:false,text:'팔로잉 탭에 뜨는 트윗이에요 @username',time:'10분',replies:'4',rts:'2',likes:'57',views:'1,204',av:null,imgs:[null,null,null,null],priv:true,liked:false,rted:false},
       {id:uid(),name:'친구',handle:'@friend',ver:false,text:'오늘 모임 다들 올 거지?',time:'34분',replies:'12',rts:'',likes:'98',views:'2,310',av:null,imgs:[null,null,null,null],priv:false,liked:true,rted:false},
       {id:uid(),name:'뉴스',handle:'@news',ver:true,text:'속보: 오늘 오후부터 전국에 비가 내리겠습니다 #날씨',time:'1시간',replies:'240',rts:'1.8천',likes:'4.2천',views:'21만',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false}],
@@ -985,7 +985,7 @@ function defaults(){
       {id:uid(),kind:'like',name:'friend_01',av:null,text:'',time:'2시간',thumb:null,sec:'오늘',follow:false},
       {id:uid(),kind:'comment',name:'daily_mood',av:null,text:'@username 대박 ㅋㅋㅋ',time:'3시간',thumb:null,sec:'',follow:false},
       {id:uid(),kind:'follow',name:'new_friend',av:null,text:'',time:'5시간',thumb:null,sec:'이번 주',follow:false}]},
-    reelv:{more:[],cur:'1',vscroll:false,cmtFlow:false,bg:null,dim:20,name:'username',ver:false,av:null,follow:true,cap:'오늘의 브이로그 #일상 #릴스',audio:'username · 원본 오디오',likes:'1.2만',cmts:'128',shares:'34',liked:false,dtap:false},
+    reelv:{more:[],cur:'1',vscroll:false,cmtFlow:false,comments:[],_cm:0,bg:null,dim:20,name:'username',ver:false,av:null,follow:true,cap:'오늘의 브이로그 #일상 #릴스',audio:'username · 원본 오디오',likes:'1.2만',cmts:'128',shares:'34',liked:false,dtap:false},
     yt:{dark:false,thumb:null,title:'영상 제목을 입력하세요',views:'조회수 12만회',ago:'3일 전',ch:'채널명',chAv:null,subs:'구독자 10만명',sub:false,ccount:'1.2천',anim:false,items:[
       {id:uid(),av:null,name:'@friend01',time:'2일 전',text:'이거 진짜 웃겨요 ㅋㅋㅋ',likes:'124',replies:'답글 3개',pin:true,hearted:true},
       {id:uid(),av:null,name:'@daily_mood',time:'1일 전',text:'와 이 영상 알고리즘 타고 왔는데 너무 좋네요',likes:'12',replies:'',pin:false,hearted:false},
@@ -993,7 +993,7 @@ function defaults(){
     face:{other:null,me:null,name:'이름',status:'00:00',pip:true},
     call:{name:'이름',sub:'휴대전화',photo:null,style:'full',swipe:true},
     gallery:{title:'최근 항목',cols:3,items:[],view:'grid',cur:1,scroll:false,fill:true,scrollAt:0,vtheme:'light',vdate:'오늘',vtime:'오후 3:24'},
-    exp:{pop:{on:false,app:'sms',title:'이름',body:'메시지 내용',time:'지금',style:'light',at:1,dur:4,snd:true,vol:100,still:true,more:[],mode:'overlap',max:3,_m2:0},scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',fx:'none',fxY:60,vidMode:'single',vidSeq:['lock','chat'],trans:'cut',shutter:'none',scrollFx:false,gifScreens:['lock','chat','sms'],gifAnim:true,tlPress:true},
+    exp:{pop:{on:false,app:'sms',title:'이름',body:'메시지 내용',time:'지금',style:'light',at:1,dur:4,snd:true,vol:100,still:true,more:[],mode:'overlap',max:3,_m2:0},scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,typeChars:true,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',fx:'none',fxY:60,vidMode:'single',vidSeq:['lock','chat'],trans:'cut',shutter:'none',scrollFx:false,gifScreens:['lock','chat','sms'],gifAnim:true,tlPress:true},
   };
 }
 function merge(base,src){
@@ -1009,6 +1009,7 @@ function merge(base,src){
 let S=defaults();
 try{const raw=localStorage.getItem(KEY);if(raw)S=merge(defaults(),JSON.parse(raw));}catch(e){}
 if(S.exp.pop&&!S.exp.pop._m2){S.exp.pop._m2=1;if(S.exp.pop.mode==='stack')S.exp.pop.mode='overlap';}
+if(S.reelv&&!S.reelv._cm){S.reelv._cm=1;if(!(S.reelv.comments||[]).length)S.reelv.comments=((S.reels&&S.reels.comments)||[]).map(c=>({...c}));}
 if(S.reels&&S.reels.bg&&S.reelv&&!S.reelv.bg){S.reelv.bg=S.reels.bg;}
 if(!(S.exp.gifScale>=1.5))S.exp.gifScale=2;if(![0.75,1,1.5,2.5].includes(S.exp.gifSpeed))S.exp.gifSpeed=1.5;
 const ui={tab:'screen',gsel:-1,fold:{}};
@@ -1134,12 +1135,12 @@ function ktRows(s,th){
     if(typing)bub=`<div class="kt-b ${first?'tail':''}" style="background:${bc}"><div class="dots">${[0,1,2].map(j=>'<i style="background:'+(L?(th.dark?'#aaa':'#9a9aa2'):'rgba(0,0,0,.35)')+';opacity:'+(DPH==null?1:(j===DPH?1:.4))+';transform:translateY('+(DPH===j?-2:0)+'px)"></i>').join('')}</div></div>`;
     else if(m.img?.url){const w=Math.round(190*BOX),h=Math.min(260,Math.round(w/(m.img.ar||1)));bub=`<div class="kt-img" style="width:${w}px;height:${h}px">${bgImg(m.img,w/h)}</div>`;}
     else bub=`<div class="kt-b ${first?'tail':''}" style="background:${bc};color:${tc}">${esc(m.text)}</div>`;
-    const meta=typing?'':`<div class="kt-meta ${L?'':'r'}" style="color:${th.dark?'#e5e5e5':'#333'}">${(m.unread||(s.chat.autoRead&&!list.slice(i+1).some(x=>x.side!==m.side)))?'<i>1</i>':''}${lastT&&m.time?`<span>${esc(m.time)}</span>`:''}</div>`;
+    const meta=typing?'':`<div class="kt-meta ${L?'':'r'}" style="color:${th.dark?'#e5e5e5':'#333'}">${(!L&&(m.unread||(s.chat.autoRead&&!list.slice(i+1).some(x=>x.side!==m.side))))?'<i>1</i>':''}${lastT&&m.time?`<span>${esc(m.time)}</span>`:''}</div>`;
     if(L)return`<div class="mrow kt-row l ${first?'first':''}">${first?`<div class="kt-pf">${pf}</div>`:'<div class="kt-pf kph"></div>'}<div>${first?`<div class="kt-n" style="color:${th.dark?'#ddd':'#222'}">${name}</div>`:''}<div class="kt-line">${bub}${meta}</div></div></div>`;
     return`<div class="mrow kt-row r ${first?'first':''}"><div class="kt-line">${meta}${bub}</div></div>`;
   };
   const list=ms.slice();
-  if(s._typing||s.chat.typing)list.push({side:s._typing==='right'?'right':'left',_t:1,time:''});
+  if(s._typing)list.push({side:s._typing==='right'?'right':'left',_t:1,time:''});
   list.forEach((m,i)=>rows.push(item(m,i,list,m._t)));
   return rows.join('');
 }
@@ -1155,7 +1156,7 @@ function screenChat(s){
 function screenSms(s){
   const C=s.chat, M=s.sms, blue=M.service==='sms'?'#34c759':'#0a84ff';
   const ms=s.chat.messages.filter(visibleMsg).slice();
-  if(s._typing||C.typing)ms.push({side:s._typing==='right'?'right':'left',_t:1});
+  if(s._typing)ms.push({side:s._typing==='right'?'right':'left',_t:1});
   let lastRight=-1,lastLeft=-1;ms.forEach((m,i)=>{if(m._t)return;if(m.side==='right')lastRight=i;else lastLeft=i;});
   const rows=ms.map((m,i)=>{
     const prev=ms[i-1],next=ms[i+1];
@@ -1174,7 +1175,7 @@ function screenSms(s){
   const body=`<div class="im-head"><div class="im-back">${I.chevL('#0a84ff',19)}${hasUnread(C.unread)?`<span>${esc(C.unread)}</span>`:''}</div><div class="im-who"><div class="im-av">${av}</div><div class="im-nm">${esc(C.name)} ›</div></div><div class="im-vid">${I.video('#0a84ff',26)}</div></div>
   <div class="list"><div class="inner im-inner"><div class="im-date"><b>${label}</b><br>${esc(M.dateLine)}</div>${rows}</div></div>
   <div class="im-in"${kbOn?' style="padding-bottom:8px"':''}><div class="im-plus">${I.plus('#8e8e93',18)}</div><div class="im-field">${hasDraft(s)?`<span class="dr" style="color:#000">${esc(draftTail(s._draft,215,15.5*((s.chat.bs||100)/100)))}<i class="crt" style="background:#0a84ff"></i></span>${SND_SVG(blue,'#fff',26)}`:`<span>${label}</span>${I.mic('#b0b0b5',20)}`}</div></div>`;
-  return{bg,body:body+(kbOn?smsKbd(s._kq!=null?x_eo(Math.min(1,+s._kq)):1):'')};
+  return{bg,body:body+(kbOn?smsKbd(s._kq!=null?x_eo(Math.min(1,+s._kq)):1,s._kp):'')};
 }
 const FC_FLIP='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 13.5-5.8L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 0 1-13.5 5.8L4 15.5M4 20v-4.5h4.5"/></svg>';
 function screenFace(s){
@@ -1221,7 +1222,7 @@ function screenGallery(s){
 }
 /* ── 인스타 DM · LINE · 텔레그램 ── */
 const CHATLIKE=['chat','sms','ig','line','tg','tw'];
-function cmsgs(s){const ms=s.chat.messages.filter(visibleMsg).slice();if(s._typing||s.chat.typing)ms.push({side:s._typing==='right'?'right':'left',_t:1,time:''});return ms;}
+function cmsgs(s){const ms=s.chat.messages.filter(visibleMsg).slice();if(s._typing)ms.push({side:s._typing==='right'?'right':'left',_t:1,time:''});return ms;}
 const pfOf=(s,c)=>s.chat.profile?.url?bgImg(s.chat.profile):X_AV(s.screen);
 const SND_SVG=(bg,fg='#fff',z=28)=>`<span class="sndb" style="width:${z}px;height:${z}px;background:${bg}"><svg width="${Math.round(z*.5)}" height="${Math.round(z*.5)}" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="${fg}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
 function draftTail(t,px,fs){let w=0,o='';const a=[...t];for(let i=a.length-1;i>=0;i--){const c=a[i],cw=(/[\u1100-\u11ff\u3130-\u318f\uac00-\ud7af\u3000-\u9fff\uff00-\uffef]/.test(c)?1:(/[A-Z0-9]/.test(c)?.62:.5))*fs;if(w+cw>px)break;w+=cw;o=c+o;}return o;}
@@ -1312,25 +1313,27 @@ function screenTl(s){
   const vf='<svg width="16" height="16" viewBox="0 0 24 24" style="flex:none"><path fill="#1d9bf0" d="M12 1.5l2.6 1.9 3.2-.2 1 3.1 2.6 1.9-1 3 1 3-2.6 1.9-1 3.1-3.2-.2L12 22.5l-2.6-1.9-3.2.2-1-3.1L2.6 15.8l1-3-1-3 2.6-1.9 1-3.1 3.2.2z"/><path d="M8 12.2l2.7 2.6L16 9.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   const lk='<svg width="15" height="15" viewBox="0 0 24 24" style="flex:none;margin-left:1px"><path fill="currentColor" d="M17 9V7a5 5 0 0 0-10 0v2H5v12h14V9zM9 7a3 3 0 0 1 6 0v2H9z"/></svg>';
   const fmt=t=>esc(t).replace(/(^|\s)([#@][^\s<]+)/g,'$1<span style="color:#1d9bf0">$2</span>');
-  const a=(k,v,on,i)=>{
-    const col=on?(k==='like'?'#f91880':'#00ba7c'):'';
+  const a=(k,v,on,i,pv)=>{
+    const gr=pv&&k==='rt';if(gr)on=0;
+    const col=gr?(dk?'#4a4f54':'#c4ccd2'):on?(k==='like'?'#f91880':'#00ba7c'):'';
     const pp=T._pop&&T._pop.k===i&&T._pop.kind===k,sc=pp?(T._pop.t<.5?1.4:1.15):1;
     return`<span${col?` style="color:${col}"`:''}><i style="display:inline-flex;transform:scale(${sc})">${ic(P[k],17,on?2.4:1.8,on&&k==='like'?'currentColor':'none')}</i>${v?esc(v):''}</span>`;
   };
-  const rows=TW.map((t,i)=>{
+  const rise=T.rise!==false,ord=TW.map((_,i)=>i);if(rise)ord.reverse();
+  const rows=ord.map(i=>{const t=TW[i];
     const av=t.av&&t.av.url?bgImg(t.av):I.person('#fff');
     const list=(Array.isArray(t.imgs)?t.imgs:[t.img]).filter(x=>x&&x.url).slice(0,4),n=list.length;
     const im=n?`<div class="tl-im n${n}">${list.map((m,j)=>`<div class="tl-ci">${bgImg(m,(n===2||(n===3&&j===0))?8/9:16/9)}</div>`).join('')}</div>`:'';
-    let an='';if(T._tlt!=null&&T._tlt<1&&i===nT-1){const e=1-Math.pow(1-T._tlt,3);an=` style="opacity:${Math.min(1,e*1.4).toFixed(2)};transform:translateY(${((1-e)*28).toFixed(1)}px)"`;}
+    let an='';if(T._tlt!=null&&T._tlt<1&&i===nT-1){const e=1-Math.pow(1-T._tlt,3);an=` style="opacity:${Math.min(1,e*1.4).toFixed(2)};transform:translateY(${(rise?-(1-e)*14:(1-e)*28).toFixed(1)}px)"`;}
     const rt='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11V9a3 3 0 0 1 3-3h11M15 3l3 3-3 3M20 13v2a3 3 0 0 1-3 3H6M9 21l-3-3 3-3"/></svg>';
     const rth=t.rtBy?`<div class="tl-rt">${rt}${esc(t.rtBy)}님이 리트윗함</div>`:'';
-    return`<div class="tl-t"${an}>${rth}<div class="tl-row"><div class="tl-pf">${av}</div><div class="tl-c"><div class="tl-n"><b>${esc(t.name)}</b>${t.priv?lk:''}${t.ver?vf:''}<span>${esc(t.handle)}${t.time?' · '+esc(t.time):''}</span></div>${t.text?`<div class="tl-x">${fmt(t.text)}</div>`:''}${im}<div class="tl-act">${a('rep',t.replies,0,i)}${a('rt',t.rts,t.rted,i)}${a('like',t.likes,t.liked,i)}${a('view',t.views,0,i)}${ic(P.share,17)}</div></div></div></div>`;
+    return`<div class="tl-t"${an}>${rth}<div class="tl-row"><div class="tl-pf">${av}</div><div class="tl-c"><div class="tl-n"><b>${esc(t.name)}</b>${t.priv?lk:''}${t.ver?vf:''}<span>${esc(t.handle)}${t.time?' · '+esc(t.time):''}</span></div>${t.text?`<div class="tl-x">${fmt(t.text)}</div>`:''}${im}<div class="tl-act">${a('rep',t.replies,0,i)}${a('rt',t.rts,t.rted,i,t.priv)}${a('like',t.likes,t.liked,i)}${a('view',t.views,0,i)}${ic(P.share,17)}</div></div></div></div>`;
   }).join('');
   const me=T.me&&T.me.url?bgImg(T.me):I.person('#fff');
   const xl='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>';
   const bg=`<div class="bgl" style="background:${dk?'#000':'#fff'}"></div>`;
   const body=`<div class="tl-head" style="${V}"><div class="tl-top"><div class="tl-av">${me}</div>${xl}<span style="width:30px"></span></div><div class="tl-tabs"><div class="${T.tab?'':'on'}">추천</div><div class="${T.tab?'on':''}">팔로잉</div></div></div>
-  <div class="tl-list" style="${V}"><div class="tl-inner">${rows}</div></div>
+  <div class="tl-list${rise?' rise':''}" style="${V}"><div class="tl-inner">${rows}</div></div>
   <div class="tl-in" style="${V}">${ic('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',24,2.2)}${ic('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5l5 5"/>',24)}${ic('<path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4"/>',24)}${ic('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',24)}</div>
   ${T.fab?`<div class="tl-fab">${ic('<path d="M12 5v14M5 12h14"/>',24,2.4)}</div>`:''}`;
   return{bg,body};
@@ -1398,7 +1401,7 @@ function screenStory(s){
   const dt='<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><circle cx="5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="19" cy="12" r="1.7"/></svg>';
   const ht='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>';
   const sd='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M21 3L3 10.5l7 2.5 2.5 7z"/><path d="M10 13L21 3"/></svg>';
-  const tx=T.text?`<div class="stx ${T.textStyle==='box'?'box':''}" style="top:${+T.textY||50}%">${esc(T.text)}</div>`:'';
+  const tx=T.text?`<div class="stx ${T.textStyle==='box'?'box':''}" style="top:${+T.textY||50}%;left:${+T.textX||50}%;right:auto;width:max-content;max-width:300px;transform:translate(-50%,-50%) rotate(${+T.textRot||0}deg) scale(${(+T.textSize||100)/100})">${esc(T.text)}</div>`:'';
   const body=`<div class="st-bars">${seg}</div><div class="st-head"><div class="st-av">${av}</div><b>${esc(T.name)}</b><span>${esc(T.time)}</span><div class="st-r">${dt}${x}</div></div>${tx}<div class="st-sp"></div><div class="st-in"><div class="st-f">${esc(T.hint)}</div>${ht}${sd}</div>`;
   return{bg,body};
 }
@@ -1469,9 +1472,10 @@ function reelStage(s,vs){
   return`<div class="bgl" style="background:#111"><div style="position:absolute;left:0;right:0;top:0;bottom:84px;overflow:hidden"><div style="position:absolute;left:0;right:0;top:0;height:100%;transform:translateY(${(-vs*100).toFixed(2)}%)">${all.map((R,i)=>reelPage(R,i,s,vs)).join('')}</div></div></div>`;
 }
 const reelTop='<div class="rl-top" style="flex:none;display:flex;justify-content:space-between;align-items:center;padding:8px 16px;color:#fff"><span style="font-size:22px;font-weight:700">릴스</span>'+I.cam('#fff',26)+'</div>';
+function curReel(s){const V=s.reelv,a=[V,...(V.more||[])];return a[Math.min(a.length,Math.max(1,+s.reels.of||1))-1];}
 function reelSheet(s){
   const R=s.reels,dk=R.sheet==='dark',SB=dk?'#262626':'#fff',T=dk?'#f5f5f5':'#000',M=dk?'#a8a8a8':'#737373',LN=dk?'#363636':'#efefef',LK=dk?'#e0f1ff':'#00376b';
-  const cs=(R.comments||[]).filter(Boolean),nC=cs.length,sq=s._sh!=null?1-Math.pow(1-Math.min(1,s._sh),3):1;
+  const cs=(curReel(s).comments||[]).filter(Boolean),nC=cs.length,sq=s._sh!=null?1-Math.pow(1-Math.min(1,s._sh),3):1;
   const rows=cs.map((c,i)=>{
     const q=(i===nC-1&&s._rq!=null&&s._rq<1)?s._rq:1,e=1-Math.pow(1-q,3);
     const an=q<1?`opacity:${Math.min(1,e*1.5).toFixed(2)};transform:translateY(${((1-e)*16).toFixed(1)}px);`:'';
@@ -1510,8 +1514,8 @@ function hScroll(push,prop,base,sp,hold,rev){
 }
 /* 댓글창이 올라오고 → 댓글이 하나씩 뜨고 → (옵션) 아래로 스크롤 */
 function cmtSeq(push,s,sp,D,hold,base,forceAn){
-  const R=s.reels,n=(R.comments||[]).filter(Boolean).length,an=(forceAn||!!R.anim)&&n>0,sc=!!R.scroll;
-  const cut=(c,k)=>{c.reels.comments=c.reels.comments.filter(Boolean).slice(0,k);};
+  const R=s.reels,n=(curReel(s).comments||[]).filter(Boolean).length,an=(forceAn||!!R.anim)&&n>0,sc=!!R.scroll;
+  const cut=(c,k)=>{const V=curReel(c);V.comments=(V.comments||[]).filter(Boolean).slice(0,k);};
   if(an){
     [0,.12,.3,.5,.7,.86,.96,1].forEach((q,qi)=>push(c=>{base(c);cut(c,0);c._sh=q;c._rs=0;},qi===0?D*.8:40/sp));
     for(let k=1;k<=n;k++){
@@ -1540,27 +1544,27 @@ function E_post(){const P=S.post;
 const edReel=(p,i)=>card(i<0?'릴스 1':`릴스 ${i+2}`,`${imgField(p+'.bg','릴스 화면 (영상 캡처 사진)')}${rng(p+'.dim',0,80,1,'어둡게','%')}
     <div class="g2">${fld('아이디',txt(p+'.name','username'))}${fld('오디오',txt(p+'.audio','username · 원본 오디오'))}</div>${imgField(p+'.av','프로필 사진',false)}${fld('캡션',area(p+'.cap','캡션'))}
     <div class="g3">${fld('좋아요',txt(p+'.likes','1.2만'))}${fld('댓글',txt(p+'.cmts','128'))}${fld('공유',txt(p+'.shares','34'))}</div>
-    ${tog(p+'.ver','인증 배지')}${tog(p+'.follow','팔로우 버튼')}${tog(p+'.liked','하트 누름')}`,
+    ${tog(p+'.ver','인증 배지')}${tog(p+'.follow','팔로우 버튼')}${tog(p+'.liked','하트 누름')}${tog(p+'.cmtFlow','GIF · 영상: 이 릴스의 댓글창을 열어 댓글 확인')}`,
     i<0?'':`<button class="ib x" data-act="del" data-path="reelv.more" data-i="${i}" title="삭제">✕</button>`);
 function E_reelv(){const V=S.reelv,n=1+V.more.length;
   return edReel('reelv',-1)+V.more.map((_,i)=>edReel(`reelv.more.${i}`,i)).join('')
   +card('릴스 추가',`<button class="btn line" data-act="add" data-path="reelv.more" data-tpl="rvmore" style="width:100%">＋ 릴스 추가 (위로 넘기면 나와요)</button>`)
-  +card('화면 · 연출',`${n>1?fld('미리 볼 릴스 번호',txt('reelv.cur','1')):''}${tog('reelv.dtap','GIF · 영상: 화면을 두 번 눌러 하트가 뜨는 연출')}${n>1?tog('reelv.vscroll','GIF · 영상: 위로 밀어 다음 릴스로 넘기기'):''}${tog('reelv.cmtFlow','GIF · 영상: 댓글 버튼 → 댓글창이 올라오고 댓글이 하나씩 떠요')}<div class="hint" style="margin-top:6px">댓글창 내용은 “릴스 댓글” 화면에서 고쳐요. 두 화면은 같은 릴스 그림을 써서 이어져요.</div>`);}
+  +card('화면 · 연출',`${n>1?fld('미리 볼 릴스 번호',txt('reelv.cur','1')):''}${tog('reelv.dtap','GIF · 영상: 화면을 두 번 눌러 하트가 뜨는 연출')}${n>1?tog('reelv.vscroll','GIF · 영상: 위로 밀어 다음 릴스로 넘기기'):''}<div class="hint" style="margin-top:6px">댓글 확인 연출은 릴스마다 위 카드에서 따로 켜고, 댓글은 “릴스 댓글” 화면에서 릴스별로 고쳐요. 두 화면은 같은 릴스 그림을 써서 이어져요.</div>`);}
 function E_reels(){
-  const R=S.reels,cs=R.comments,n=1+S.reelv.more.length;
+  const R=S.reels,n=1+S.reelv.more.length,vi=Math.min(n,Math.max(1,+R.of||1))-1,RV=curReel(S),cp=vi?`reelv.more.${vi-1}`:'reelv';if(!Array.isArray(RV.comments))RV.comments=[];const cs=RV.comments;
   return card('릴스 배경',`<div class="hint">배경은 “릴스 본화면”의 릴스 그림을 그대로 써요.</div>${n>1?fld('댓글이 달린 릴스 번호',txt('reels.of','1')):''}`)
   +card('댓글창',`${fld('댓글창 색',seg('reels.sheet',[['light','밝게'],['dark','어둡게']]))}
     ${rng('reels.sheetH',40,92,1,'댓글창 높이','%')}
     <div class="g2">${fld('제목',txt('reels.title','댓글'))}${fld('입력창 문구',txt('reels.ph','username(으)로 댓글 달기...'))}</div>
     ${imgField('reels.me','내 프로필 사진',false)}${tog('reels.emoji','이모지 빠른 반응 줄')}`)
   +card('연출',`${tog('reels.anim','댓글창이 올라오고 댓글이 하나씩 떠요')}${tog('reels.scroll','아래로 스크롤')}${R.scroll?rng('reels.scrollAt',0,100,1,'정지 화면 위치','%'):''}<div class="hint" style="margin-top:6px">스크롤은 댓글이 댓글창보다 많을 때 적용되고, 슬라이더는 PNG 같은 정지 화면 위치예요.</div>`)
-  +card('댓글',cs.map((c,i)=>`<div class="item"><div class="item-h"><span class="badge">댓글 ${i+1}</span>${mv('reels.comments',i,cs.length)}</div>
-    ${imgField(`reels.comments.${i}.av`,'프로필 사진',false)}
-    <div class="g2">${fld('아이디',txt(`reels.comments.${i}.name`,'username'))}${fld('시간',txt(`reels.comments.${i}.time`,'1일'))}</div>
-    ${area(`reels.comments.${i}.text`,'댓글 내용')}
-    <div class="g2">${fld('좋아요 수',txt(`reels.comments.${i}.likes`,'12'))}${fld('답글 문구 (비우면 숨김)',txt(`reels.comments.${i}.replies`,'답글 3개 보기'))}</div>
-    <div class="g3">${tog(`reels.comments.${i}.liked`,'하트')}${tog(`reels.comments.${i}.author`,'작성자')}${tog(`reels.comments.${i}.ver`,'인증')}</div></div>`).join('')
-    +`<button class="btn line" data-act="add" data-path="reels.comments" data-tpl="rcomment">＋ 댓글 추가</button>`);
+  +card(`릴스 ${vi+1}의 댓글`,cs.map((c,i)=>`<div class="item"><div class="item-h"><span class="badge">댓글 ${i+1}</span>${mv(cp+'.comments',i,cs.length)}</div>
+    ${imgField(`${cp}.comments.${i}.av`,'프로필 사진',false)}
+    <div class="g2">${fld('아이디',txt(`${cp}.comments.${i}.name`,'username'))}${fld('시간',txt(`${cp}.comments.${i}.time`,'1일'))}</div>
+    ${area(`${cp}.comments.${i}.text`,'댓글 내용')}
+    <div class="g2">${fld('좋아요 수',txt(`${cp}.comments.${i}.likes`,'12'))}${fld('답글 문구 (비우면 숨김)',txt(`${cp}.comments.${i}.replies`,'답글 3개 보기'))}</div>
+    <div class="g3">${tog(`${cp}.comments.${i}.liked`,'하트')}${tog(`${cp}.comments.${i}.author`,'작성자')}${tog(`${cp}.comments.${i}.ver`,'인증')}</div></div>`).join('')
+    +`<button class="btn line" data-act="add" data-path="${cp}.comments" data-tpl="rcomment">＋ 댓글 추가</button>`);
 }
 
 /* ═════════════ 인스타 프로필 · 활동 · 릴스 본화면 · 유튜브 댓글 ═════════════ */
@@ -1630,6 +1634,7 @@ function E_yt(){const P=S.yt;
 const SCREEN_FN={lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw,tl:screenTl,news:screenNews,dial:screenDial,story:screenStory,post:screenPost,reels:screenReels,igprof:screenIgProf,igact:screenIgAct,reelv:screenReelV,yt:screenYt,recents:screenRecents,profile:screenProfile,search:screenSearch};
 
 let BOX=1;
+['chat','ig','line','tg'].forEach(k=>{const f=SCREEN_FN[k];SCREEN_FN[k]=s=>{const r=f(s);if(s.chat.kb!==false&&(hasDraft(s)||s.chat.kbStill)&&DIMS[s.device.ratio||'phone'][1]>=676){r.body=r.body.replace(/class="(kt-in|ig-in|ln-in|tg-in)"/,'class="$1 kbp"')+smsKbd(s._kq!=null?x_eo(Math.min(1,+s._kq)):1,s._kp);}return r;};});
 function msgFx(s){return s;}
 const SCROLL_SEL={chat:['.list','.inner'],sms:['.list','.inner'],ig:['.list','.inner'],line:['.list','.inner'],tg:['.list','.inner'],tw:['.list','.inner'],tl:['.tl-list','.tl-inner'],news:['.nw-list','.nw-inner']};
 function scrollApply(root,st){
@@ -1826,6 +1831,7 @@ function stageHTML(s,opt={}){
 let raf=0;
 function renderPreview(){
   $('#preview').innerHTML=stageHTML(S);
+  if(S.screen==='story'){const x=$('#preview .stx');if(x)x.insertAdjacentHTML('beforeend','<i class="stx-h"></i>');}
   const pel=$('#preview').firstElementChild;if(pel)applySlide(pel,popStill(S));   // 인용·반응·실패 같은 고정 장식은 정지 화면에도 바로 보여요
   $('#dockLbl').textContent=SCREENS.find(x=>x[0]===S.screen)[1]+'  ·  '+(S.device.ratio&&S.device.ratio!=='phone'?({vert:'9:16',horiz:'16:9',four:'4:3'})[S.device.ratio]:({island:'DYNAMIC ISLAND',notch:'NOTCH',punch:'PUNCH HOLE'})[S.device.model])+(S.device.bgOff?'  ·  TRANSPARENT':'');
   document.body.classList.toggle('bgoff',!!S.device.bgOff);
@@ -1841,6 +1847,14 @@ function schedule(){if(raf)return;raf=requestAnimationFrame(()=>{raf=0;renderPre
 let saveT=0,warned=false;
 function commit(){schedule();clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){if(!warned){warned=true;toast('사진 용량이 커서 자동 저장은 건너뛰었어요 (프로젝트 저장은 가능)');}}},500);}
 window.addEventListener('resize',fit);
+(function(){const pv=document.getElementById('preview');let d=null;
+pv.addEventListener('pointerdown',e=>{const h=e.target.closest('.stx-h'),t=e.target.closest('.stx'),lay=pv.querySelector('.lay');if(!t||!lay||S.screen!=='story')return;const lr=lay.getBoundingClientRect(),tr=t.getBoundingClientRect(),cx=tr.left+tr.width/2,cy=tr.top+tr.height/2;
+d={h:!!h,lr,cx,cy,ox:e.clientX-cx,oy:e.clientY-cy,d0:Math.hypot(e.clientX-cx,e.clientY-cy)||1,a0:Math.atan2(e.clientY-cy,e.clientX-cx),sz:+S.story.textSize||100,rot:+S.story.textRot||0};pv.setPointerCapture(e.pointerId);e.preventDefault();});
+pv.addEventListener('pointermove',e=>{if(!d)return;const T=S.story;
+if(d.h){T.textSize=Math.round(Math.max(30,Math.min(300,d.sz*Math.hypot(e.clientX-d.cx,e.clientY-d.cy)/d.d0)));let r=d.rot+(Math.atan2(e.clientY-d.cy,e.clientX-d.cx)-d.a0)*180/Math.PI;T.textRot=Math.round(((r+540)%360)-180);}
+else{T.textX=Math.round(Math.max(0,Math.min(100,(e.clientX-d.ox-d.lr.left)/d.lr.width*100)));T.textY=Math.round(Math.max(0,Math.min(100,(e.clientY-d.oy-d.lr.top)/d.lr.height*100)));}
+commit();});
+const end=()=>{if(d){d=null;renderEditor();}};pv.addEventListener('pointerup',end);pv.addEventListener('pointercancel',end);})();
 
 /* ═════════════ Editor builders ═════════════ */
 const fcard=(k,t,body)=>{const o=ui.fold[k]!==false;return`<section class="card fold${o?'':' shut'}"><div class="ct" data-act="fold" data-val="${k}" role="button" tabindex="0" aria-expanded="${o}"><span>${t}</span><i class="fchev"></i></div><div class="fb">${body}</div></section>`;};
@@ -1934,7 +1948,7 @@ function E_msgs(){
       ${fld('메시지 상태 (영상 · 미리보기에서 변하는 모습이 나와요)',seg(`chat.messages.${i}.state`,[['none','기본'],['deleted','삭제됨'],['failed','전송 실패']],'sm'))}
       ${fld('이모티콘 반응',seg(`chat.messages.${i}.react`,[['','없음'],['❤️','❤️'],['👍','👍'],['😂','😂'],['😢','😢']],'sm'))}</div>`).join('')}
     <div class="g2"><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="left">＋ 상대방</button><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="right">＋ 나</button></div>
-    <div class="sep"></div>${tog('chat.typing','입력 중… 말풍선 표시 (정지 화면 · PNG용, 영상 · GIF엔 안 나와요)')}${typOpts()}${tog('chat.autoRead','상대가 읽으면 카톡 "1" 자동 사라짐')}`);
+    <div class="sep"></div>${S.screen!=='sms'?tog('chat.kb','키보드 표시 (입력창에 타이핑할 때 올라와요)')+(S.chat.kb!==false?tog('chat.kbStill','PNG · 정지 화면에서도 키보드 항상 표시'):''):''}${typOpts()}${tog('chat.autoRead','상대가 읽으면 카톡 "1" 자동 사라짐')}`);
 }
 function E_chat(){
   return card('대화방',`${fld('테마',sws('chat.theme',KT.map((t,i)=>[i,`linear-gradient(135deg,${t.bg} 55%,${t.r} 55%)`,t.n])))}
@@ -1944,9 +1958,9 @@ function E_chat(){
 }
 
 /* 아이폰 한글 키보드 (메시지 화면용) */
-function smsKbd(kq){
+function smsKbd(kq,kp){let ki=0;
   const R=['ㅂㅈㄷㄱㅅㅛㅕㅑㅐㅔ','ㅁㄴㅇㄹㅎㅗㅓㅏㅣ','ㅋㅌㅊㅍㅠㅜㅡ'];
-  const kk=(l,w,bg,fs,col)=>`<div style="flex:${w||1};height:42px;border-radius:5px;background:${bg||'#fff'};box-shadow:0 1px 0 #898a8d;display:flex;align-items:center;justify-content:center;font-size:${fs||22}px;font-weight:300;color:${col||'#000'}">${l}</div>`;
+  const kk=(l,w,bg,fs,col)=>`<div style="flex:${w||1};height:42px;border-radius:5px;background:${ki++===kp?'#b8bcc4':(bg||'#fff')};box-shadow:0 1px 0 #898a8d;display:flex;align-items:center;justify-content:center;font-size:${fs||22}px;font-weight:300;color:${col||'#000'}">${l}</div>`;
   const sh='<svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M12 4l8 9h-5v6H9v-6H4z"/></svg>',dl='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.8" stroke-linejoin="round"><path d="M9 6h11a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9l-6-6z"/><path d="M12.5 9.5l5 5M17.5 9.5l-5 5" stroke-linecap="round"/></svg>';
   const rw=R.map((r,ri)=>`<div style="display:flex;gap:6px;padding:0 ${ri===1?16:ri===2?0:3}px;${ri===2?'justify-content:space-between;padding:0 3px':''}">${ri===2?kk(sh,1.3,'#adb3bc')+`<div style="display:flex;gap:6px;flex:7.2">${[...r].map(l=>kk(l,1,'',22)).join('')}</div>`+kk(dl,1.3,'#adb3bc'):[...r].map(l=>kk(l,1,'',22)).join('')}</div>`).join('');
   const glb='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>';
@@ -2151,6 +2165,10 @@ function applySlide(root,st){
   msgDeco(root,st);fxApply(root,st);sheetApply(root,st);ovApply(root,st);scrollApply(root,st);rlApply(root,st);feedApply(root,st);glApply(root,st);
   const ti=root.querySelector('.tl-inner');
   if(ti){
+    if(st.tl&&st.tl.rise!==false){
+      if(st.tl._tlt!=null&&st.tl._tlt<1){const lh=ti.parentElement.clientHeight,ch=ti.offsetHeight,h=ti.firstElementChild?ti.firstElementChild.offsetHeight:0,e=1-Math.pow(1-st.tl._tlt,3),d0=Math.max(-h,lh-ch)-Math.max(0,lh-ch);ti.style.transform=`translateY(${(d0*(1-e)).toFixed(1)}px)`;}
+      return;
+    }
     if(st.tl&&st.tl._sc){
       const lh=ti.parentElement.clientHeight,ch=ti.offsetHeight,rs=ti.children,last=rs[rs.length-1];
       if(last){
@@ -2187,11 +2205,11 @@ function chatPlan(s){
   mk(c=>take(c,0),Math.min(800,gap*.7),'k0');
   for(let k=1;k<=n;k++){
     const m=ms[k-1],firstOfSide=(k===1||ms[k-2].side!==m.side);
-    if(s.exp.typing&&m.side==='left'&&firstOfSide)typFrames(mk,true,gap*.8,c=>take(c,k-1),`t${k}`);
+    if(s.chat.typing&&m.side==='left'&&firstOfSide)typFrames(mk,true,gap*.8,c=>take(c,k-1),`t${k}`);
     const typeIn=s.exp.typeIn&&m.side==='right'&&m.text&&m.text.trim()&&!(m.img&&m.img.url);
-    if(typeIn){const ch=[...m.text.trim()],st=Math.min(ch.length,10),tot=Math.max(700,Math.min(2200,ch.length*90));
-      for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');mk(c=>{take(c,k-1);c._draft=txt;c._kq=Math.min(1,j/2);c._typing='right';c._dph=j%3;},j===st?tot/st+260:tot/st,`d${k}_${j}`);}}
-    else if(s.exp.typingMe&&m.side==='right'&&firstOfSide)typFrames(mk,'right',gap*.7,c=>take(c,k-1),`tr${k}`);
+    if(typeIn){const ch=[...m.text.trim()],cm=s.exp.typeChars!==false,st=Math.min(ch.length,cm?30:10),tot=Math.max(700,Math.min(2200,ch.length*90));
+      for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');mk(c=>{take(c,k-1);c._draft=txt;c._kq=Math.min(1,j/2);c._kp=(txt.codePointAt(txt.length-1)||0)%30;},j===st?tot/st+260:tot/st,`d${k}_${j}`);}}
+    else if(false&&m.side==='right'&&firstOfSide)typFrames(mk,'right',gap*.7,c=>take(c,k-1),`tr${k}`);
     let sound=m.side;
     const stt=m.state,rx=!!m.react,pre=stt==='deleted'||stt==='failed'||rx,endD=k===n?Math.max(1600,gap*1.6):gap*.7;
     const cur=(c,ex)=>{take(c,k);c.chat.messages[k-1]={...c.chat.messages[k-1],...ex};};
@@ -2551,7 +2569,7 @@ function E_tl(){
   ts.forEach(t=>{if(!Array.isArray(t.imgs))t.imgs=[t.img||null,null,null,null];while(t.imgs.length<4)t.imgs.push(null);});
   return card('타임라인',`${fld('상단 탭 (탭마다 트윗이 따로예요)',seg('tl.tab',[[0,'추천'],[1,'팔로잉']]))}
     ${fld('화면',seg('tl.mode',[['light','화이트'],['dark','다크']]))}
-    ${imgField('tl.me','내 프로필 사진',false)}${tog('tl.fab','글쓰기 버튼')}
+    ${imgField('tl.me','내 프로필 사진',false)}${tog('tl.fab','글쓰기 버튼')}${tog('tl.rise','최신 트윗이 맨 위 · 아래에서부터 쌓이며 올라오기 (트윗 1이 가장 아래, 마지막 트윗이 맨 위)')}
     ${fld('GIF · 영상 스크롤 방식',seg('tl.scrollMode',[['add','트윗이 하나씩 올라옴'],['down','사람이 아래로 스크롤'],['up','맨 아래에서 위로']]))}
     ${T.scrollMode!=='add'?'<div class="hint" style="margin:-4px 0 8px">디스패치처럼 전체 트윗이 이미 떠 있고, 사람이 손가락으로 훅 내렸다 멈췄다 하듯 스크롤돼요. 트윗이 화면보다 길게(여러 개) 있어야 움직여요.</div>':''}
     ${tog('exp.tlPress','GIF · 영상: 하트 · 리트윗 누르는 애니메이션')}
@@ -2603,7 +2621,7 @@ function E_story(){
     <div class="sep"></div>${rng('story.cur',1,Math.max(1,n),1,'미리 볼 칸','번')}${rng('story.prog',0,100,5,'진행','%')}
     ${fld('사진 한 칸 길이',seg('story.imgSec',[[2,'2초'],[3,'3초'],[5,'5초']]))}
     <div class="hint" style="margin-top:4px">GIF · 영상 · ▶ 미리보기에서는 1번 칸부터 순서대로 진행 막대가 차고 다음 칸으로 넘어가요. 영상 칸은 영상 길이만큼(최대 15초) 재생돼요. 영상 소리는 들어가지 않아요.</div>`)
-  +card('사진 위 글자',`${fld('내용',area('story.text','비우면 숨김'))}${fld('스타일',seg('story.textStyle',[['plain','기본'],['box','흰 박스']]))}${rng('story.textY',10,90,1,'세로 위치','%')}`);
+  +card('사진 위 글자',`${fld('내용',area('story.text','비우면 숨김'))}${fld('스타일',seg('story.textStyle',[['plain','기본'],['box','흰 박스']]))}${rng('story.textX',0,100,1,'가로 위치','%')}${rng('story.textY',0,100,1,'세로 위치','%')}${rng('story.textSize',30,300,5,'크기','%')}${rng('story.textRot',-180,180,1,'회전','°')}<div class="hint" style="margin-top:4px">미리보기 화면의 글자를 <b>직접 드래그</b>하면 위치가 바뀌고, 글자 오른쪽 아래 <b>동그라미</b>를 끌면 크기와 방향(회전)이 함께 바뀌어요.</div>`);
 }
 function E_chatlike0(t){
   return card(t,`<div class="g2">${fld('상대 이름',txt('chat.name','이름'))}${fld('안읽은 수',txt('chat.unread','0'))}</div>
@@ -2841,10 +2859,10 @@ function buildFrames(s){
       push(c=>take(c,0),D);
       const ms=s.chat.messages.filter(visibleMsg);
       for(let k=1;k<=n;k++){
-        if(s.exp.typing&&ms[k-1].side==='left'&&(k===1||ms[k-2].side!=='left'))[0,1,2].forEach(j=>push(c=>{take(c,k-1);c._typing=true;c._dph=j;},D*.9/3));
+        if(s.chat.typing&&ms[k-1].side==='left'&&(k===1||ms[k-2].side!=='left'))[0,1,2].forEach(j=>push(c=>{take(c,k-1);c._typing=true;c._dph=j;},D*.9/3));
         const mk1=ms[k-1],typeIn=s.exp.typeIn&&mk1.side==='right'&&mk1.text&&mk1.text.trim()&&!(mk1.img&&mk1.img.url);
-        if(typeIn){const ch=[...mk1.text.trim()],st=Math.min(ch.length,5);for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');push(c=>{take(c,k-1);c._draft=txt;c._kq=Math.min(1,j/2);c._typing='right';c._dph=j%3;},(j===st?D*.55:D*.3));}}
-        else if(s.exp.typingMe&&mk1.side==='right'&&(k===1||ms[k-2].side!=='right'))[0,1,2].forEach(j=>push(c=>{take(c,k-1);c._typing='right';c._dph=j;},D*.7/3));
+        if(typeIn){const ch=[...mk1.text.trim()],cm=s.exp.typeChars!==false,st=Math.min(ch.length,cm?30:5);for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');push(c=>{take(c,k-1);c._draft=txt;c._kq=Math.min(1,j/2);c._kp=(txt.codePointAt(txt.length-1)||0)%30;},(j===st?D*.55:(cm?75/sp:D*.3)));}}
+        else if(false&&mk1.side==='right'&&(k===1||ms[k-2].side!=='right'))[0,1,2].forEach(j=>push(c=>{take(c,k-1);c._typing='right';c._dph=j;},D*.7/3));
         push(c=>take(c,k),k===n?hold:D);
       }break;}
     case'face':{
@@ -2857,7 +2875,7 @@ function buildFrames(s){
     case'tl':{const key=s.tl.tab?'tweetsF':'tweets',n=(s.tl[key]||[]).length,pr=s.exp.tlPress!==false;
       if(s.tl.scrollMode==='down'||s.tl.scrollMode==='up'){scrollPlan(s,s.tl.scrollMode==='up').forEach(f=>F.push({s:f.s,delay:f.delay}));break;}
       for(let k=1;k<=n;k++){
-        const tw=s.tl[key][k-1],kd=pr?[tw.liked?'like':'',tw.rted?'rt':''].filter(Boolean):[];
+        const tw=s.tl[key][k-1],kd=pr?[tw.liked?'like':'',(tw.rted&&!tw.priv)?'rt':''].filter(Boolean):[];
         const cut=c=>{c.tl[key]=c.tl[key].slice(0,k);c.tl._sc=1;};
         const st=(c,j)=>{const q=c.tl[key][k-1];q.liked=!!tw.liked&&(!kd.includes('like')||kd.indexOf('like')<=j);q.rted=!!tw.rted&&(!kd.includes('rt')||kd.indexOf('rt')<=j);};
         for(const t of [.25,.5,.8])push(c=>{cut(c);c.tl._tlt=t;st(c,-1);},50/sp);
@@ -2882,8 +2900,7 @@ function buildFrames(s){
       for(let k=1;k<=n;k++){for(const q of [.25,.55,.85])push(c=>{c[K].items=c[K].items.slice(0,k);c._aq=q;},48/sp);push(c=>{c[K].items=c[K].items.slice(0,k);},k===n?hold:D*.5);}break;}
     case'reelv':{
       const V=s.reelv,n=1+(V.more||[]).length,a=Math.min(n,Math.max(1,+V.cur||1))-1;
-      const nC=(s.reels.comments||[]).filter(Boolean).length,flow=!!V.cmtFlow&&nC>0;
-      const tg=Math.min(n,Math.max(1,+s.reels.of||1))-1;
+      const RA=[V,...(V.more||[])],hit=RA.findIndex(r=>r.cmtFlow&&(r.comments||[]).some(Boolean)),flow=hit>=0,tg=flow?hit:Math.min(n,Math.max(1,+s.reels.of||1))-1;
       const end=flow?tg:(V.vscroll&&n>1?n-1:a),swipe=!!V.vscroll&&end>a,a0=(!swipe&&flow)?end:a;
       const more=swipe||flow;
       if(V.dtap){push(c=>{c._vs=a0;c._pl=0;},D);for(const t of [.06,.14,.24,.36,.5,.64,.78,.9])push(c=>{c._vs=a0;c._pl=t;},46/sp);push(c=>{c._vs=a0;c._pl=1;},more?D:hold);}
@@ -2892,7 +2909,7 @@ function buildFrames(s){
         for(let i=1;i<=10;i++){const e=1-Math.pow(1-i/10,3);push(c=>{c._vs=j-1+e;},38/sp);}
         push(c=>{c._vs=j;},(j===end&&!flow)?hold:D*.9);
       }
-      if(flow)cmtSeq(push,s,sp,D,hold,c=>{c._vs=end;},true);
+      if(flow)cmtSeq(push,{...s,reels:{...s.reels,of:String(tg+1)}},sp,D,hold,c=>{c._vs=end;c.reels.of=String(tg+1);},true);
       break;}
     case'post':{
       const P=s.post,sc=!!P.scroll,z=c=>{c._ps=0;};
@@ -3149,7 +3166,7 @@ function X_AV(k){
   return`<svg viewBox="0 0 40 40" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${P[0]}"/><stop offset="1" stop-color="${P[1]}"/></linearGradient></defs><rect width="40" height="40" fill="url(#${id})"/><circle cx="20" cy="15.5" r="6.6" fill="#fff" opacity=".96"/><path d="M6.5 41c0-9.6 5.8-14.8 13.5-14.8S33.5 31.4 33.5 41z" fill="#fff" opacity=".96"/></svg>`;
 }
 
-const typOpts=()=>`<div class="lb" style="margin:10px 0 4px">입력 중 표시 (GIF · 영상)</div>${tog('exp.typing','상대 메시지 전에 점 3개 말풍선')}${tog('exp.typingMe','내 메시지 전에 점 3개 말풍선')}${tog('exp.typeIn','내 메시지를 입력창에 타이핑 (말풍선도 같이)')}<div class="hint" style="margin:4px 0 8px">세 옵션 모두 점이 순서대로 깜빡여요.</div>`;
+const typOpts=()=>`<div class="lb" style="margin:10px 0 4px">입력 중 표시 (GIF · 영상)</div>${tog('chat.typing','입력 중 말풍선 표시 (켜면 상대 메시지 전에 말풍선이 떠요 · 모든 메시지가 나온 뒤엔 사라져요)')}${tog('exp.typeIn','내 메시지를 입력창에 타이핑 (말풍선도 같이)')}${tog('exp.typeChars','타이핑을 글자 하나씩 (키보드 키 눌림 표시)')}<div class="hint" style="margin:4px 0 8px">세 옵션 모두 점이 순서대로 깜빡여요.</div>`;
 function E_extra(){
   const sc=SCROLL_SEL[S.screen]?card('화면 끊기게 스크롤',`${tog('exp.scrollFx','메시지가 올라올 때 화면이 한 칸씩 끊기며 스크롤')}<div class="hint" style="margin-top:6px">현재 화면(${screenLabel(S.screen)})의 ▶ 미리보기 · GIF · 영상에 적용돼요.</div>`):'';
   return E_pop()+sc;
