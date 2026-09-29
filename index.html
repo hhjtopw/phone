@@ -1716,9 +1716,27 @@ function E_export(){
 const SOUND_DIR='phone/sound effect/';
 const SOUND_FILES={sfx:'message.mp3',pop:'notification.mp3',ring:'ringtone.mp3',type:'typing.mp3'};
 const soundUrl=k=>encodeURI(SOUND_DIR+SOUND_FILES[k]);
-async function soundData(k){const r=await fetch(soundUrl(k));if(!r.ok)throw new Error(soundUrl(k)+' → '+r.status);return r.arrayBuffer();}
+const SOUND_TRY=k=>[...new Set([SOUND_DIR,'./'+SOUND_DIR,'/'+SOUND_DIR,'sound effect/','sound_effect/','sounds/',''].map(d=>encodeURI(d+SOUND_FILES[k])))];
+const SOUND_PICK={};   // 직접 고른 파일 (file:// 로 열었을 때도 동작)
+async function soundData(k){
+  if(SOUND_PICK[k])return SOUND_PICK[k].arrayBuffer();
+  let last='';
+  for(const u of SOUND_TRY(k)){try{const r=await fetch(u);if(r.ok){const b=await r.arrayBuffer();if(b.byteLength>1000)return b;}last=u+' → '+r.status;}catch(e){last=u+' → '+e.message;}}
+  throw new Error(last);
+}
+const soundPickBtn=()=>`<label class="btn line upl" style="margin:2px 0 8px">📁 알림음 파일 직접 선택 (소리가 안 날 때)<input type="file" accept="audio/*" multiple data-snd></label><div class="hint" style="margin:-2px 0 8px">${Object.keys(SOUND_PICK).length?'직접 고른 파일: '+Object.entries(SOUND_PICK).map(([k,f])=>esc(f.name)).join(', ')+' · ':''}폴더의 mp3(<b>${esc(SOUND_FILES.pop)}</b> 등)를 고르면 이번 접속 동안 그 파일을 써요. 파일 이름이 ${esc(SOUND_FILES.pop)}가 아니어도 1개만 고르면 알림음으로 써요.</div>`;
+document.addEventListener('change',async e=>{
+  const el=e.target;if(!el.matches||!el.matches('[data-snd]'))return;
+  const fs=[...el.files];if(!fs.length)return;
+  const inv=Object.fromEntries(Object.entries(SOUND_FILES).map(([k,v])=>[v.toLowerCase(),k]));
+  let n=0;for(const f of fs){const k=inv[f.name.toLowerCase()];if(k){SOUND_PICK[k]=f;n++;}}
+  if(!n&&fs.length===1){SOUND_PICK.pop=fs[0];n=1;}
+  sfxBuf=null;popBuf=null;soundWarned=false;
+  if(await sfxInit()){popPlay(null,(S.exp.pop.vol||100)/100);toast('알림음 '+n+'개를 적용했어요');}
+  renderEditor();
+});
 let soundWarned=false;
-function soundFail(e){console.warn('효과음',e);if(!soundWarned){soundWarned=true;toast('효과음 파일을 못 불러왔어요 — "'+SOUND_DIR+'" 폴더가 index.html 옆에 있는지, GitHub Pages·로컬 서버로 열었는지 확인해 주세요');}}
+function soundFail(e){console.warn('효과음',e);if(!soundWarned){soundWarned=true;toast(location.protocol==='file:'?'파일로 직접 열면 브라우저가 소리 파일을 막아요 — 편집 화면의 "알림음 파일 직접 선택"으로 mp3를 골라 주세요 (또는 GitHub Pages·로컬 서버로 열기)':'효과음 파일을 못 불러왔어요 — "'+SOUND_DIR+SOUND_FILES.pop+'" 경로를 확인하거나 "알림음 파일 직접 선택"을 써 주세요');}}
 /* ═════════════ 효과음 · 영상 · 미리보기 ═════════════ */
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 let actx=null,sfxBuf=null,popBuf=null;
@@ -1726,7 +1744,7 @@ async function sfxInit(){
   try{
     if(!actx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;actx=new AC();}
     if(actx.state==='suspended')await actx.resume();
-    if(!sfxBuf)sfxBuf=await actx.decodeAudioData(await soundData('sfx'));
+    if(!sfxBuf){try{sfxBuf=await actx.decodeAudioData(await soundData('sfx'));}catch(e){soundFail(e);}}
     if(!popBuf){try{popBuf=await actx.decodeAudioData(await soundData('pop'));}catch(e){soundFail(e);}}
     return true;
   }catch(e){soundFail(e);return false;}
@@ -2169,7 +2187,7 @@ function E_pop(){
     <button class="btn line" style="width:100%;margin:2px 0 12px" data-act="add" data-path="exp.pop.more" data-tpl="popmore">＋ 알림 추가</button>
     ${tog('exp.pop.snd','알림음 재생 (영상 · 미리보기)')}${P.snd?rng('exp.pop.vol',0,100,5,'알림음 볼륨','%'):''}
     ${tog('exp.pop.still','PNG · 정지 화면에도 팝업 표시')}
-    <button class="btn line" style="width:100%;margin-top:4px" data-act="popTest">🔔 알림음 들어보기</button>
+    <button class="btn line" style="width:100%;margin-top:4px" data-act="popTest">🔔 알림음 들어보기</button>${soundPickBtn()}
     <div class="hint" style="margin-top:8px">위에서 슬라이드로 내려왔다가 올라가요. 알림을 여러 개 넣으면 '여러 개 동시에'는 새 알림이 맨 위에 쌓이고 기존 알림은 아래로 밀려나며, '하나씩 교체'는 앞 알림이 위로 밀려나가요(아이폰 배너와 같음). 알림마다 뜨는 순간에 알림음이 나요. 영상 · GIF · ▶ 미리보기에서 움직이고, 알림음은 팝업이 뜨는 순간에 맞춰 영상에 들어가요 (GIF는 소리 없음). 뜨는 시점은 영상 시작 기준이고, 영상보다 뒤면 끝에 맞춰 떠요.</div>`:''}`);
 }
 function E_video(){
@@ -2345,7 +2363,7 @@ const ACT={
   copyOoc:async el=>{const t=document.getElementById('ooc'+el.dataset.i).value;toast(await copyText(t)?'복사했어요':'복사가 안 돼요 — 직접 선택해서 복사해 주세요');},
   gsel:el=>{ui.gsel=ui.gsel===+el.dataset.i?-1:+el.dataset.i;renderEditor();},
   rand:el=>{RAND[el.dataset.val]();renderEditor();commit();},
-  tlAvAll:el=>{const T=S.tl,ts=T[T.tab?'tweetsF':'tweets']||[],a=(ts[+el.dataset.val]||{}).av;if(!a)return;ts.forEach(t=>{t.av={...a};});renderEditor();commit();toast('모든 트윗에 같은 프로필 사진을 적용했어요');},popTest:async()=>{if(await sfxInit())popPlay(null,(S.exp.pop.vol||100)/100);else toast('알림음을 재생할 수 없어요');},png:()=>exportPNG(false),copy:()=>exportPNG(true),pngscroll:()=>exportScrollPNG(),gif:()=>exportGIF(),vid:()=>exportVideo(),play:()=>playPreview(),
+  tlAvAll:el=>{const T=S.tl,ts=T[T.tab?'tweetsF':'tweets']||[],a=(ts[+el.dataset.val]||{}).av;if(!a)return;ts.forEach(t=>{t.av={...a};});renderEditor();commit();toast('모든 트윗에 같은 프로필 사진을 적용했어요');},popTest:async()=>{const ok=await sfxInit();if(ok&&popBuf)popPlay(null,(S.exp.pop.vol||100)/100);else{soundWarned=false;soundFail(new Error('알림음 없음'));}},png:()=>exportPNG(false),copy:()=>exportPNG(true),pngscroll:()=>exportScrollPNG(),gif:()=>exportGIF(),vid:()=>exportVideo(),play:()=>playPreview(),
   quick:()=>{const t=document.getElementById('quickTx');if(!t)return;const tp=nowParts(),time=S.chat.messages.length?S.chat.messages[S.chat.messages.length-1].time:`${tp.ap} ${tp.h12}:${pad(tp.m)}`;const ms=mkMsgs(t.value,time);if(!ms.length){toast('내용을 입력해 주세요');return;}S.chat.messages=ms;renderEditor();commit();toast(`${ms.length}개 메시지를 적용했어요`);},
   saveJson:()=>download(new Blob([JSON.stringify(S)],{type:'application/json'}),`phone-project_${stamp()}.json`),
   reset:()=>{if(!confirm('모든 내용을 지우고 처음 상태로 돌릴까요?'))return;S=defaults();ui.gsel=-1;renderEditor();commit();toast('초기화했어요');},
@@ -2682,7 +2700,7 @@ async function playPreview(){
   if(typeOn()){try{if(await sfxInit()){const sp=typeSpan(videoPlan());if(sp){const b=await x_typeBuf(),g=actx.createGain(),w=actx.currentTime+.12;ts=actx.createBufferSource();ts.buffer=b;ts.loop=true;ts.loopStart=b._off;g.gain.value=.9;ts.connect(g);g.connect(actx.destination);ts.start(w+sp.t0,b._off);ts.stop(w+sp.t1);}}}catch(e){console.warn(e);}}
   try{await playPreview0();}finally{if(a)a.pause();if(ts){try{ts.stop();}catch(e){}}}
 }
-function E_lock(){return E_lock0()+card('알림 연출',`${tog('lock.newTop','새 알림이 위에 쌓이고, 기존 알림은 아래로 밀리기')}${tog('lock.shake','알림이 뜰 때 팝업 흔들림(진동)')}${tog('lock.snd','알림음 재생 (상단 팝업 알림과 같은 소리)')}${S.lock.snd!==false?rng('exp.pop.vol',0,100,5,'알림음 볼륨','%')+'<button class="btn line" style="width:100%;margin:2px 0 8px" data-act="popTest">🔔 알림음 들어보기</button>':''}<div class="hint" style="margin-top:6px">▶ 미리보기 · GIF · 영상에서 알림이 하나씩 떨어지며 연달아 쌓여요. 알림음은 알림이 뜨는 순간마다 나고, 영상(MP4/WebM)과 미리보기에 들어가요. '새 알림이 위에 쌓이기'를 켜면 목록의 <b>맨 아래(마지막) 알림이 화면 맨 위</b>에 보여요.</div>`);}
+function E_lock(){return E_lock0()+card('알림 연출',`${tog('lock.newTop','새 알림이 위에 쌓이고, 기존 알림은 아래로 밀리기')}${tog('lock.shake','알림이 뜰 때 팝업 흔들림(진동)')}${tog('lock.snd','알림음 재생 (상단 팝업 알림과 같은 소리)')}${S.lock.snd!==false?rng('exp.pop.vol',0,100,5,'알림음 볼륨','%')+'<button class="btn line" style="width:100%;margin:2px 0 8px" data-act="popTest">🔔 알림음 들어보기</button>'+soundPickBtn():''}<div class="hint" style="margin-top:6px">▶ 미리보기 · GIF · 영상에서 알림이 하나씩 떨어지며 연달아 쌓여요. 알림음은 알림이 뜨는 순간마다 나고, 영상(MP4/WebM)과 미리보기에 들어가요. '새 알림이 위에 쌓이기'를 켜면 목록의 <b>맨 아래(마지막) 알림이 화면 맨 위</b>에 보여요.</div>`);}
 function E_call(){const C=S.call;return E_call0()+card('수신 화면 옵션',`${fld('화면 스타일',seg('call.style',[['full','전체 화면'],['banner','상단 배너']]))}${C.style!=='banner'?tog('call.swipe','밀어서 수락 애니메이션'):''}<label class="btn line upl">＋ 벨소리 mp3 넣기<input type="file" accept="audio/*" data-ring></label><div class="hint" style="margin-top:8px">${RING?esc(RING.name)+' 적용됨 · ':''}벨소리는 ▶ 미리보기에서 재생돼요. (GIF·영상 파일에는 소리가 들어가지 않아요)</div>`);}
 function E_gallery(){const G=S.gallery;return E_gallery0()+(G.view==='grid'?card('스크롤',`${tog('gallery.scroll','사진이 채워진 뒤 아래로 스크롤')}<div class="hint" style="margin-top:6px">사진이 ${G.cols*4}장보다 많을 때 적용돼요.</div>`):'');}
 /* 한글을 실제 키보드처럼 자모 한 개씩 쳤을 때의 (조합 중인 글자, 눌린 키) 목록 */
