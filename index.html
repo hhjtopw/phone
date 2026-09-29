@@ -474,11 +474,11 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .scr.pm .ln-b{font-size:15.6px;padding:9px 13px;max-width:246px}
 .scr.pm .tg-b{font-size:15.6px;padding:8px 12px 7px;max-width:258px}
 /* 상단·하단 UI 끄기 */
-.scr.noTop .sb,.scr.noTop .kt-head,.scr.noTop .im-head,.scr.noTop .ig-head,.scr.noTop .ln-head,.scr.noTop .tg-head,.scr.noTop .tw-head{display:none!important}
-.scr.noBottom .kt-in,.scr.noBottom .im-in,.scr.noBottom .ig-in,.scr.noBottom .ln-in,.scr.noBottom .tg-in,.scr.noBottom .tw-in,.scr.noBottom .home{display:none!important}
+.scr.noTop .pt-head,.scr.noTop .rl-top,.scr.noTop .sb,.scr.noTop .kt-head,.scr.noTop .im-head,.scr.noTop .ig-head,.scr.noTop .ln-head,.scr.noTop .tg-head,.scr.noTop .tw-head{display:none!important}
+.scr.noBottom .pt-tab,.scr.noBottom .rl-in,.scr.noBottom .kt-in,.scr.noBottom .im-in,.scr.noBottom .ig-in,.scr.noBottom .ln-in,.scr.noBottom .tg-in,.scr.noBottom .tw-in,.scr.noBottom .home{display:none!important}
 /* 배경 끄기: 말풍선만 */
 .scr.bgoff{background:transparent!important;color:#111}
-.scr.bgoff .bgl,.scr.bgoff .sb,.scr.bgoff .home,.scr.bgoff .kt-head,.scr.bgoff .im-head,.scr.bgoff .ig-head,.scr.bgoff .ln-head,.scr.bgoff .tg-head,.scr.bgoff .tw-head,.scr.bgoff .tw-in,.scr.bgoff .tw-dw,.scr.bgoff .kt-in,.scr.bgoff .im-in,.scr.bgoff .ig-in,.scr.bgoff .ln-in,.scr.bgoff .tg-in,.scr.bgoff .kt-dw,.scr.bgoff .im-date,.scr.bgoff .ig-date,.scr.bgoff .ln-dw,.scr.bgoff .tg-dw,.scr.bgoff .islandc,.scr.bgoff .notchc,.scr.bgoff .punchc{display:none!important}
+.scr.bgoff .pt-head,.scr.bgoff .pt-tab,.scr.bgoff .rl-top,.scr.bgoff .bgl,.scr.bgoff .sb,.scr.bgoff .home,.scr.bgoff .kt-head,.scr.bgoff .im-head,.scr.bgoff .ig-head,.scr.bgoff .ln-head,.scr.bgoff .tg-head,.scr.bgoff .tw-head,.scr.bgoff .tw-in,.scr.bgoff .tw-dw,.scr.bgoff .kt-in,.scr.bgoff .im-in,.scr.bgoff .ig-in,.scr.bgoff .ln-in,.scr.bgoff .tg-in,.scr.bgoff .kt-dw,.scr.bgoff .im-date,.scr.bgoff .ig-date,.scr.bgoff .ln-dw,.scr.bgoff .tg-dw,.scr.bgoff .islandc,.scr.bgoff .notchc,.scr.bgoff .punchc{display:none!important}
 /* 공통 */
 .mrow{display:flex}
 .cimg{border-radius:16px;overflow:hidden;position:relative;flex:none}
@@ -708,6 +708,7 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .pv .nt,.pv .popn .nt{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 .pv .scr,.pv .scr *{will-change:auto}
 #preview .scr{contain:paint}
+.scr.bgoff .pt-wrap{background:transparent!important}
 .popn .nt{border-radius:26px;padding:12px 15px;gap:12px;align-items:center;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .popn .nt-ic{width:38px;height:38px;border-radius:10px}.popn .nt-h{font-size:15px;font-weight:600}.popn .nt-h span{font-size:13px;opacity:.55}.popn .nt-b{font-size:15px;line-height:1.28;opacity:.92}
 .ig-ring.off{background:none;padding:2.5px}.ig-ring .ig-av.lg{width:35px;height:35px;border:2px solid #fff;box-sizing:border-box}
@@ -791,6 +792,39 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .nw-shr i{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800}
 .nw-p{font-size:16px;line-height:1.85;color:#1c1c1c}
 .nw-cap{font-size:12.5px;color:#888;padding:8px 16px 0}
+/* ═════ v4 · iOS 26 lock screen ═════ */
+.lk-lock{margin:6px 0 4px;opacity:.9}
+.lk-date{font-size:19px;font-weight:600;letter-spacing:-.1px;opacity:.9}
+.lk-time{font-size:96px;line-height:1.02;letter-spacing:-2px;font-variant-numeric:tabular-nums;margin-top:-2px}
+.nt,.nt.light,.nt.glass{border:0;border-radius:26px;padding:12px 14px 13px;gap:12px;backdrop-filter:blur(36px) saturate(1.9);-webkit-backdrop-filter:blur(36px) saturate(1.9);box-shadow:0 8px 28px rgba(0,0,0,.16),inset 0 .5px 0 rgba(255,255,255,.42),inset 0 0 0 .5px rgba(255,255,255,.16)}
+.nt.glass{background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.14))}
+.nt.dark{background:rgba(38,38,42,.6)}
+.nt.light{background:rgba(255,255,255,.74)}
+.nt-ic{width:40px;height:40px;border-radius:10px;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.12)}
+.nt-h{font-size:15px;font-weight:600}.nt-h span{font-size:13px;opacity:.6}
+.nt-b{font-size:15px;line-height:1.3;opacity:.92}
+.lk-btn{width:54px;height:54px;bottom:42px;border:0;backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);box-shadow:inset 0 .5px 0 rgba(255,255,255,.5),inset 0 0 0 .5px rgba(255,255,255,.2),0 6px 18px rgba(0,0,0,.18)}
+.pv .lk-btn,.pv .nt{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+/* ═════ v5 ═════ */
+.lk-notis.ntop{top:222px}
+.lk-date{font-weight:500;font-size:20px}
+.nt-h b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nt-b{max-height:2.6em;overflow:hidden}
+.nt-ic{width:40px;height:40px}
+.lk-lock svg{filter:drop-shadow(0 1px 3px rgba(0,0,0,.25))}
+/* 디스패치 기자명·날짜·공유: 글자 기반 flex 대신 블록/float로 → 내보내기에서도 안 밀림 */
+.scr .nw-meta{display:block;height:18px;margin:14px 0 12px;padding:0;overflow:hidden;font-size:12.5px;line-height:18px;letter-spacing:0;text-indent:0;white-space:nowrap;color:#8a8a8a}
+.scr .nw-meta .nw-by{display:block;float:left;max-width:64%;overflow:hidden;text-overflow:ellipsis;margin:0;padding:0}
+.scr .nw-meta .nw-dt{display:block;float:right;margin:0;padding:0;text-align:right}
+.scr .nw-shr{display:block;height:30px;margin:0 0 18px;padding:0 0 14px;box-sizing:content-box;overflow:hidden;border-bottom:1px solid #ececec;letter-spacing:0;text-indent:0;white-space:nowrap}
+.scr .nw-shr .nw-sl{display:block;float:left;margin:0;padding:0;font-size:12.5px;line-height:30px;color:#999}
+.scr .nw-shr .nw-ics{display:block;float:right;height:30px;margin:0;padding:0}
+/* ═════ v6 ═════ */
+.lk-notis.ntop{top:244px}
+.scr[style*="--sh:428px"] .lk-notis.ntop,.scr[style*="--sh:450px"] .lk-notis.ntop{top:222px}
+/* 아이메시지 헤더: 회색 배경을 상태바 영역 끝까지 위로 늘림 */
+.im-head{position:relative}
+.im-head:before{content:"";position:absolute;left:0;right:0;bottom:100%;height:64px;background:inherit;pointer-events:none}
 </style>
 </head>
 <body>
@@ -862,10 +896,14 @@ UI.tg='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="curre
 UI.tl='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>';
 UI.news='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 16.5h5"/></svg>';
 UI.dial=UI.call;UI.recents=UI.call;UI.profile=UI.chat;UI.search=UI.gallery;UI.story=UI.ig;
+UI.igprof=UI.ig;UI.igact='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>';
+UI.yt='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="4"/><path d="M10.5 9.5l4 2.5-4 2.5z"/></svg>';
+UI.post='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="4" y="3.5" width="16" height="17" rx="2.5"/><path d="M4 14h16"/><path d="M8 17.5h4"/></svg>';
+UI.reelv=UI.reels='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M3.5 9h17M9 3.5l3 5.5M15 3.5l3 5.5"/><path d="M10.5 12.5l4 2.3-4 2.3z"/></svg>';
 const DSP_LOGO='data:image/png;base64,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';
 /* ═════════════ Data tables ═════════════ */
-const SCREENS=[['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램'],['tw','트위터'],['tl','타임라인'],['news','디스패치'],['dial','전화 걸기'],['story','인스타 스토리'],['recents','최근 통화'],['profile','카톡 프로필'],['search','검색창 타이핑']];
-const SCREEN_GROUPS=[['메신저',['chat','sms','ig','line','tg','profile']],['전화',['dial','recents','call','face']],['SNS와 뉴스',['story','tw','tl','news']],['기기 화면',['lock','gallery','search']]];
+const SCREENS=[['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램'],['tw','트위터'],['tl','타임라인'],['news','디스패치'],['dial','전화 걸기'],['story','인스타 스토리'],['post','인스타 게시물'],['reels','릴스 댓글'],['igprof','인스타 프로필'],['igact','인스타 활동'],['reelv','릴스 본화면'],['yt','유튜브 댓글'],['recents','최근 통화'],['profile','카톡 프로필'],['search','검색창 타이핑']];
+const SCREEN_GROUPS=[['메신저',['chat','sms','ig','line','tg','profile']],['전화',['dial','recents','call','face']],['SNS와 뉴스',['story','post','reels','reelv','igprof','igact','yt','tw','tl','news']],['기기 화면',['lock','gallery','search']]];
 const screenLabel=k=>(SCREENS.find(x=>x[0]===k)||[k,k])[1];
 const WALLS=[
   ['linear-gradient(170deg,#4a4a50 0%,#1c1c1f 100%)','그라파이트'],
@@ -937,9 +975,24 @@ function defaults(){
       {id:uid(),name:'이름',handle:'@username',ver:true,text:'오늘 날씨 진짜 좋다 #일상',time:'2시간',replies:'128',rts:'1,024',likes:'1.2만',views:'32만',av:null,imgs:[null,null,null,null],priv:false,liked:true,rted:true},
       {id:uid(),name:'이름',handle:'@username',ver:false,text:'다들 점심 뭐 먹었어?',time:'5시간',replies:'34',rts:'12',likes:'890',views:'1.4만',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false},
       {id:uid(),name:'이름',handle:'@username',ver:false,text:'월요일은 언제나 힘들어 ㅠㅠ',time:'1일',replies:'9',rts:'3',likes:'241',views:'5,210',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false}]},
+    post:{name:'username',loc:'',av:null,ver:false,ring:false,caption:'오늘 하루 #일상 #데일리',time:'2시간 전',cmt:'댓글 32개 모두 보기',likes:'1,204',likeBy:'',liked:false,saved:false,dark:false,ratio:'11',cur:'1',dtap:false,photos:[{id:uid(),img:null}]},
+    reels:{bg:null,dim:35,sheet:'light',sheetH:70,title:'댓글',ph:'username(으)로 댓글 달기...',me:null,emoji:true,anim:false,scroll:false,scrollAt:0,comments:[
+      {id:uid(),av:null,name:'friend_01',time:'2시간',text:'이거 진짜 웃겨 ㅋㅋㅋㅋ',likes:'12',replies:'',liked:false,author:false,ver:false},
+      {id:uid(),av:null,name:'username',time:'1시간',text:'@friend_01 너도 봐봐',likes:'3',replies:'답글 2개 보기',liked:true,author:true,ver:false},
+      {id:uid(),av:null,name:'daily_mood',time:'30분',text:'와 이 노래 뭐예요?',likes:'1',replies:'',liked:false,author:false,ver:false}]},
+    igprof:{dark:false,name:'username',ver:false,av:null,dname:'이름',posts:'128',followers:'1,204',following:'342',bio:'한 줄 소개\n📍서울',btn:'follow',fanim:false,hl:[{id:uid(),img:null,label:'일상'},{id:uid(),img:null,label:'여행'},{id:uid(),img:null,label:'맛집'}],grid:Array.from({length:6},()=>({id:uid(),img:null}))},
+    igact:{dark:false,anim:false,items:[
+      {id:uid(),kind:'like',name:'friend_01',av:null,text:'',time:'2시간',thumb:null,sec:'오늘',follow:false},
+      {id:uid(),kind:'comment',name:'daily_mood',av:null,text:'@username 대박 ㅋㅋㅋ',time:'3시간',thumb:null,sec:'',follow:false},
+      {id:uid(),kind:'follow',name:'new_friend',av:null,text:'',time:'5시간',thumb:null,sec:'이번 주',follow:false}]},
+    reelv:{bg:null,dim:20,name:'username',ver:false,av:null,follow:true,cap:'오늘의 브이로그 #일상 #릴스',audio:'username · 원본 오디오',likes:'1.2만',cmts:'128',shares:'34',liked:false,dtap:false},
+    yt:{dark:false,thumb:null,title:'영상 제목을 입력하세요',views:'조회수 12만회',ago:'3일 전',ch:'채널명',chAv:null,subs:'구독자 10만명',sub:false,ccount:'1.2천',anim:false,items:[
+      {id:uid(),av:null,name:'@friend01',time:'2일 전',text:'이거 진짜 웃겨요 ㅋㅋㅋ',likes:'124',replies:'답글 3개',pin:true,hearted:true},
+      {id:uid(),av:null,name:'@daily_mood',time:'1일 전',text:'와 이 영상 알고리즘 타고 왔는데 너무 좋네요',likes:'12',replies:'',pin:false,hearted:false},
+      {id:uid(),av:null,name:'@user_3',time:'5시간 전',text:'구독하고 갑니다',likes:'3',replies:'',pin:false,hearted:false}]},
     face:{other:null,me:null,name:'이름',status:'00:00',pip:true},
     call:{name:'이름',sub:'휴대전화',photo:null,style:'full',swipe:true},
-    gallery:{title:'최근 항목',cols:3,items:[],view:'grid',cur:1,scroll:false,vtheme:'light',vdate:'오늘',vtime:'오후 3:24'},
+    gallery:{title:'최근 항목',cols:3,items:[],view:'grid',cur:1,scroll:false,fill:true,scrollAt:0,vtheme:'light',vdate:'오늘',vtime:'오후 3:24'},
     exp:{pop:{on:false,app:'sms',title:'이름',body:'메시지 내용',time:'지금',style:'light',at:1,dur:4,snd:true,vol:100,still:true,more:[],mode:'stack',max:3},scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',fx:'none',fxY:60,vidMode:'single',vidSeq:['lock','chat'],trans:'cut',shutter:'none',scrollFx:false,gifScreens:['lock','chat','sms'],gifAnim:true,tlPress:true},
   };
 }
@@ -988,7 +1041,9 @@ function bgImg(im,ca=1){
   return `<div class="imgbox"><div style="left:${(L.l*100).toFixed(3)}%;top:${(L.t/L.H*100).toFixed(3)}%;width:${(L.iw*100).toFixed(3)}%;height:${(L.ih/L.H*100).toFixed(3)}%;background-image:url('${pvUrl(im.url)}')"></div></div>`;
 }
 function aspectOf(p,im){
-  if(/^(lock\.wall|face\.other|call\.photo|dial\.photo|story\.slots\.\d+\.img|chat\.bgImg)$/.test(p))return SA;
+  if(/^(lock\.wall|face\.other|call\.photo|dial\.photo|story\.slots\.\d+\.img|chat\.bgImg|reels\.bg|reelv\.bg)$/.test(p))return SA;
+  if(p==='yt.thumb')return 16/9;
+  if(/^post\.photos\.\d+\.img$/.test(p))return S.post.ratio==='45'?4/5:1;
   {const m=p.match(/^tl\.(?:tweets|tweetsF)\.(\d+)\.imgs\.(\d+)$/);if(m){const L=(S.tl[p.split('.')[1]][+m[1]].imgs||[]),n=L.filter(x=>x&&x.url).length,r=L.slice(0,+m[2]).filter(x=>x&&x.url).length;return (n===2||(n===3&&r===0))?8/9:16/9;}}
   if(/^news\.blocks\.\d+\.img$/.test(p))return Math.min(1.9,Math.max(.7,(im&&im.ar)||1.5));
   if(p==='face.me')return 104/156;
@@ -1010,6 +1065,12 @@ function statusColor(s){
     case'chat':return KT[s.chat.theme].dark?'#fff':'#000';
     case'tw':return (s.tw&&s.tw.mode)==='dark'?'#fff':'#000';
     case'tl':return s.tl.mode==='dark'?'#fff':'#000';
+    case'post':return s.post.dark?'#fff':'#000';
+    case'igprof':return s.igprof.dark?'#fff':'#000';
+    case'igact':return s.igact.dark?'#fff':'#000';
+    case'yt':return s.yt.dark?'#fff':'#000';
+    case'reelv':return'#fff';
+    case'reels':return'#fff';
     case'news':return s.device.uiTop===false?'#000':'#fff';
     case'face':case'call':case'dial':case'story':case'profile':return'#fff';
     default:return'#000';
@@ -1019,6 +1080,11 @@ function homeColor(s){
   switch(s.screen){
     case'tw':return (s.tw&&s.tw.mode)==='dark'?'rgba(255,255,255,.85)':'#111';
     case'tl':return s.tl.mode==='dark'?'rgba(255,255,255,.85)':'#111';
+    case'post':return s.post.dark?'rgba(255,255,255,.85)':'#111';
+    case'igprof':return s.igprof.dark?'rgba(255,255,255,.85)':'#111';
+    case'igact':return s.igact.dark?'rgba(255,255,255,.85)':'#111';
+    case'yt':return s.yt.dark?'rgba(255,255,255,.85)':'#111';
+    case'reels':return s.reels.sheet==='dark'?'rgba(255,255,255,.85)':'#111';
     case'news':return'#111';
     case'ig':case'line':case'tg':return'#111';
     case'chat':return KT[s.chat.theme].dark?'rgba(255,255,255,.85)':'#111';
@@ -1042,12 +1108,12 @@ const visibleMsg=m=>(m.text&&m.text.trim())||(m.img&&m.img.url);
 
 function screenLock(s){
   const L=s.lock, tc=lockTimeColor(s);
-  const bg=`<div class="bgl" style="background:${WALLS[L.preset]?.[0]||WALLS[0][0]}">${bgImg(L.wall,SA)}${L.dim?`<div class="bgl" style="background:rgba(0,0,0,${L.dim/100})"></div>`:''}</div>`;
+  const bg=`<div class="bgl" style="background:${WALLS[L.preset]?.[0]||WALLS[0][0]}">${bgImg(L.wall,SA)}${L.dim?`<div class="bgl" style="background:rgba(0,0,0,${L.dim/100})"></div>`:''}<div class="bgl" style="background:linear-gradient(rgba(0,0,0,${wallLight(s)?.05:.11}),rgba(0,0,0,0) 30%,rgba(0,0,0,0) 60%,rgba(0,0,0,${wallLight(s)?.07:.18}))"></div></div>`;
   const tsh=L.shadow?(isDarkColor(tc)?'text-shadow:0 1px 10px rgba(255,255,255,.55)':'text-shadow:0 2px 16px rgba(0,0,0,.45),0 1px 4px rgba(0,0,0,.35)'):'';
   const lightBg=isDarkColor(tc)||wallLight(s);const nst=(L.notiStyle==='glass'&&lightBg)?'light':L.notiStyle;const lb=lightBg?'rgba(0,0,0,.07)':'rgba(255,255,255,.16)',li=lightBg?'#111':'#fff';
   const LQ=s._lq,LS=s._lsh,arr0=lkShown(s),arr=L.newTop!==false?arr0.slice().reverse():arr0,nw=L.newTop!==false?0:arr.length-1;const notis=arr.map((n,ni)=>{const a=APPS[n.app]||APPS.kakao;return`<div class="nt ${nst}" style="${x_ntFx(ni===nw,LQ,LS)}"><div class="nt-ic" style="background:${a.bg}">${a.ic()}</div><div class="nt-tx"><div class="nt-h"><b>${esc(n.title||a.n)}</b><span>${esc(n.time)}</span></div>${n.body?`<div class="nt-b">${esc(n.body)}</div>`:''}</div></div>`;}).join('');
   const body=`<div class="lk"><div class="lk-lock"><svg width="15" height="19" viewBox="0 0 16 20"><rect x="1.5" y="8" width="13" height="10.5" rx="2.5" fill="${tc}"/><path d="M4.3 8V6a3.7 3.7 0 0 1 7.4 0v2" fill="none" stroke="${tc}" stroke-width="1.8"/></svg></div><div class="lk-date" style="color:${tc};${tsh}">${esc(L.date)}</div><div class="lk-time" style="color:${tc};font-weight:${L.weight};${tsh}">${esc(L.time)}</div><div class="lk-notis${L.newTop!==false?' ntop':''}">${notis}</div></div>
-   ${L.buttons?`<div class="lk-btn" style="left:44px;background:${lb}">${I.flash(li,20)}</div><div class="lk-btn" style="right:44px;background:${lb}">${I.cam(li,20)}</div>`:''}`;
+   ${L.buttons?`<div class="lk-btn" style="left:44px;background:${lb}">${LK_FLASH(li)}</div><div class="lk-btn" style="right:44px;background:${lb}">${LK_CAM(li)}</div>`:''}`;
   return{bg,body};
 }
 function ktRows(s,th){
@@ -1062,7 +1128,7 @@ function ktRows(s,th){
     const L=m.side==='left';
     const bc=L?th.l:th.r, tc=L?th.tl:th.tr;
     let bub;
-    if(typing)bub=`<div class="kt-b ${first?'tail':''}" style="background:${bc}"><div class="dots">${('<i style="background:'+(L?(th.dark?'#aaa':'#9a9aa2'):'rgba(0,0,0,.35)')+'"></i>').repeat(3)}</div></div>`;
+    if(typing)bub=`<div class="kt-b ${first?'tail':''}" style="background:${bc}"><div class="dots">${[0,1,2].map(j=>'<i style="background:'+(L?(th.dark?'#aaa':'#9a9aa2'):'rgba(0,0,0,.35)')+';opacity:'+(DPH==null?1:(j===DPH?1:.4))+';transform:translateY('+(DPH===j?-2:0)+'px)"></i>').join('')}</div></div>`;
     else if(m.img?.url){const w=Math.round(190*BOX),h=Math.min(260,Math.round(w/(m.img.ar||1)));bub=`<div class="kt-img" style="width:${w}px;height:${h}px">${bgImg(m.img,w/h)}</div>`;}
     else bub=`<div class="kt-b ${first?'tail':''}" style="background:${bc};color:${tc}">${esc(m.text)}</div>`;
     const meta=typing?'':`<div class="kt-meta ${L?'':'r'}" style="color:${th.dark?'#e5e5e5':'#333'}">${(m.unread||(s.chat.autoRead&&!list.slice(i+1).some(x=>x.side!==m.side)))?'<i>1</i>':''}${lastT&&m.time?`<span>${esc(m.time)}</span>`:''}</div>`;
@@ -1146,7 +1212,7 @@ function screenGallery(s){
     c=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>`];
   const tab=[['보관함',1],['For You',0],['앨범',0],['검색',0]].map(([t,on],i)=>`<div class="${on?'on':''}">${GI[i](on?'#0a84ff':'#8e8e93')}${t}</div>`).join('');
   const body=`<div class="gl-head"><h3>${esc(G.title)}</h3><div class="gl-hr"><span class="gl-sel">선택</span><i class="gl-more"><svg width="16" height="16" viewBox="0 0 24 24" fill="#111"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></i></div></div><div class="gl-sub">사진 ${n}장</div>
-  <div style="flex:1;min-height:0;overflow:hidden"><div class="gl-grid" style="grid-template-columns:repeat(${cols},1fr);${x_glS(s)}">${tiles}</div></div><div class="gl-tab">${tab}</div>`;
+  <div class="gl-box" style="flex:1;min-height:0;overflow:hidden"><div class="gl-grid" style="grid-template-columns:repeat(${cols},1fr);${x_glS(s)}">${tiles}</div></div><div class="gl-tab">${tab}</div>`;
   return{bg,body};
 }
 /* ── 인스타 DM · LINE · 텔레그램 ── */
@@ -1157,7 +1223,8 @@ const SND_SVG=(bg,fg='#fff',z=28)=>`<span class="sndb" style="width:${z}px;heigh
 function draftTail(t,px,fs){let w=0,o='';const a=[...t];for(let i=a.length-1;i>=0;i--){const c=a[i],cw=(/[\u1100-\u11ff\u3130-\u318f\uac00-\ud7af\u3000-\u9fff\uff00-\uffef]/.test(c)?1:(/[A-Z0-9]/.test(c)?.62:.5))*fs;if(w+cw>px)break;w+=cw;o=c+o;}return o;}
 const hasDraft=s=>s._draft!=null&&s._draft!=='';
 const draftEl=(s,px,fs,col)=>hasDraft(s)?`<span class="dr" style="color:${col}">${esc(draftTail(s._draft,px,fs*((s.chat.bs||100)/100)))}<i class="crt" style="background:${col}"></i></span>`:'';
-const dots3=c=>`<div class="dots">${`<i style="background:${c}"></i>`.repeat(3)}</div>`;
+let DPH=null;
+const dots3=c=>`<div class="dots">${[0,1,2].map(j=>`<i style="background:${c};opacity:${DPH==null?1:(j===DPH?1:.4)};transform:translateY(${DPH===j?-2:0}px)"></i>`).join('')}</div>`;
 function cimg(m,w){w=Math.round(w*BOX);const h=Math.min(260,Math.round(w/(m.img.ar||1)));return`<div class="cimg" style="width:${w}px;height:${h}px">${bgImg(m.img,w/h)}</div>`;}
 function lastLeftIdx(ms){let k=-1;ms.forEach((m,i)=>{if(m.side==='left'&&!m._t)k=i;});return k;}
 function lastRightIdx(ms){let k=-1;ms.forEach((m,i)=>{if(m.side==='right'&&!m._t)k=i;});return k;}
@@ -1278,10 +1345,16 @@ function screenNews(s){
   }).join('');
   const act=['단독','연예','스포츠','포토','영상','칼럼'].includes(N.cat)?N.cat:'전체';
   const nav=N.nav!==false?`<div class="nw-nav">${['전체','단독','연예','스포츠','포토','영상','칼럼'].map(x=>`<span class="${x===act?'on':''}">${x}</span>`).join('')}</div>`:'';
-  const shr=N.share!==false?`<div class="nw-shr"><span>공유</span><i style="background:#fee500"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 4C6.8 4 3 7.1 3 11c0 2.5 1.6 4.7 4.1 6L6 20.5l3.8-2.3c.7.1 1.5.2 2.2.2 5.2 0 9-3.100 9-7.400S17.200 4 12 4z" fill="#3c1e1e"/></svg></i><i style="background:#1877f2;color:#fff;font-size:17px;font-family:Arial,sans-serif">f</i><i style="background:#111;color:#fff;font-size:14px;font-family:Arial,sans-serif">X</i><i style="background:#e9e9ec"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2.200" stroke-linecap="round"><path d="M10 14a4.500 4.500 0 0 0 6.400 0l3-3a4.500 4.500 0 0 0-6.400-6.400l-1 1M14 10a4.500 4.500 0 0 0-6.400 0l-3 3a4.500 4.500 0 0 0 6.400 6.400l1-1"/></svg></i></div>`:'';
+  const NC=(bg,g)=>`<svg width="30" height="30" viewBox="0 0 30 30" style="display:block;float:left;margin-left:8px"><circle cx="15" cy="15" r="15" fill="${bg}"/>${g}</svg>`;
+  const shr=N.share!==false?`<div class="nw-shr"><span class="nw-sl">공유</span><div class="nw-ics">${
+    NC('#fee500','<g transform="translate(7.5 7.5) scale(.625)"><path d="M12 4C6.8 4 3 7.1 3 11c0 2.5 1.6 4.7 4.1 6L6 20.5l3.8-2.3c.7.1 1.5.2 2.2.2 5.2 0 9-3.1 9-7.4S17.2 4 12 4z" fill="#3c1e1e"/></g>')
+   +NC('#1877f2','<path d="M16.4 24v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.6V6.6c-.3 0-1.2-.1-2.3-.1-2.3 0-3.900 1.400-3.900 4v2.400H10.700V16h2.800v8z" fill="#fff"/>')
+   +NC('#111','<path d="M9.500 9.500l11 11M20.500 9.500l-11 11" stroke="#fff" stroke-width="2.200" stroke-linecap="round" fill="none"/>')
+   +NC('#e9e9ec','<g transform="translate(7.500 7.500) scale(.625)" fill="none" stroke="#555" stroke-width="2.400" stroke-linecap="round"><path d="M10 14a4.500 4.500 0 0 0 6.400 0l3-3a4.500 4.500 0 0 0-6.400-6.400l-1 1M14 10a4.500 4.500 0 0 0-6.400 0l-3 3a4.500 4.500 0 0 0 6.400 6.400l1-1"/></g>')
+  }</div></div>`:'';
   const saf=N.safari!==false?`<div class="nw-saf"><div class="nw-url"><span class="aa">가<b>가</b></span><span class="u"><svg width="10" height="12" viewBox="0 0 10 12"><rect x="1" y="5" width="8" height="6.500" rx="1.500" fill="#3c3c43" opacity=".6"/><path d="M2.700 5V3.500a2.300 2.300 0 0 1 4.600 0V5" fill="none" stroke="#3c3c43" stroke-width="1.200" opacity=".6"/></svg>${esc(N.url||'dispatch.co.kr')}</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#3c3c43" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".7"><path d="M20 12a8 8 0 1 1-2.500-5.800M20 4v4.500h-4.500"/></svg></div><div class="nw-tools"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4L7 12l8 8"/></svg><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".35"><path d="M9 4l8 8-8 8"/></svg><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h14"/></svg><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v17l-7-4-7 4z"/></svg><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linejoin="round"><rect x="3.500" y="6.500" width="13" height="13" rx="2.500"/><path d="M7.500 3.500h11a2 2 0 0 1 2 2v11" stroke-linecap="round"/></svg></div></div>`:'';
   const body=`<div class="nw-head"><img src="${lg}" style="height:24px;width:auto"><div class="nw-hic">${I.search('#fff')}${I.menu('#fff')}</div></div>${nav}
-  <div class="nw-list"${N.safari!==false?' style="padding-bottom:0"':''}><div class="nw-inner" style="transform:translateY(-${Math.max(0,+N.scroll||0)}px)">${N.cat?`<div class="nw-cat">${esc(N.cat)}</div>`:''}<h1 class="nw-t">${esc(N.title)}</h1>${N.sub?`<div class="nw-sub">${esc(N.sub)}</div>`:''}<div class="nw-meta"><span>${esc(N.by)}</span><span>${esc(N.date)}</span></div>${shr}${blocks}</div></div>${saf}`;
+  <div class="nw-list"${N.safari!==false?' style="padding-bottom:0"':''}><div class="nw-inner" style="transform:translateY(-${Math.max(0,+N.scroll||0)}px)">${N.cat?`<div class="nw-cat">${esc(N.cat)}</div>`:''}<h1 class="nw-t">${esc(N.title)}</h1>${N.sub?`<div class="nw-sub">${esc(N.sub)}</div>`:''}<div class="nw-meta"><span class="nw-by">${esc(N.by)}</span><span class="nw-dt">${esc(N.date)}</span></div>${shr}${blocks}</div></div>${saf}`;
   return{bg,body};
 }
 function screenDial(s){
@@ -1325,7 +1398,187 @@ function screenStory(s){
   const body=`<div class="st-bars">${seg}</div><div class="st-head"><div class="st-av">${av}</div><b>${esc(T.name)}</b><span>${esc(T.time)}</span><div class="st-r">${dt}${x}</div></div>${tx}<div class="st-sp"></div><div class="st-in"><div class="st-f">${esc(T.hint)}</div>${ht}${sd}</div>`;
   return{bg,body};
 }
-const SCREEN_FN={lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw,tl:screenTl,news:screenNews,dial:screenDial,story:screenStory,recents:screenRecents,profile:screenProfile,search:screenSearch};
+/* ═════════════ 인스타 게시물 · 릴스 댓글창 ═════════════ */
+const IGP={
+  heart:'<path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/>',
+  cmt:'<path d="M20.7 12.6A8.7 8.7 0 1 0 4.6 17L3.5 21l4.1-1.1a8.7 8.7 0 0 0 13.1-7.3z"/>',
+  send:'<path d="M21.2 3L10.4 13.6M21.2 3l-6.7 18-4.1-7.4L3 9.5z"/>',
+  mark:'<path d="M6 3.5h12v17l-6-4.5-6 4.5z"/>',
+  home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  find:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20.5 20.5"/>',
+  reel:'<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M3.5 9h17M9 3.5l3 5.5M15 3.5l3 5.5"/><path d="M10.5 12.5l4 2.3-4 2.3z"/>'
+};
+const igIc=(d,c,z=26,w=1.7,f='none')=>`<svg width="${z}" height="${z}" viewBox="0 0 24 24" fill="${f}" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" style="flex:none;display:block">${d}</svg>`;
+const igHl=(t,c)=>esc(t).replace(/(^|\s)([#@][^\s<]+)/g,`$1<span style="color:${c}">$2</span>`);
+const igPf=(im,z)=>`<div style="width:${z}px;height:${z}px;border-radius:50%;background:#c7c7cc;position:relative;overflow:hidden;flex:none">${im&&im.url?bgImg(im):X_AV('ig')}</div>`;
+const igVer='<svg width="13" height="13" viewBox="0 0 24 24" style="flex:none;margin-left:3px"><path fill="#0095f6" d="M12 1.5l2.6 1.9 3.2-.2 1 3.1 2.6 1.9-1 3 1 3-2.6 1.9-1 3.1-3.2-.2L12 22.5l-2.6-1.9-3.2.2-1-3.1L2.6 15.8l1-3-1-3 2.6-1.9 1-3.1 3.2.2z"/><path d="M8 12.2l2.7 2.6L16 9.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const numOf=t=>/^[\d,]+$/.test(String(t==null?'':t).trim())?+String(t).replace(/,/g,''):null;
+const fmtN=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+
+function screenPost(s){
+  const P=s.post,dk=!!P.dark,T=dk?'#f5f5f5':'#000',M=dk?'#a8a8a8':'#737373',BG=dk?'#000':'#fff',LN=dk?'#262626':'#efefef',LK=dk?'#e0f1ff':'#00376b';
+  const ph=(P.photos||[]).filter(Boolean),n=Math.max(1,ph.length),ci=Math.min(n,Math.max(1,Math.round(+P.cur||1)))-1,ca=P.ratio==='45'?4/5:1;
+  const cur=ph[ci]&&ph[ci].img&&ph[ci].img.url?ph[ci].img:null;
+  const anim=s._pl!=null,lk=anim?s._pl>=.3:!!P.liked;
+  const base=numOf(P.likes),lkTxt=(anim&&!lk&&base!=null)?(/,/.test(String(P.likes))?fmtN(Math.max(0,base-1)):String(Math.max(0,base-1))):esc(P.likes);
+  const bg=`<div class="bgl" style="background:${BG}"></div>`;
+  const head=`<div class="pt-head" style="flex:none;height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border-bottom:.5px solid ${LN}">${I.chevL(T,19)}<div style="text-align:center;line-height:1.2"><div style="font-size:11.5px;color:${M}">${esc(P.name)}</div><div style="font-size:16px;font-weight:700">게시물</div></div><span style="width:12px"></span></div>`;
+  const av=P.ring?`<div style="width:38px;height:38px;border-radius:50%;padding:2px;background:conic-gradient(from 200deg,#f9ce34,#ee2a7b,#6228d7,#f9ce34);flex:none;box-sizing:border-box"><div style="width:34px;height:34px;border-radius:50%;padding:2px;background:${BG};box-sizing:border-box">${igPf(P.av,30)}</div></div>`:igPf(P.av,36);
+  const dots=`<svg width="20" height="20" viewBox="0 0 24 24" fill="${T}" style="flex:none"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>`;
+  const who=`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px"><div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">${av}<div style="min-width:0;line-height:1.25"><div style="display:flex;align-items:center;font-size:14px;font-weight:600">${esc(P.name)}${P.ver?igVer:''}</div>${P.loc?`<div style="font-size:12px">${esc(P.loc)}</div>`:''}</div></div>${dots}</div>`;
+  let big='';
+  if(anim&&s._pl>0&&s._pl<1){const t=s._pl,sc=.55+.6*Math.min(1,t/.45),op=t<.8?1:Math.max(0,1-(t-.8)/.2);
+    big=`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center"><svg width="104" height="104" viewBox="0 0 24 24" style="transform:scale(${sc.toFixed(3)});opacity:${op.toFixed(2)};filter:drop-shadow(0 4px 14px rgba(0,0,0,.3))"><path fill="#fff" d="M12 21s-8.5-5.2-8.5-11.2A4.9 4.9 0 0 1 12 7.1a4.9 4.9 0 0 1 8.5 2.7C20.5 15.8 12 21 12 21z"/></svg></div>`;}
+  const badge=n>1?`<div style="position:absolute;top:12px;right:12px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;line-height:16px;padding:4px 10px;border-radius:14px">${ci+1}/${n}</div>`:'';
+  const photo=`<div style="position:relative;width:100%;aspect-ratio:${ca};background:${dk?'#1c1c1c':'#efefef'};overflow:hidden">${cur?bgImg(cur,ca):''}${badge}${big}</div>`;
+  const dn=n>1?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;gap:4px">${Array.from({length:n},(_,i)=>`<i style="display:block;width:6px;height:6px;border-radius:50%;background:${i===ci?'#0095f6':(dk?'#5a5a5a':'#c7c7cc')}"></i>`).join('')}</div>`:'';
+  const act=`<div style="position:relative;display:flex;align-items:center;gap:14px;padding:10px 12px 6px">${igIc(IGP.heart,lk?'#ff3040':T,26,1.7,lk?'#ff3040':'none')}${igIc(IGP.cmt,T)}${igIc(IGP.send,T)}<span style="flex:1"></span>${igIc(IGP.mark,T,26,1.7,P.saved?T:'none')}${dn}</div>`;
+  const likeLine=P.likeBy?`<b>${esc(P.likeBy)}</b>님 외 <b>${lkTxt}</b>명이 좋아합니다`:`좋아요 <b>${lkTxt}</b>개`;
+  const info=`<div style="padding:0 12px 10px;font-size:14px;line-height:19px"><div style="font-weight:400">${likeLine}</div>${P.caption?`<div style="margin-top:4px;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere"><b style="font-weight:600">${esc(P.name)}</b> ${igHl(P.caption,LK)}</div>`:''}${P.cmt?`<div style="margin-top:4px;color:${M}">${esc(P.cmt)}</div>`:''}${P.time?`<div style="margin-top:4px;font-size:12px;color:${M}">${esc(P.time)}</div>`:''}</div>`;
+  const tab=`<div class="pt-tab" style="flex:none;height:84px;border-top:.5px solid ${LN};background:${BG};display:flex;justify-content:space-around;padding:12px 6px 0">${igIc(IGP.home,T,26,1.7,T)}${igIc(IGP.reel,T)}${igIc(IGP.send,T)}${igIc(IGP.find,T)}${igPf(P.av,26)}</div>`;
+  const body=`<div class="pt-wrap" style="flex:1;min-height:0;display:flex;flex-direction:column;background:${BG};color:${T}">${head}<div style="flex:1;min-height:0;overflow:hidden">${who}${photo}${act}${info}</div>${tab}</div>`;
+  return{bg,body};
+}
+
+function screenReels(s){
+  const R=s.reels,dk=R.sheet==='dark',SB=dk?'#262626':'#fff',T=dk?'#f5f5f5':'#000',M=dk?'#a8a8a8':'#737373',LN=dk?'#363636':'#efefef',LK=dk?'#e0f1ff':'#00376b';
+  const cs=(R.comments||[]).filter(Boolean),nC=cs.length;
+  const bg=`<div class="bgl" style="background:linear-gradient(170deg,#4a4a50,#1b1b1e 70%)">${R.bg&&R.bg.url?bgImg(R.bg,SA):''}<div class="bgl" style="background:rgba(0,0,0,${((+R.dim||0)/100).toFixed(2)})"></div></div>`;
+  const rows=cs.map((c,i)=>{
+    const q=(i===nC-1&&s._rq!=null&&s._rq<1)?s._rq:1,e=1-Math.pow(1-q,3);
+    const an=q<1?`opacity:${Math.min(1,e*1.5).toFixed(2)};transform:translateY(${((1-e)*16).toFixed(1)}px);`:'';
+    const rp=c.replies&&String(c.replies).trim();
+    return`<div style="${an}display:flex;gap:12px;padding:9px 16px;align-items:flex-start">${igPf(c.av,36)}<div style="flex:1;min-width:0"><div style="display:flex;align-items:center;font-size:13px;line-height:18px;font-weight:600;color:${T}">${esc(c.name)}${c.ver?igVer:''}<span style="font-weight:400;color:${M};margin-left:8px">${esc(c.time)}</span>${c.author?`<span style="font-weight:400;color:${M};margin-left:6px">· 작성자</span>`:''}</div><div style="font-size:14px;line-height:19px;margin-top:2px;color:${T};white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere">${igHl(c.text,LK)}</div><div style="font-size:12px;line-height:16px;font-weight:600;color:${M};margin-top:7px">답글 달기</div>${rp?`<div style="display:flex;align-items:center;margin-top:12px;font-size:12px;line-height:16px;font-weight:600;color:${M}"><i style="display:block;width:22px;height:1px;background:${M};margin-right:10px;opacity:.6"></i>${esc(rp)}</div>`:''}</div><div style="flex:none;width:30px;padding-top:8px;color:${M};font-size:12px;line-height:14px;display:flex;flex-direction:column;align-items:center">${igIc(IGP.heart,c.liked?'#ff3040':M,17,1.8,c.liked?'#ff3040':'none')}<div style="margin-top:3px">${esc(c.likes)}</div></div></div>`;
+  }).join('');
+  const emo=R.emoji!==false?`<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font-size:22px;line-height:28px">${['❤','🙌','🔥','👏','😢','😍','😮','😂'].map(e=>`<span>${e}</span>`).join('')}</div>`:'';
+  const inp=`<div class="rl-in" style="flex:none;padding:6px 14px 34px;display:flex;align-items:center;gap:10px;background:${SB}">${igPf(R.me,32)}<div style="flex:1;height:40px;border:1px solid ${dk?'#4a4a4a':'#dbdbdb'};border-radius:20px;padding:0 12px 0 16px;display:flex;align-items:center;justify-content:space-between;color:${M};font-size:14px;min-width:0"><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(R.ph)}</span>${I.smile(M)}</div></div>`;
+  const sheet=`<div class="rl-sheet" style="position:absolute;left:0;right:0;bottom:0;height:${Math.min(92,Math.max(40,+R.sheetH||70))}%;background:${SB};border-radius:16px 16px 0 0;display:flex;flex-direction:column;overflow:hidden;color:${T};z-index:4"><div style="flex:none;padding:8px 0 0"><div style="width:36px;height:4px;border-radius:2px;background:${dk?'#5a5a5a':'#c7c7cc'};margin:0 auto"></div><div style="text-align:center;font-size:15px;font-weight:700;line-height:20px;padding:12px 0;border-bottom:.5px solid ${LN}">${esc(R.title)}</div></div><div class="rl-list" style="flex:1;min-height:0;overflow:hidden"><div class="rl-inner" style="padding:4px 0 10px">${rows}</div></div><div style="flex:none;border-top:.5px solid ${LN}">${emo}${inp}</div></div>`;
+  const top=`<div class="rl-top" style="flex:none;display:flex;justify-content:space-between;align-items:center;padding:8px 16px;color:#fff;opacity:.92"><span style="font-size:22px;font-weight:700;letter-spacing:-.4px">릴스</span>${I.cam('#fff',26)}</div>`;
+  return{bg,body:top+sheet};
+}
+/* 릴스 댓글 스크롤: 실제 높이를 재서 끝까지 내려가요 */
+function rlApply(root,st){
+  if(st.screen!=='reels'||!st.reels)return;
+  const box=root.querySelector('.rl-list'),inner=root.querySelector('.rl-inner');if(!box||!inner)return;
+  const g=st._rs!=null?st._rs:(st.reels.scroll?(+st.reels.scrollAt||0)/100:0);
+  const max=Math.max(0,inner.offsetHeight-box.clientHeight);
+  inner.style.transform=(max&&g)?`translateY(${(-g*max).toFixed(1)}px)`:'';
+}
+function E_post(){
+  const P=S.post,ph=P.photos;
+  return card('게시물',`<div class="g2">${fld('아이디',txt('post.name','username'))}${fld('위치 (비우면 숨김)',txt('post.loc','서울'))}</div>
+    ${imgField('post.av','프로필 사진',false)}
+    <div class="g2">${tog('post.ver','인증 배지')}${tog('post.ring','스토리 링')}</div>
+    ${fld('본문',area('post.caption','본문 (#해시태그 · @멘션은 파랗게)'))}
+    <div class="g2">${fld('시간',txt('post.time','2시간 전'))}${fld('댓글 문구',txt('post.cmt','댓글 32개 모두 보기'))}</div>
+    <div class="g2">${fld('좋아요 수',txt('post.likes','1,204'))}${fld('좋아요 누른 사람',txt('post.likeBy','비우면 “좋아요 N개”'))}</div>
+    ${tog('post.liked','하트 누름')}${tog('post.saved','저장함')}${tog('post.dark','다크 모드')}`)
+  +card('사진',`${fld('비율',seg('post.ratio',[['11','정사각 1:1'],['45','세로 4:5']]))}
+    ${ph.map((p,i)=>`<div class="item"><div class="item-h"><span class="badge">사진 ${i+1}</span>${mv('post.photos',i,ph.length)}</div>${imgField(`post.photos.${i}.img`,'사진')}</div>`).join('')}
+    <button class="btn line" data-act="add" data-path="post.photos" data-tpl="pphoto">＋ 사진 추가</button>
+    ${ph.length>1?fld('미리 볼 사진 번호',txt('post.cur','1')):''}`)
+  +card('연출',`${tog('post.dtap','GIF · 영상: 사진을 두 번 눌러 하트가 뜨는 연출')}<div class="hint" style="margin-top:6px">하트가 크게 떴다 사라지면서 아래 하트가 빨갛게 채워지고 좋아요 수도 1 올라가요.</div>`);
+}
+function E_reels(){
+  const R=S.reels,cs=R.comments;
+  return card('릴스 배경',`${imgField('reels.bg','릴스 화면 (영상 캡처 사진)')}${rng('reels.dim',0,80,1,'어둡게','%')}`)
+  +card('댓글창',`${fld('댓글창 색',seg('reels.sheet',[['light','밝게'],['dark','어둡게']]))}
+    ${rng('reels.sheetH',40,92,1,'댓글창 높이','%')}
+    <div class="g2">${fld('제목',txt('reels.title','댓글'))}${fld('입력창 문구',txt('reels.ph','username(으)로 댓글 달기...'))}</div>
+    ${imgField('reels.me','내 프로필 사진',false)}${tog('reels.emoji','이모지 빠른 반응 줄')}`)
+  +card('연출',`${tog('reels.anim','댓글이 하나씩 올라오는 연출')}${tog('reels.scroll','아래로 스크롤')}${R.scroll?rng('reels.scrollAt',0,100,1,'정지 화면 위치','%'):''}<div class="hint" style="margin-top:6px">두 옵션은 따로 동작해요. 스크롤은 댓글이 댓글창보다 많을 때 적용되고, 슬라이더는 PNG 같은 정지 화면 위치예요.</div>`)
+  +card('댓글',cs.map((c,i)=>`<div class="item"><div class="item-h"><span class="badge">댓글 ${i+1}</span>${mv('reels.comments',i,cs.length)}</div>
+    ${imgField(`reels.comments.${i}.av`,'프로필 사진',false)}
+    <div class="g2">${fld('아이디',txt(`reels.comments.${i}.name`,'username'))}${fld('시간',txt(`reels.comments.${i}.time`,'1일'))}</div>
+    ${area(`reels.comments.${i}.text`,'댓글 내용')}
+    <div class="g2">${fld('좋아요 수',txt(`reels.comments.${i}.likes`,'12'))}${fld('답글 문구 (비우면 숨김)',txt(`reels.comments.${i}.replies`,'답글 3개 보기'))}</div>
+    <div class="g3">${tog(`reels.comments.${i}.liked`,'하트')}${tog(`reels.comments.${i}.author`,'작성자')}${tog(`reels.comments.${i}.ver`,'인증')}</div></div>`).join('')
+    +`<button class="btn line" data-act="add" data-path="reels.comments" data-tpl="rcomment">＋ 댓글 추가</button>`);
+}
+
+/* ═════════════ 인스타 프로필 · 활동 · 릴스 본화면 · 유튜브 댓글 ═════════════ */
+const igTab=(av,T,BG,LN)=>`<div class="pt-tab" style="flex:none;height:84px;border-top:.5px solid ${LN};background:${BG};display:flex;justify-content:space-around;padding:12px 6px 0">${igIc(IGP.home,T,26,1.7,T)}${igIc(IGP.reel,T)}${igIc(IGP.send,T)}${igIc(IGP.find,T)}${igPf(av,26)}</div>`;
+const rowAn=(i,n,s)=>{const q=(i===n-1&&s._aq!=null&&s._aq<1)?s._aq:1,e=1-Math.pow(1-q,3);return q<1?`opacity:${e.toFixed(2)};transform:translateY(${((1-e)*14).toFixed(1)}px);`:'';};
+const igCol=dk=>({T:dk?'#f5f5f5':'#000',M:dk?'#a8a8a8':'#737373',BG:dk?'#000':'#fff',LN:dk?'#262626':'#efefef',BT:dk?'#363636':'#efefef',LK:dk?'#e0f1ff':'#00376b'});
+
+function screenIgProf(s){
+  const P=s.igprof,{T,M,BG,LN,BT}=igCol(P.dark);
+  const fl=s._fl!=null?(s._fl>=.5?'following':'follow'):P.btn;
+  const b1=fl==='mine'?['프로필 편집',BT,T]:fl==='following'?['팔로잉 ⌄',BT,T]:['팔로우','#0095f6','#fff'];
+  const b2=fl==='mine'?'프로필 공유':'메시지';
+  const btn=(l,bg,c)=>`<div style="flex:1;height:32px;border-radius:8px;background:${bg};color:${c};font-size:13.5px;font-weight:600;display:flex;align-items:center;justify-content:center">${l}</div>`;
+  const fol=numOf(P.followers),fv=(fol!=null&&s._fl!=null&&fl==='following')?fmtN(fol+1):esc(P.followers);
+  const stat=(n,l)=>`<div style="flex:1;text-align:center;line-height:1.25"><div style="font-size:16px;font-weight:700">${n}</div><div style="font-size:13px">${l}</div></div>`;
+  const hl=(P.hl||[]).map(h=>`<div style="flex:none;width:66px;text-align:center"><div style="width:62px;height:62px;border-radius:50%;border:1px solid ${P.dark?'#4a4a4a':'#dbdbdb'};padding:3px;box-sizing:border-box">${igPf(h.img,54)}</div><div style="font-size:12px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(h.label)}</div></div>`).join('');
+  const grid=(P.grid||[]).map(g=>`<div style="position:relative;aspect-ratio:1;background:${P.dark?'#1c1c1c':'#efefef'};overflow:hidden">${g.img&&g.img.url?bgImg(g.img,1):''}</div>`).join('');
+  const head=`<div class="pt-head" style="flex:none;height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 14px"><div style="display:flex;align-items:center;font-size:19px;font-weight:700">${esc(P.name)}${P.ver?igVer:''}</div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${T}" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></div>`;
+  const top=`<div style="display:flex;align-items:center;gap:22px;padding:8px 16px 0"><div style="width:84px;height:84px;flex:none">${igPf(P.av,84)}</div><div style="flex:1;display:flex">${stat(esc(P.posts),'게시물')}${stat(fv,'팔로워')}${stat(esc(P.following),'팔로잉')}</div></div>`;
+  const bio=`<div style="padding:10px 16px 0;font-size:13.5px;line-height:18px"><b style="font-weight:600">${esc(P.dname)}</b><div style="white-space:pre-wrap;word-break:keep-all">${esc(P.bio)}</div></div>`;
+  const tabs=`<div style="flex:none;display:flex;border-top:.5px solid ${LN};margin-top:12px"><div style="flex:1;display:flex;justify-content:center;padding:9px 0;border-bottom:1.5px solid ${T}">${igIc('<rect x="4" y="4" width="16" height="16"/><path d="M4 9.5h16M4 15h16M9.5 4v16M15 4v16"/>',T,24,1.5)}</div><div style="flex:1;display:flex;justify-content:center;padding:9px 0">${igIc(IGP.reel,M,24,1.5)}</div><div style="flex:1;display:flex;justify-content:center;padding:9px 0">${igIc('<circle cx="12" cy="9" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>',M,24,1.5)}</div></div>`;
+  const body=`<div class="pt-wrap" style="flex:1;min-height:0;display:flex;flex-direction:column;background:${BG};color:${T}">${head}<div style="flex:1;min-height:0;overflow:hidden">${top}${bio}<div style="display:flex;gap:6px;padding:12px 16px 0">${btn(...b1)}${btn(b2,BT,T)}</div>${hl?`<div style="display:flex;gap:10px;padding:14px 16px 0;overflow:hidden">${hl}</div>`:''}${tabs}<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px">${grid}</div></div>${igTab(P.av,T,BG,LN)}</div>`;
+  return{bg:`<div class="bgl" style="background:${BG}"></div>`,body};
+}
+const IGA={like:'님이 회원님의 게시물을 좋아합니다.',follow:'님이 회원님을 팔로우하기 시작했습니다.',comment:'님이 댓글을 남겼습니다: ',mention:'님이 댓글에서 회원님을 언급했습니다: '};
+function screenIgAct(s){
+  const P=s.igact,{T,M,BG,LN,LK}=igCol(P.dark),its=(P.items||[]).filter(Boolean),n=its.length;
+  const rows=its.map((it,i)=>{
+    const sec=it.sec&&it.sec.trim()?`<div style="font-size:15px;font-weight:700;padding:14px 16px 6px">${esc(it.sec)}</div>`:'';
+    const tx=it.kind==='comment'||it.kind==='mention'?igHl(it.text||'',LK):'';
+    const right=it.kind==='follow'?`<div style="flex:none;height:32px;padding:0 16px;border-radius:8px;background:${it.follow?(P.dark?'#363636':'#efefef'):'#0095f6'};color:${it.follow?T:'#fff'};font-size:13px;font-weight:600;display:flex;align-items:center">${it.follow?'팔로잉':'팔로우'}</div>`:(it.thumb&&it.thumb.url?`<div style="flex:none;width:44px;height:44px;position:relative;overflow:hidden;border-radius:4px">${bgImg(it.thumb,1)}</div>`:'');
+    return`${sec}<div style="${rowAn(i,n,s)}display:flex;align-items:center;gap:12px;padding:8px 16px">${igPf(it.av,44)}<div style="flex:1;min-width:0;font-size:13.5px;line-height:18px;word-break:keep-all;overflow-wrap:anywhere"><b style="font-weight:600">${esc(it.name)}</b>${IGA[it.kind]||''}${tx} <span style="color:${M}">${esc(it.time)}</span></div>${right}</div>`;
+  }).join('');
+  const head=`<div class="pt-head" style="flex:none;height:46px;display:flex;align-items:center;padding:0 16px;font-size:22px;font-weight:700">활동</div>`;
+  return{bg:`<div class="bgl" style="background:${BG}"></div>`,body:`<div class="pt-wrap" style="flex:1;min-height:0;display:flex;flex-direction:column;background:${BG};color:${T}">${head}<div style="flex:1;min-height:0;overflow:hidden">${rows}</div>${igTab(P.av||null,T,BG,LN)}</div>`};
+}
+function screenReelV(s){
+  const R=s.reelv,anim=s._pl!=null,lk=anim?s._pl>=.3:!!R.liked;
+  const bg=`<div class="bgl" style="background:linear-gradient(170deg,#4a4a50,#1b1b1e 70%)">${R.bg&&R.bg.url?bgImg(R.bg,SA):''}<div class="bgl" style="background:linear-gradient(rgba(0,0,0,.35),rgba(0,0,0,0) 20%,rgba(0,0,0,0) 55%,rgba(0,0,0,.55)),rgba(0,0,0,${((+R.dim||0)/100).toFixed(2)})"></div></div>`;
+  const ic=(d,f,l,fill)=>`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;font-size:12px;line-height:14px">${igIc(d,f,28,1.7,fill||'none')}<span>${esc(l)}</span></div>`;
+  const dots='<svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>';
+  const lnum=numOf(R.likes),lt=(anim&&!lk&&lnum!=null&&/,/.test(String(R.likes)))?fmtN(Math.max(0,lnum-1)):esc(R.likes);
+  const rail=`<div style="position:absolute;right:10px;bottom:16px;display:flex;flex-direction:column;align-items:center;gap:18px;z-index:3">${ic(IGP.heart,lk?'#ff3040':'#fff',lt,lk?'#ff3040':'none')}${ic(IGP.cmt,'#fff',R.cmts)}${ic(IGP.send,'#fff',R.shares)}${dots}<div style="width:26px;height:26px;border-radius:6px;border:2px solid #fff;overflow:hidden;position:relative">${igPf(R.av,22)}</div></div>`;
+  let big='';if(anim&&s._pl>0&&s._pl<1){const t=s._pl,sc=.55+.6*Math.min(1,t/.45),op=t<.8?1:Math.max(0,1-(t-.8)/.2);big=`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;z-index:2"><svg width="104" height="104" viewBox="0 0 24 24" style="transform:scale(${sc.toFixed(3)});opacity:${op.toFixed(2)};filter:drop-shadow(0 4px 14px rgba(0,0,0,.3))"><path fill="#fff" d="M12 21s-8.5-5.2-8.5-11.2A4.9 4.9 0 0 1 12 7.1a4.9 4.9 0 0 1 8.5 2.7C20.5 15.8 12 21 12 21z"/></svg></div>`;}
+  const cap=`<div style="position:absolute;left:14px;right:70px;bottom:16px;color:#fff;z-index:3"><div style="display:flex;align-items:center;gap:8px">${igPf(R.av,32)}<b style="font-size:14px;font-weight:600;display:flex;align-items:center">${esc(R.name)}${R.ver?igVer:''}</b>${R.follow?'<span style="border:1px solid #fff;border-radius:6px;padding:3px 10px;font-size:12.5px;font-weight:600">팔로우</span>':''}</div><div style="font-size:14px;line-height:19px;margin-top:10px;white-space:pre-wrap;word-break:keep-all">${igHl(R.cap,'#fff')}</div><div style="font-size:12.5px;margin-top:8px;opacity:.9">♪ ${esc(R.audio)}</div></div>`;
+  const top=`<div class="rl-top" style="flex:none;display:flex;justify-content:space-between;align-items:center;padding:8px 16px;color:#fff"><span style="font-size:22px;font-weight:700">릴스</span>${I.cam('#fff',26)}</div>`;
+  const tab=`<div class="pt-tab" style="flex:none;height:84px;background:#000;display:flex;justify-content:space-around;padding:12px 6px 0">${igIc(IGP.home,'#fff',26)}${igIc(IGP.reel,'#fff',26)}${igIc(IGP.send,'#fff')}${igIc(IGP.find,'#fff')}${igPf(R.av,26)}</div>`;
+  return{bg,body:`${top}<div style="flex:1;min-height:0;position:relative">${big}${rail}${cap}</div>${tab}`};
+}
+function screenYt(s){
+  const P=s.yt,{T,M,BG,LN}=igCol(P.dark),its=(P.items||[]).filter(Boolean),n=its.length;
+  const th=`<div style="position:relative;width:100%;aspect-ratio:16/9;background:#111;overflow:hidden;flex:none">${P.thumb&&P.thumb.url?bgImg(P.thumb,16/9):''}</div>`;
+  const up='<path d="M7 11v9H3v-9zM7 11l4-7c1.5 0 2.5 1 2.2 2.6L12.7 10H19a2 2 0 0 1 2 2.4l-1.3 6A2 2 0 0 1 17.7 20H7"/>';
+  const rows=its.map((c,i)=>`<div style="${rowAn(i,n,s)}display:flex;gap:12px;padding:8px 16px">${igPf(c.av,32)}<div style="flex:1;min-width:0;font-size:14px;line-height:19px"><div style="font-size:12px;color:${M};line-height:16px">${c.pin?'📌 고정됨 · ':''}${esc(c.name)} · ${esc(c.time)}</div><div style="margin-top:2px;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere">${esc(c.text)}</div><div style="display:flex;align-items:center;gap:18px;margin-top:8px;font-size:12px;color:${M}"><span style="display:flex;align-items:center;gap:6px">${igIc(up,M,18,1.6)}${esc(c.likes)}</span><span style="display:flex;transform:rotate(180deg)">${igIc(up,M,18,1.6)}</span>${igIc(IGP.cmt,M,17,1.6)}${c.hearted?'<span style="color:#ff3040">❤</span>':''}</div>${c.replies?`<div style="margin-top:8px;font-size:13px;font-weight:600;color:#065fd4">${esc(c.replies)}</div>`:''}</div></div>`).join('');
+  const info=`<div style="flex:none;padding:12px 16px 0"><div style="font-size:16px;font-weight:600;line-height:21px">${esc(P.title)}</div><div style="font-size:12.5px;color:${M};margin-top:3px">${esc(P.views)} · ${esc(P.ago)}</div><div style="display:flex;align-items:center;gap:10px;margin-top:12px">${igPf(P.chAv,36)}<div style="flex:1;min-width:0;line-height:1.25"><div style="font-size:14px;font-weight:600">${esc(P.ch)}</div><div style="font-size:12px;color:${M}">${esc(P.subs)}</div></div><div style="height:34px;padding:0 14px;border-radius:17px;background:${P.sub?(P.dark?'#272727':'#f2f2f2'):(P.dark?'#f1f1f1':'#0f0f0f')};color:${P.sub?T:(P.dark?'#0f0f0f':'#fff')};font-size:14px;font-weight:600;display:flex;align-items:center">${P.sub?'구독중':'구독'}</div></div><div style="margin-top:14px;padding:10px 12px;border-radius:12px;background:${P.dark?'#272727':'#f2f2f2'};font-size:14px;font-weight:600">댓글 <span style="font-weight:400;font-size:12.5px;color:${M};margin-left:4px">${esc(P.ccount)}</span></div></div>`;
+  return{bg:`<div class="bgl" style="background:${BG}"></div>`,body:`<div class="pt-wrap" style="flex:1;min-height:0;display:flex;flex-direction:column;background:${BG};color:${T}">${th}${info}<div style="flex:1;min-height:0;overflow:hidden;padding-top:8px">${rows}</div></div>`};
+}
+const tw2=(a,b)=>`<div class="g2">${a}${b}</div>`;
+const itemEd=(path,arr,inner,tpl,lab)=>arr.map((x,i)=>`<div class="item"><div class="item-h"><span class="badge">${lab} ${i+1}</span>${mv(path,i,arr.length)}</div>${inner(i)}</div>`).join('')+`<button class="btn line" data-act="add" data-path="${path}" data-tpl="${tpl}">＋ ${lab} 추가</button>`;
+function E_igprof(){const P=S.igprof;
+  return card('프로필',`${tw2(fld('아이디',txt('igprof.name','username')),fld('이름',txt('igprof.dname','이름')))}${imgField('igprof.av','프로필 사진',false)}
+    <div class="g3">${fld('게시물',txt('igprof.posts','128'))}${fld('팔로워',txt('igprof.followers','1,204'))}${fld('팔로잉',txt('igprof.following','342'))}</div>
+    ${fld('소개',area('igprof.bio','소개'))}${fld('버튼',seg('igprof.btn',[['follow','팔로우'],['following','팔로잉'],['mine','내 프로필']]))}
+    ${tw2(tog('igprof.ver','인증 배지'),tog('igprof.dark','다크 모드'))}${tog('igprof.fanim','GIF · 영상: 팔로우 → 팔로잉으로 바뀌는 연출 (버튼을 팔로잉으로 두세요)')}`)
+  +card('하이라이트',itemEd('igprof.hl',P.hl,i=>`${fld('이름',txt(`igprof.hl.${i}.label`,'일상'))}${imgField(`igprof.hl.${i}.img`,'사진',false)}`,'ighl','하이라이트'))
+  +card('게시물 사진',itemEd('igprof.grid',P.grid,i=>imgField(`igprof.grid.${i}.img`,'사진',false),'gitem','사진'));}
+function E_igact(){const P=S.igact;
+  return card('활동',`${tw2(tog('igact.dark','다크 모드'),tog('igact.anim','GIF · 영상: 알림이 하나씩 올라오는 연출'))}`)
+  +card('알림',itemEd('igact.items',P.items,i=>`${fld('종류',seg(`igact.items.${i}.kind`,[['like','좋아요'],['follow','팔로우'],['comment','댓글'],['mention','멘션']]))}
+    ${tw2(fld('아이디',txt(`igact.items.${i}.name`,'username')),fld('시간',txt(`igact.items.${i}.time`,'2시간')))}${imgField(`igact.items.${i}.av`,'프로필 사진',false)}
+    ${fld('댓글 내용 (댓글 · 멘션만)',txt(`igact.items.${i}.text`,'내용'))}${fld('구간 제목 (비우면 숨김)',txt(`igact.items.${i}.sec`,'오늘'))}
+    ${imgField(`igact.items.${i}.thumb`,'게시물 사진 (팔로우 제외)',false)}${tog(`igact.items.${i}.follow`,'이미 팔로잉 (팔로우 알림)')}`,'actitem','알림'));}
+function E_reelv(){const R=S.reelv;
+  return card('릴스 화면',`${imgField('reelv.bg','릴스 화면 (영상 캡처 사진)')}${rng('reelv.dim',0,80,1,'어둡게','%')}
+    ${tw2(fld('아이디',txt('reelv.name','username')),fld('오디오',txt('reelv.audio','username · 원본 오디오')))}${imgField('reelv.av','프로필 사진',false)}${fld('캡션',area('reelv.cap','캡션'))}
+    <div class="g3">${fld('좋아요',txt('reelv.likes','1.2만'))}${fld('댓글',txt('reelv.cmts','128'))}${fld('공유',txt('reelv.shares','34'))}</div>
+    ${tw2(tog('reelv.ver','인증 배지'),tog('reelv.follow','팔로우 버튼'))}${tog('reelv.liked','하트 누름')}${tog('reelv.dtap','GIF · 영상: 화면을 두 번 눌러 하트가 뜨는 연출')}`);}
+function E_yt(){const P=S.yt;
+  return card('영상',`${imgField('yt.thumb','영상 화면 (16:9)')}${fld('제목',txt('yt.title','제목'))}${tw2(fld('조회수',txt('yt.views','조회수 12만회')),fld('업로드',txt('yt.ago','3일 전')))}
+    ${tw2(fld('채널',txt('yt.ch','채널명')),fld('구독자',txt('yt.subs','구독자 10만명')))}${imgField('yt.chAv','채널 사진',false)}${fld('댓글 수',txt('yt.ccount','1.2천'))}
+    ${tw2(tog('yt.sub','구독중'),tog('yt.dark','다크 모드'))}${tog('yt.anim','GIF · 영상: 댓글이 하나씩 올라오는 연출')}`)
+  +card('댓글',itemEd('yt.items',P.items,i=>`${tw2(fld('아이디',txt(`yt.items.${i}.name`,'@username')),fld('시간',txt(`yt.items.${i}.time`,'1일 전')))}${imgField(`yt.items.${i}.av`,'프로필 사진',false)}${area(`yt.items.${i}.text`,'댓글 내용')}
+    ${tw2(fld('좋아요',txt(`yt.items.${i}.likes`,'12')),fld('답글 문구',txt(`yt.items.${i}.replies`,'답글 3개')))}${tw2(tog(`yt.items.${i}.pin`,'고정됨'),tog(`yt.items.${i}.hearted`,'작성자 하트'))}`,'ytc','댓글'));}
+
+const SCREEN_FN={lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw,tl:screenTl,news:screenNews,dial:screenDial,story:screenStory,post:screenPost,reels:screenReels,igprof:screenIgProf,igact:screenIgAct,reelv:screenReelV,yt:screenYt,recents:screenRecents,profile:screenProfile,search:screenSearch};
 
 let BOX=1;
 function msgFx(s){return s;}
@@ -1444,13 +1697,15 @@ function screenProfile(s){
   const cf4=s.device.ratio==='four'||s.device.ratio==='horiz',P=s.profile,pt=s._pt!=null?s._pt:(P.stage==='new'?1:0),st=P.change==='photo'?0:pt,pp=P.change==='status'?0:pt;
   const av=(im,o,ca=1)=>im&&im.url?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;opacity:${o.toFixed(2)}">${bgImg(im,ca)}</div>`:'';
   const both=av(P.photo,1-pp)+av(P.newPhoto,pp),bgb=av(P.photo,1-pp,SA)+av(P.newPhoto,pp,SA),has=(P.photo&&P.photo.url)||(P.newPhoto&&P.newPhoto.url);
-  const bg=`<div class="bgl" style="background:linear-gradient(170deg,#4a4a50,#1b1b1e 70%)"><div class="bgl" style="filter:blur(26px);transform:scale(1.3);opacity:.55">${bgb}</div><div class="bgl" style="background:rgba(0,0,0,.35)"></div></div>`;
-  const ln=(t,o,y)=>`<div style="position:absolute;left:0;right:0;text-align:center;opacity:${o.toFixed(2)};transform:translateY(${y.toFixed(1)}px)">${esc(t)}</div>`;
-  const x='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>';
-  const it=(ic,l)=>`<div class="cl-it"><div class="c s">${ic}</div>${l}</div>`;
-  const body=`<div style="display:flex;justify-content:space-between;align-items:center;padding:${cf4?36:58}px 22px 0;position:relative;z-index:2">${x}<span style="color:#fff;font-size:15px;opacity:.85">프로필 관리</span></div>
-  <div class="cl" style="padding-top:${cf4?16:96}px"><div style="width:${cf4?84:104}px;height:${cf4?84:104}px;border-radius:${cf4?30:38}px;background:#8e8e93;position:relative;overflow:hidden;margin:0 auto;display:flex;align-items:flex-end;justify-content:center">${has?both:X_AV('chat')}</div><div style="font-size:22px;font-weight:600;margin-top:${cf4?8:16}px">${esc(P.name)}</div><div style="position:relative;height:22px;margin-top:8px;font-size:15px;opacity:.9">${ln(P.status,1-st,-st*6)}${ln(P.newStatus,st,(1-st)*6)}</div></div>
-  <div class="cl-bot" style="bottom:${cf4?24:52}px;padding:0 60px"><div class="cl-row" style="justify-content:space-around">${it(I.msg('#fff',22),'나와의 채팅')}${it(I.cam('#fff',22),'프로필 편집')}${it(I.person('#fff'),'카카오스토리')}</div></div>`;
+  const bg=`<div class="bgl" style="background:linear-gradient(170deg,#4a4a50,#1b1b1e 70%)"><div class="bgl" style="filter:blur(34px) saturate(1.15);transform:scale(1.35);opacity:.6">${bgb}</div><div class="bgl" style="background:linear-gradient(rgba(0,0,0,.36),rgba(0,0,0,.2) 42%,rgba(0,0,0,.5))"></div></div>`;
+  const ln=(t,o,y)=>`<div style="position:absolute;left:34px;right:34px;top:0;text-align:center;opacity:${o.toFixed(2)};transform:translateY(${y.toFixed(1)}px);line-height:21px;max-height:42px;overflow:hidden;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;letter-spacing:-.2px">${esc(t)}</div>`;
+  const x='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><path d="M5.500 5.500l13 13M18.500 5.500l-13 13"/></svg>';
+  const LI=d=>`<svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+  const it=(ic,l)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:9px;color:#fff;font-size:12.5px;letter-spacing:-.2px;text-shadow:0 1px 6px rgba(0,0,0,.35)">${ic}<span style="display:block;line-height:16px">${l}</span></div>`;
+  const sz=cf4?84:104;
+  const body=`<div style="display:flex;justify-content:space-between;align-items:center;padding:${cf4?36:58}px 22px 0;position:relative;z-index:2">${x}<span style="color:#fff;font-size:15px;opacity:.88;letter-spacing:-.2px">프로필 관리</span></div>
+  <div class="cl" style="padding-top:${cf4?16:92}px"><div style="width:${sz}px;height:${sz}px;border-radius:${Math.round(sz*.38)}px;background:#8e8e93;position:relative;overflow:hidden;margin:0 auto;display:flex;align-items:flex-end;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.38),0 0 0 .5px rgba(255,255,255,.28)">${has?both:X_AV('chat')}</div><div style="font-size:21px;font-weight:600;margin-top:${cf4?8:18}px;letter-spacing:-.4px">${esc(P.name)}</div><div style="position:relative;height:42px;margin-top:8px;font-size:15px;opacity:.9">${ln(P.status,1-st,-st*6)}${ln(P.newStatus,st,(1-st)*6)}</div></div>
+  <div style="position:absolute;left:0;right:0;bottom:${cf4?14:40}px;z-index:2;border-top:.5px solid rgba(255,255,255,.28);padding:${cf4?12:20}px 18px 0;display:flex">${it(LI('<path d="M12 4C7 4 3 7.200 3 11.200c0 2.500 1.600 4.700 4 6l-.8 3 3.500-2c.8.200 1.500.200 2.300.200 5 0 9-3.200 9-7.200S17 4 12 4z"/>'),'나와의 채팅')}${it(LI('<path d="M4 20l.9-4L16 4.900a2.100 2.100 0 0 1 3 0 2.100 2.100 0 0 1 0 3L7.900 19z"/><path d="M14.200 6.700l3 3"/>'),'프로필 편집')}${it(LI('<circle cx="12" cy="8.500" r="3.600"/><path d="M4.500 20c.8-4 3.600-6 7.500-6s6.700 2 7.500 6"/>'),'카카오스토리')}</div>`;
   return{bg,body};
 }
 function E_profile(){
@@ -1483,7 +1738,7 @@ function E_recents(){
     ${n<12?`<button class="btn line" data-act="add" data-path="recents.items" data-tpl="call">＋ 기록 추가</button>`:''}`);
 }
 function stageHTML(s,opt={}){
-  s=msgFx(s);
+  s=msgFx(s);DPH=s._dph==null?null:s._dph;
   BOX=1+((((s.chat&&s.chat.bs)||100)/100)-1)*.4;   // 말풍선 변화의 40%만 주변에 반영
   const d=s.device, ratio=d.ratio||'phone', off=!!d.bgOff, [W,H]=DIMS[ratio]||DIMS.phone; SA=W/H;
   const sc=statusColor(s);
@@ -1613,7 +1868,7 @@ function E_msgs(){
       ${fld('메시지 상태 (영상 · 미리보기에서 변하는 모습이 나와요)',seg(`chat.messages.${i}.state`,[['none','기본'],['deleted','삭제됨'],['failed','전송 실패']],'sm'))}
       ${fld('이모티콘 반응',seg(`chat.messages.${i}.react`,[['','없음'],['❤️','❤️'],['👍','👍'],['😂','😂'],['😢','😢']],'sm'))}</div>`).join('')}
     <div class="g2"><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="left">＋ 상대방</button><button class="btn line" data-act="add" data-path="chat.messages" data-tpl="right">＋ 나</button></div>
-    <div class="sep"></div>${tog('chat.typing','입력 중… 말풍선 표시 (정지 화면 · PNG용, 영상 · GIF엔 안 나와요)')}${tog('exp.typing','영상 · GIF: 상대 메시지 전에 "입력 중…"')}${tog('exp.typingMe','영상 · GIF: 내 메시지 전에도 "입력 중…"')}${tog('exp.typeIn','영상 · GIF: 내 메시지를 입력창에 타이핑 (타이핑하는 동안 "입력 중…" 말풍선도 같이 나와요)')}${tog('chat.autoRead','상대가 읽으면 카톡 "1" 자동 사라짐')}`);
+    <div class="sep"></div>${tog('chat.typing','입력 중… 말풍선 표시 (정지 화면 · PNG용, 영상 · GIF엔 안 나와요)')}${typOpts()}${tog('chat.autoRead','상대가 읽으면 카톡 "1" 자동 사라짐')}`);
 }
 function E_chat(){
   return card('대화방',`${fld('테마',sws('chat.theme',KT.map((t,i)=>[i,`linear-gradient(135deg,${t.bg} 55%,${t.r} 55%)`,t.n])))}
@@ -1706,7 +1961,7 @@ function E_export(){
     ${fld('속도',seg('exp.gifSpeed',[[0.75,'느리게'],[1,'보통'],[1.5,'빠르게'],[2.5,'아주 빠르게']]))}
     ${fld('화질',seg('exp.gifScale',[[1.5,'보통'],[2,'선명'],[3,'최고 (용량 큼)']]))}
     ${fld('배경',seg('exp.gifBg',[['#ffffff','흰색'],['#f3f3f5','회색'],['#000000','검정'],['transparent','투명']]))}
-    ${tog('exp.typing','상대 메시지 전에 "입력 중…" 넣기')}${tog('exp.typingMe','내 메시지 전에도 "입력 중…" 넣기')}${tog('exp.typeIn','내 메시지: 입력창에 타이핑 (타이핑하는 동안 "입력 중…" 말풍선도 같이 나와요)')}<div class="sep"></div>
+    ${typOpts()}<div class="sep"></div>
     <button class="btn full" data-act="gif">GIF 저장</button>`)
   +E_video()+card('프로젝트',`<div class="hint" style="margin-bottom:10px">작업 내용은 이 브라우저에 자동 저장돼요. 파일로 백업하거나 다른 기기로 옮길 수 있어요.</div>
     <div class="g2"><button class="btn ghost" data-act="saveJson">파일로 저장</button><label class="btn ghost upl">불러오기<input type="file" accept=".json,application/json" data-load></label></div>
@@ -1815,7 +2070,7 @@ const wantSfx=(s,side)=>s.exp.sfx==='all'||(s.exp.sfx==='me'&&side==='right');
 
 function applySlide(root,st){
   if(!st)return;
-  msgDeco(root,st);fxApply(root,st);sheetApply(root,st);ovApply(root,st);scrollApply(root,st);
+  msgDeco(root,st);fxApply(root,st);sheetApply(root,st);ovApply(root,st);scrollApply(root,st);rlApply(root,st);glApply(root,st);
   const ti=root.querySelector('.tl-inner');
   if(ti){
     if(st.tl&&st.tl._sc){
@@ -1845,6 +2100,8 @@ function applySlide(root,st){
   if(st.screen==='sms'){const c1=1.70158,bk=1+(c1+1)*Math.pow(t-1,3)+c1*Math.pow(t-1,2);last.style.transformOrigin=last.classList.contains('r')?'100% 100%':'0% 100%';last.style.transform=`translateY(${((1-e)*10).toFixed(1)}px) scale(${(.62+.38*bk).toFixed(3)})`;}
   else last.style.transform=`translateY(${((1-e)*8).toFixed(1)}px)`;
 }
+const TYP_MS=[0,1,2];
+function typFrames(mk,side,ms,base,keyp){TYP_MS.forEach(j=>mk(c=>{base(c);c._typing=side;c._dph=j;},ms/3,keyp+'_'+j));}
 function chatPlan(s){
   const gap=(s.exp.vidGap||1.2)*1000,F=[],ms=s.chat.messages.filter(visibleMsg),n=ms.length;
   const mk=(mod,delay,key,snd)=>{const c={...s,chat:{...s.chat,typing:false}};mod(c);F.push({s:c,delay:Math.round(delay),key,snd});};
@@ -1852,11 +2109,11 @@ function chatPlan(s){
   mk(c=>take(c,0),Math.min(800,gap*.7),'k0');
   for(let k=1;k<=n;k++){
     const m=ms[k-1],firstOfSide=(k===1||ms[k-2].side!==m.side);
-    if(s.exp.typing&&m.side==='left'&&firstOfSide){if(s.screen==='sms'){for(let j=0;j<3;j++)mk(c=>{take(c,k-1);c._typing=true;c._dph=j;},gap*.8/3,`t${k}_${j}`);}else mk(c=>{take(c,k-1);c._typing=true;},gap*.8,`t${k}`);}
+    if(s.exp.typing&&m.side==='left'&&firstOfSide)typFrames(mk,true,gap*.8,c=>take(c,k-1),`t${k}`);
     const typeIn=s.exp.typeIn&&m.side==='right'&&m.text&&m.text.trim()&&!(m.img&&m.img.url);
     if(typeIn){const ch=[...m.text.trim()],st=Math.min(ch.length,10),tot=Math.max(700,Math.min(2200,ch.length*90));
-      for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');mk(c=>{take(c,k-1);c._draft=txt;c._typing='right';},j===st?tot/st+260:tot/st,`d${k}_${j}`);}}
-    else if(s.exp.typingMe&&m.side==='right'&&firstOfSide){if(s.screen==='sms'){for(let j=0;j<3;j++)mk(c=>{take(c,k-1);c._typing='right';c._dph=j;},gap*.7/3,`tr${k}_${j}`);}else mk(c=>{take(c,k-1);c._typing='right';},gap*.7,`tr${k}`);}
+      for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');mk(c=>{take(c,k-1);c._draft=txt;c._typing='right';c._dph=j%3;},j===st?tot/st+260:tot/st,`d${k}_${j}`);}}
+    else if(s.exp.typingMe&&m.side==='right'&&firstOfSide)typFrames(mk,'right',gap*.7,c=>take(c,k-1),`tr${k}`);
     let sound=m.side;
     const stt=m.state,rx=!!m.react,pre=stt==='deleted'||stt==='failed'||rx,endD=k===n?Math.max(1600,gap*1.6):gap*.7;
     const cur=(c,ex)=>{take(c,k);c.chat.messages[k-1]={...c.chat.messages[k-1],...ex};};
@@ -2205,7 +2462,7 @@ function E_video(){
     ${S.exp.vidMode==='seq'?fld('화면 전환 효과',seg('exp.trans',[['cut','없음'],['fade','페이드'],['slide','밀어내기']])):''}
     ${fld('스크린샷 셔터 효과 (영상 맨 끝)',seg('exp.shutter',[['none','없음'],['flash','번쩍']]))}
     ${fld('강조 효과 (마지막 장면에서)',seg('exp.fx',[['none','없음'],['zoom','줌인'],['shake','흔들림']]))}${S.exp.fx==='zoom'?rng('exp.fxY',0,100,5,'확대 중심 세로 위치','%'):''}
-    ${S.screen==='face'?fld('영상통화 프레임',seg('exp.faceFps',[[8,'8fps'],[10,'10fps'],[15,'15fps']]))+tog('exp.vidAudio','넣은 영상의 소리 포함'):''}${S.screen==='call'?fld('전화 애니메이션 길이',seg('exp.callSec',[[3,'3초'],[5,'5초'],[8,'8초']])):''}${tog('exp.smooth','부드러운 스크롤 애니메이션')}${tog('exp.typing','상대 메시지 전에 "입력 중…" 넣기')}${tog('exp.typingMe','내 메시지 전에도 "입력 중…" 넣기')}
+    ${S.screen==='face'?fld('영상통화 프레임',seg('exp.faceFps',[[8,'8fps'],[10,'10fps'],[15,'15fps']]))+tog('exp.vidAudio','넣은 영상의 소리 포함'):''}${S.screen==='call'?fld('전화 애니메이션 길이',seg('exp.callSec',[[3,'3초'],[5,'5초'],[8,'8초']])):''}${tog('exp.smooth','부드러운 스크롤 애니메이션')}${typOpts()}
     ${fld('효과음',seg('exp.sfx',[['off','끄기'],['me','내 메시지'],['all','모든 메시지']]))}
     ${rng('exp.sfxVol',0,100,5,'볼륨','%')}${rng('exp.sfxOff',-300,300,10,'효과음 싱크 보정','ms')}<div class="sep"></div>
     <div class="g2"><button class="btn ghost" data-act="play">▶ 미리보기</button><button class="btn" data-act="vid">영상 저장</button></div>`);
@@ -2305,7 +2562,7 @@ function renderEditor(){
   let h='';
   if(ui.tab==='screen'){
     h=`<div class="sgrps">${SCREEN_GROUPS.map(([gl,ks])=>`<div class="sgrp"><div class="sgl">${gl}</div><div class="sgb">${ks.map(k=>`<button class="pkbtn ${S.screen===k?'on':''}" data-act="screen" data-val="${k}">${UI[k]}${screenLabel(k)}</button>`).join('')}</div></div>`).join('')}</div>`
-      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램'),tw:E_tw,tl:E_tl,news:E_news,dial:E_dial,story:E_story,recents:E_recents,profile:E_profile,search:E_search})[S.screen]();
+      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램'),tw:E_tw,tl:E_tl,news:E_news,dial:E_dial,story:E_story,post:E_post,reels:E_reels,igprof:E_igprof,igact:E_igact,reelv:E_reelv,yt:E_yt,recents:E_recents,profile:E_profile,search:E_search})[S.screen]();
   }else if(ui.tab==='device')h=E_device();
   else if(ui.tab==='ooc')h=E_ooc();
   else if(ui.tab==='extra')h=E_extra();
@@ -2330,6 +2587,10 @@ document.addEventListener('input',e=>{
 });
 const TPL={
   slot:()=>({id:uid(),img:null}),
+  pphoto:()=>({id:uid(),img:null}),gitem:()=>({id:uid(),img:null}),ighl:()=>({id:uid(),img:null,label:'하이라이트'}),
+  actitem:()=>({id:uid(),kind:'like',name:'username',av:null,text:'',time:'1일',thumb:null,sec:'',follow:false}),
+  ytc:()=>({id:uid(),av:null,name:'@username',time:'1일 전',text:'',likes:'0',replies:'',pin:false,hearted:false}),
+  rcomment:()=>({id:uid(),av:null,name:'username',time:'1일',text:'',likes:'0',replies:'',liked:false,author:false,ver:false}),
   call:()=>({id:uid(),name:'이름',kind:'missed',time:'오후 3:24'}),
   noti:()=>({id:uid(),app:'kakao',title:'',body:'',time:'지금'}),
   popmore:()=>{const P=S.exp.pop,L=[P,...(P.more||[])],l=L[L.length-1];return{id:uid(),app:l.app,title:l.title,body:'',time:'지금',at:Math.round(((+l.at||0)+(P.mode==='replace'?(+l.dur||3)-.5:1.5))*2)/2,dur:P.mode==='replace'?3:4};},
@@ -2445,6 +2706,7 @@ function expandForScrollCapture(scr,screen){
     set(box,'flex','none');set(box,'overflow','visible');set(box,'height','auto');
     set(inner,'transform','none');
   }
+  const gb=scr.querySelector('.gl-box');set(gb,'flex','none');set(gb,'overflow','visible');set(gb,'height','auto');set(scr.querySelector('.gl-grid'),'transform','none');
   const tab=scr.querySelector('.gl-tab');set(tab,'display','none');   // 하단 탭 바는 캡처에 안 넣어요
   const home=scr.querySelector('.home');set(home,'display','none');
   set(scr,'height','auto');set(scr,'overflow','visible');
@@ -2497,10 +2759,10 @@ function buildFrames(s){
       push(c=>take(c,0),D);
       const ms=s.chat.messages.filter(visibleMsg);
       for(let k=1;k<=n;k++){
-        if(s.exp.typing&&ms[k-1].side==='left'&&(k===1||ms[k-2].side!=='left'))push(c=>{take(c,k-1);c._typing=true;},D*.9);
+        if(s.exp.typing&&ms[k-1].side==='left'&&(k===1||ms[k-2].side!=='left'))[0,1,2].forEach(j=>push(c=>{take(c,k-1);c._typing=true;c._dph=j;},D*.9/3));
         const mk1=ms[k-1],typeIn=s.exp.typeIn&&mk1.side==='right'&&mk1.text&&mk1.text.trim()&&!(mk1.img&&mk1.img.url);
-        if(typeIn){const ch=[...mk1.text.trim()],st=Math.min(ch.length,5);for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');push(c=>{take(c,k-1);c._draft=txt;c._typing='right';},(j===st?D*.55:D*.3));}}
-        else if(s.exp.typingMe&&mk1.side==='right'&&(k===1||ms[k-2].side!=='right'))push(c=>{take(c,k-1);c._typing='right';},D*.7);
+        if(typeIn){const ch=[...mk1.text.trim()],st=Math.min(ch.length,5);for(let j=1;j<=st;j++){const txt=ch.slice(0,Math.round(ch.length*j/st)).join('');push(c=>{take(c,k-1);c._draft=txt;c._typing='right';c._dph=j%3;},(j===st?D*.55:D*.3));}}
+        else if(s.exp.typingMe&&mk1.side==='right'&&(k===1||ms[k-2].side!=='right'))[0,1,2].forEach(j=>push(c=>{take(c,k-1);c._typing='right';c._dph=j;},D*.7/3));
         push(c=>take(c,k),k===n?hold:D);
       }break;}
     case'face':{
@@ -2531,6 +2793,28 @@ function buildFrames(s){
       sl.forEach((x,i)=>{const vo=SVID[x.id],dur=vo?Math.min(15,vo.dur||3):ip,fps=vo?8:4,n=Math.max(2,Math.round(dur*fps));
         for(let j=1;j<=n;j++){push(c=>{c.story._cur=i;c.story._p=j/n;},(j===n&&i===sl.length-1)?hold*.6:(vo?1000/fps:1000/fps/sp));F[F.length-1].sv={i,t:(j-1)/fps};}
       });break;}
+    case'igprof':{if(s.igprof.btn!=='following'||!s.igprof.fanim){push(()=>{},hold);break;}push(c=>{c._fl=0;},D);push(c=>{c._fl=1;},hold);break;}
+    case'igact':case'yt':{const K=s.screen,n=(s[K].items||[]).length;if(!s[K].anim||!n){push(()=>{},hold);break;}
+      push(c=>{c[K].items=[];},D*.8);
+      for(let k=1;k<=n;k++){for(const q of [.25,.55,.85])push(c=>{c[K].items=c[K].items.slice(0,k);c._aq=q;},48/sp);push(c=>{c[K].items=c[K].items.slice(0,k);},k===n?hold:D*.5);}break;}
+    case'reelv':{if(!s.reelv.dtap){push(()=>{},hold);break;}push(c=>{c._pl=0;},D);for(const t of [.06,.14,.24,.36,.5,.64,.78,.9])push(c=>{c._pl=t;},46/sp);push(c=>{c._pl=1;},hold);break;}
+    case'post':{
+      if(!s.post.dtap){push(()=>{},hold);break;}
+      push(c=>{c._pl=0;},D);
+      for(const t of [.06,.14,.24,.36,.5,.64,.78,.9])push(c=>{c._pl=t;},46/sp);
+      push(c=>{c._pl=1;},hold);break;}
+    case'reels':{
+      const R=s.reels,n=(R.comments||[]).filter(Boolean).length,an=!!R.anim&&n>0,sc=!!R.scroll;
+      const cut=(c,k)=>{c.reels.comments=c.reels.comments.filter(Boolean).slice(0,k);};
+      if(an){
+        push(c=>{cut(c,0);c._rs=0;},D*.8);
+        for(let k=1;k<=n;k++){
+          for(const q of [.2,.5,.8])push(c=>{cut(c,k);c._rq=q;c._rs=0;},48/sp);
+          push(c=>{cut(c,k);c._rs=0;},(k===n&&!sc)?hold:D*.55);
+        }
+      }else push(c=>{c._rs=0;},sc?D:hold);
+      if(sc)for(let i=1;i<=18;i++){const e=(1-Math.cos(Math.PI*i/18))/2;push(c=>{c._rs=e;},i===18?hold:65/sp);}
+      break;}
     case'profile':{push(c=>{c._pt=0;},D*1.3);for(const t of [.12,.25,.4,.55,.7,.85])push(c=>{c._pt=t;},75/sp);push(c=>{c._pt=1;},hold);break;}
     case'search':{const st=hgSteps(s.search.query||''),n=st.length,cps=Math.max(1,+s.search.cps||7),sy=Math.max(1,[...(s.search.query||'')].length);push(c=>{c.search._k=0;c.search._j=0;},700);st.forEach((k,j)=>push(c=>{c.search._k=j+1;c.search._j=j+1;},1000/cps*(sy/Math.max(1,n))*(.78+.44*((j*37)%10)/10)));for(let j=1;j<=4;j++)push(c=>{c.search._k=n;c.search._j=n+j;},j===4?hold:130);break;}
     case'recents':{const n=s.recents.items.length;push(c=>{c.recents.items=[];},D*.8);for(let k=1;k<=n;k++){for(const t of [.35,.7])push(c=>{c.recents.items=c.recents.items.slice(0,k);c._rp=t;},55/sp);push(c=>{c.recents.items=c.recents.items.slice(0,k);},k===n?hold:D*.55);}break;}
@@ -2546,7 +2830,11 @@ function buildFrames(s){
         }
         push(c=>{c._gi=(start+n-1)%n;c._gq=0;},hold);break;
       }
-      const n=Math.min(s.gallery.items.length,40),sc=s.gallery.scroll&&n>s.gallery.cols*4;for(let k=0;k<=n;k++)push(c=>{c.gallery.items=c.gallery.items.slice(0,k);},(k===n&&!sc)?hold:D*.6);if(sc)for(let i=1;i<=18;i++){const e=(1-Math.cos(Math.PI*i/18))/2;push(c=>{c._gs=e;},i===18?hold:65/sp);}break;}
+      const G=s.gallery,tot=G.items.length,n=Math.min(tot,40),sc=!!G.scroll&&tot>G.cols*4;
+       if(G.fill!==false){for(let k=0;k<=n;k++)push(c=>{c.gallery.items=c.gallery.items.slice(0,k);c._gs=0;},(k===n&&!sc)?hold:D*.6);}
+       else push(c=>{c._gs=0;},sc?D:hold);
+       if(sc)for(let i=1;i<=18;i++){const e=(1-Math.cos(Math.PI*i/18))/2;push(c=>{c._gs=e;},i===18?hold:65/sp);}
+       break;}
   }
   return F;
 }
@@ -2668,7 +2956,7 @@ function x_ntFx(isNew,q,sh){
   return '';
 }
 function x_glS(s){
-  if(s._gs==null)return '';const g=s._gs,av=DIMS[s.device.ratio||'phone'][1]-216;
+  return '';const g=s._gs,av=DIMS[s.device.ratio||'phone'][1]-216;
   return`transform:translateY(calc(${(-g*100).toFixed(2)}% + ${(g*av).toFixed(1)}px))`;
 }
 function x_igG(i,n){const w=Math.min(8,n),k=Math.max(0,i-(n-w)),t=w>1?k/(w-1):0,a=[207,0,199],b=[91,60,245];return`rgb(${a.map((x,m)=>Math.round(x+(b[m]-x)*t))})`;}
@@ -2702,7 +2990,7 @@ async function playPreview(){
 }
 function E_lock(){return E_lock0()+card('알림 연출',`${tog('lock.newTop','새 알림이 위에 쌓이고, 기존 알림은 아래로 밀리기')}${tog('lock.shake','알림이 뜰 때 팝업 흔들림(진동)')}${tog('lock.snd','알림음 재생 (상단 팝업 알림과 같은 소리)')}${S.lock.snd!==false?rng('exp.pop.vol',0,100,5,'알림음 볼륨','%')+'<button class="btn line" style="width:100%;margin:2px 0 8px" data-act="popTest">🔔 알림음 들어보기</button>'+soundPickBtn():''}<div class="hint" style="margin-top:6px">▶ 미리보기 · GIF · 영상에서 알림이 하나씩 떨어지며 연달아 쌓여요. 알림음은 알림이 뜨는 순간마다 나고, 영상(MP4/WebM)과 미리보기에 들어가요. '새 알림이 위에 쌓이기'를 켜면 목록의 <b>맨 아래(마지막) 알림이 화면 맨 위</b>에 보여요.</div>`);}
 function E_call(){const C=S.call;return E_call0()+card('수신 화면 옵션',`${fld('화면 스타일',seg('call.style',[['full','전체 화면'],['banner','상단 배너']]))}${C.style!=='banner'?tog('call.swipe','밀어서 수락 애니메이션'):''}<label class="btn line upl">＋ 벨소리 mp3 넣기<input type="file" accept="audio/*" data-ring></label><div class="hint" style="margin-top:8px">${RING?esc(RING.name)+' 적용됨 · ':''}벨소리는 ▶ 미리보기에서 재생돼요. (GIF·영상 파일에는 소리가 들어가지 않아요)</div>`);}
-function E_gallery(){const G=S.gallery;return E_gallery0()+(G.view==='grid'?card('스크롤',`${tog('gallery.scroll','사진이 채워진 뒤 아래로 스크롤')}<div class="hint" style="margin-top:6px">사진이 ${G.cols*4}장보다 많을 때 적용돼요.</div>`):'');}
+function E_gallery(){const G=S.gallery;return E_gallery0()+(G.view==='grid'?card('사진 채우기',`${tog('gallery.fill','사진이 하나씩 채워지는 연출')}<div class="hint" style="margin-top:6px">끄면 처음부터 사진이 모두 채워진 화면으로 시작해요.</div>`)+card('스크롤',`${tog('gallery.scroll','아래로 스크롤')}${G.scroll?rng('gallery.scrollAt',0,100,1,'정지 화면 위치','%'):''}<div class="hint" style="margin-top:6px">채우기와 따로 동작해요. 둘 다 켜면 다 채운 뒤 스크롤하고, 스크롤만 켜면 바로 내려가요. 사진이 ${G.cols*4}장보다 많을 때 적용되고, 슬라이더는 PNG 등 정지 화면의 위치예요.</div>`):'');}
 /* 한글을 실제 키보드처럼 자모 한 개씩 쳤을 때의 (조합 중인 글자, 눌린 키) 목록 */
 const HG_CHO='ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ',HG_JUNG='ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ',HG_JONG=' ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ';
 const HG_SPLIT={ㅘ:'ㅗㅏ',ㅙ:'ㅗㅐ',ㅚ:'ㅗㅣ',ㅝ:'ㅜㅓ',ㅞ:'ㅜㅔ',ㅟ:'ㅜㅣ',ㅢ:'ㅡㅣ',ㄳ:'ㄱㅅ',ㄵ:'ㄴㅈ',ㄶ:'ㄴㅎ',ㄺ:'ㄹㄱ',ㄻ:'ㄹㅁ',ㄼ:'ㄹㅂ',ㄽ:'ㄹㅅ',ㄾ:'ㄹㅌ',ㄿ:'ㄹㅍ',ㅀ:'ㄹㅎ',ㅄ:'ㅂㅅ'};
@@ -2737,7 +3025,7 @@ function screenSearch(s){
   const rows0=n>0?sg.map((t,i)=>{const o=anim?Math.min(1,Math.max(0,(j-2-i*1.6)/3)):1,hi=t.startsWith(typed.slice(0,-1)||typed);const p=hi?[...t].findIndex((c,x)=>c!==[...typed][x]):-1,cut=hi?(p<0?[...typed].length:p):0;return`<div style="display:flex;align-items:center;gap:12px;padding:11px 18px;border-bottom:.5px solid #e6e6ea;opacity:${o.toFixed(2)};transform:translateY(${((1-o)*7).toFixed(1)}px)">${mg}<div style="flex:1;font-size:16.5px;color:#3a3a3c;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${hi?`<span style="color:#000">${esc([...t].slice(0,cut).join(''))}</span><b style="font-weight:400;color:#8e8e93">${esc([...t].slice(cut).join(''))}</b>`:esc(t)}</div><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#c0c0c6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 17L7 7M7 15V7h8"/></svg></div>`;}).join(''):'';
   const car=`<i class="crt2${live?' lv':''}" style="${anim?`opacity:${(j>steps.length&&(j-steps.length)%2)?0:1}`:''}"></i>`;
   const clr=n>0?'<span style="margin-left:auto;width:17px;height:17px;border-radius:50%;background:#b9b9bf;display:flex;align-items:center;justify-content:center;flex:none"><svg width="9" height="9" viewBox="0 0 10 10" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><path d="M2 2l6 6M8 2l-6 6"/></svg></span>':'';
-  const bar0=`<div style="display:flex;align-items:center;gap:12px;padding:54px 14px 8px"><div style="flex:1;display:flex;align-items:center;gap:8px;height:38px;padding:0 10px;border-radius:11px;background:#eeeef0;min-width:0">${mg}<span style="font-size:17px;color:${n?'#000':'#8e8e93'};white-space:nowrap;overflow:hidden;letter-spacing:-.2px">${n?esc(typed)+car:car+esc(Q.ph)}</span>${clr}</div><span style="color:#0a84ff;font-size:17px">취소</span></div>`;
+  const bar0=`<div style="display:flex;align-items:center;gap:12px;padding:54px 14px 8px"><div style="flex:1;display:flex;align-items:center;gap:8px;height:44px;padding:0 14px;border-radius:22px;background:rgba(118,118,128,.12);min-width:0">${mg}<span style="font-size:17px;color:${n?'#000':'#8e8e93'};white-space:nowrap;overflow:hidden;letter-spacing:-.2px">${n?esc(typed)+car:car+esc(Q.ph)}</span>${clr}</div><span style="color:#0a84ff;font-size:17px">취소</span></div>`;
   const SK=Q.style||'google',NV=SK==='naver',GG=SK==='google';
   const gi=(d,c='#9aa0a6',w=18)=>`<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none">${d}</svg>`;
   const I_MG=gi('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/>'),I_HI=gi('<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'),I_UP=gi('<path d="M17 17L7 7M7 15V7h8"/>','#b0b4b9',16);
@@ -2745,12 +3033,12 @@ function screenSearch(s){
     const o=anim?Math.min(1,Math.max(0,(j-2-i*1.6)/3)):1,hi=t.startsWith(typed.slice(0,-1)||typed),p=hi?[...t].findIndex((c,x)=>c!==[...typed][x]):-1,cut=hi?(p<0?[...typed].length:p):0;
     const A=esc([...t].slice(0,cut).join('')),B=esc([...t].slice(cut).join(''));
     const tx=!hi?esc(t):NV?`<span style="color:#03c75a">${A}</span>${B}`:`<span>${A}</span><b style="font-weight:700">${B}</b>`;
-    return`<div style="display:flex;align-items:center;gap:${GG?16:12}px;padding:${GG?'12px 16px':'11px 14px'};opacity:${o.toFixed(2)};transform:translateY(${((1-o)*7).toFixed(1)}px)">${GG&&i===0?I_HI:I_MG}<div style="flex:1;font-size:${GG?17:16.5}px;color:${GG?'#202124':'#222'};letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tx}</div>${I_UP}</div>`;}).join('')+`<div style="padding:12px 16px;font-size:12px;color:#8e8e93;text-align:${NV?'right':'center'}">${NV?'자동완성 끄기':'부적절한 예상 검색어 신고'}</div>`:'';
+    return`<div style="display:flex;align-items:center;gap:${GG?16:12}px;padding:${GG?'12px 16px':'13px 14px'}${NV?';border-bottom:1px solid #f0f0f0':''};opacity:${o.toFixed(2)};transform:translateY(${((1-o)*7).toFixed(1)}px)">${GG&&i===0?I_HI:I_MG}<div style="flex:1;font-size:${GG?17:16.5}px;color:${GG?'#202124':'#222'};letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${tx}</div>${I_UP}</div>`;}).join('')+`<div style="padding:12px 16px;font-size:12px;color:#8e8e93;text-align:${NV?'right':'center'}">${NV?'자동완성 끄기':'부적절한 예상 검색어 신고'}</div>`:'';
   const cur=`<span style="flex:1;min-width:0;font-size:17px;color:${n?'#000':'#8e8e93'};white-space:nowrap;overflow:hidden;letter-spacing:-.2px">${n?esc(typed)+car:car+esc(Q.ph)}</span>`;
   const clrN=n>0?`<span style="width:${GG?24:20}px;height:${GG?24:20}px;border-radius:50%;background:${GG?'transparent':'#b9b9bf'};display:flex;align-items:center;justify-content:center;flex:none">${gi('<path d="M6 6l12 12M18 6L6 18"/>',GG?'#5f6368':'#fff',GG?20:11)}</span>`:'';
   const barN=NV
-    ?`<div style="display:flex;align-items:center;padding:54px 12px 10px"><div style="flex:1;display:flex;align-items:center;gap:8px;height:46px;padding:0 4px 0 10px;border-radius:6px;border:2px solid #03c75a;background:#fff;min-width:0"><span style="width:22px;height:22px;border-radius:5px;background:#03c75a;color:#fff;font:800 14px/22px Arial,sans-serif;text-align:center;flex:none">N</span>${cur}${clrN}<span style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex:none">${gi('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/>','#03c75a',23)}</span></div></div><div style="height:1px;background:#e5e5e5"></div>`
-    :`<div style="display:flex;align-items:center;gap:10px;padding:54px 12px 10px"><span style="flex:none;display:flex;padding:0 2px">${gi('<path d="M19 12H5M11 6l-6 6 6 6"/>','#202124',24)}</span><div style="flex:1;display:flex;align-items:center;gap:8px;height:46px;padding:0 14px 0 18px;border-radius:23px;background:#f1f3f4;min-width:0">${cur}${clrN}${n?'':gi('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.500 11.500a6.500 6.500 0 0 0 13 0M12 18v3"/>','#4285f4',22)}</div></div>`;
+    ?`<div style="display:flex;align-items:center;padding:54px 12px 10px"><div style="flex:1;display:flex;align-items:center;gap:8px;height:46px;padding:0 4px 0 10px;border-radius:10px;border:2.5px solid #03c75a;box-shadow:0 1px 4px rgba(3,199,90,.18);background:#fff;min-width:0"><span style="width:22px;height:22px;border-radius:5px;background:#03c75a;color:#fff;font:800 14px/22px Arial,sans-serif;text-align:center;flex:none">N</span>${cur}${clrN}${n?'':GDOT}<span style="width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex:none">${gi('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L20 20"/>','#03c75a',23)}</span></div></div><div style="height:1px;background:#e5e5e5"></div>`
+    :`<div style="display:flex;align-items:center;gap:10px;padding:54px 12px 10px"><span style="flex:none;display:flex;padding:0 2px">${gi('<path d="M19 12H5M11 6l-6 6 6 6"/>','#202124',24)}</span><div style="flex:1;display:flex;align-items:center;gap:8px;height:46px;padding:0 14px 0 18px;border-radius:23px;background:#fff;box-shadow:0 1px 6px rgba(32,33,36,.28);min-width:0">${cur}${clrN}${n?'':gi('<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.500 11.500a6.500 6.500 0 0 0 13 0M12 18v3"/>','#4285f4',22)+LENS}</div></div><div style="height:1px;background:#ebebeb"></div>`;
   const rows=SK==='ios'?rows0:rowsN,bar=SK==='ios'?bar0:barN;
   let kb='';
   if(tall&&(n>0||anim)){
@@ -2775,6 +3063,7 @@ function X_AV(k){
   return`<svg viewBox="0 0 40 40" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${P[0]}"/><stop offset="1" stop-color="${P[1]}"/></linearGradient></defs><rect width="40" height="40" fill="url(#${id})"/><circle cx="20" cy="15.5" r="6.6" fill="#fff" opacity=".96"/><path d="M6.5 41c0-9.6 5.8-14.8 13.5-14.8S33.5 31.4 33.5 41z" fill="#fff" opacity=".96"/></svg>`;
 }
 
+const typOpts=()=>`<div class="lb" style="margin:10px 0 4px">입력 중 표시 (GIF · 영상)</div>${tog('exp.typing','상대 메시지 전에 점 3개 말풍선')}${tog('exp.typingMe','내 메시지 전에 점 3개 말풍선')}${tog('exp.typeIn','내 메시지를 입력창에 타이핑 (말풍선도 같이)')}<div class="hint" style="margin:4px 0 8px">세 옵션 모두 점이 순서대로 깜빡여요.</div>`;
 function E_extra(){
   const sc=SCROLL_SEL[S.screen]?card('화면 끊기게 스크롤',`${tog('exp.scrollFx','메시지가 올라올 때 화면이 한 칸씩 끊기며 스크롤')}<div class="hint" style="margin-top:6px">현재 화면(${screenLabel(S.screen)})의 ▶ 미리보기 · GIF · 영상에 적용돼요.</div>`):'';
   return E_pop()+sc;
@@ -2797,6 +3086,19 @@ async function x_typeBuf(){
 }
 const typeOn=()=>S.search.snd!==false&&(S.screen==='search'||(S.exp.vidMode==='seq'&&(S.exp.vidSeq||[]).includes('search')));
 
+/* 갤러리 스크롤: 실제 높이를 재서 끝까지 정확히 내려가요 (채우기 옵션과 무관) */
+function glApply(root,st){
+  if(st.screen!=='gallery'||!st.gallery||st.gallery.view==='viewer')return;
+  const box=root.querySelector('.gl-box'),grid=root.querySelector('.gl-grid');if(!box||!grid)return;
+  const g=st._gs!=null?st._gs:(st.gallery.scroll?(+st.gallery.scrollAt||0)/100:0);
+  const max=Math.max(0,grid.offsetHeight-box.clientHeight);
+  grid.style.transform=(max&&g)?`translateY(${(-g*max).toFixed(1)}px)`:'';
+}
+const LENS='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round" style="flex:none"><path d="M4 9V6.5A2.5 2.5 0 0 1 6.5 4H9" stroke="#ea4335"/><path d="M15 4h2.5A2.5 2.5 0 0 1 20 6.5V9" stroke="#4285f4"/><path d="M20 15v2.5a2.5 2.5 0 0 1-2.5 2.5H15" stroke="#34a853"/><path d="M9 20H6.5A2.5 2.5 0 0 1 4 17.5V15" stroke="#fbbc05"/><circle cx="12" cy="12" r="2.6" fill="#4285f4" stroke="none"/></svg>';
+const GDOT='<span style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex:none"><span style="width:24px;height:24px;border-radius:50%;background:#03c75a;display:flex;align-items:center;justify-content:center"><span style="width:8px;height:8px;border-radius:50%;background:#fff"></span></span></span>';
+
+const LK_FLASH=c=>`<svg width="26" height="26" viewBox="0 0 24 24"><path fill="${c}" fill-rule="evenodd" d="M7.500 2.500h9v3.500l-2 2.500v.7H9.500v-.7l-2-2.500zM9.500 10.800h5V20a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2zM12 13a1.100 1.100 0 1 0 0 2.200 1.100 1.100 0 0 0 0-2.200z"/></svg>`;
+const LK_CAM=c=>`<svg width="27" height="27" viewBox="0 0 24 24"><path fill="${c}" fill-rule="evenodd" d="M8.300 4.500h7.400l1.200 1.700H19a2.500 2.500 0 0 1 2.500 2.500v8.800A2.500 2.500 0 0 1 19 20H5a2.500 2.500 0 0 1-2.500-2.500V8.700A2.500 2.500 0 0 1 5 6.200h2.100zM12 9.200a3.800 3.800 0 1 0 0 7.600 3.800 3.800 0 0 0 0-7.600zM12 10.600a2.400 2.400 0 1 1 0 4.800 2.400 2.400 0 0 1 0-4.800z"/></svg>`;
 /* ═════════════ Boot ═════════════ */
 renderEditor();renderPreview();
 if(document.fonts)document.fonts.ready.then(fit);
