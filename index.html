@@ -985,6 +985,68 @@ body.dr-on #drawer{transform:none}
 .nt-ic{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 1px 3px rgba(0,0,0,.18)}
 .nt-h{font-weight:600}
 .lk-btn{background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(24px) saturate(1.6);backdrop-filter:blur(24px) saturate(1.6);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.42),inset 0 -1px 0 rgba(255,255,255,.08),inset 0 0 0 .5px rgba(255,255,255,.18),0 4px 14px rgba(0,0,0,.18)}
+
+/* ═════ v8 · iOS 26 Photos · 전화 수신 다듬기 ═════ */
+.scr .gl-tab{left:16px!important;right:auto!important;width:calc(100% - 100px)!important;justify-content:center;gap:2px}
+.scr .gl-tab div{width:50%!important;flex-direction:row!important;gap:6px!important;font-size:13px!important;font-weight:600;color:#3c3c43}
+.scr .gl-tab div.on{color:#0a84ff;background:rgba(120,120,128,.2);box-shadow:inset 0 .5px 0 rgba(255,255,255,.7)}
+.gl-srch{position:absolute;right:16px;bottom:24px;width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:4;background:rgba(249,249,251,.76);backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) saturate(1.8);box-shadow:0 8px 28px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.8),inset 0 0 0 .5px rgba(0,0,0,.07)}
+.pv .gl-srch{backdrop-filter:none;-webkit-backdrop-filter:none}
+.gl-t{transform-origin:center}
+.gl-cnt{text-align:center;padding:18px 0 130px;color:#000}.gl-cnt b{display:block;font-size:17px;font-weight:600}.gl-cnt span{font-size:13px;color:#8e8e93}
+.aur{position:absolute;border-radius:50%;filter:blur(46px);pointer-events:none;width:300px;height:300px}
+.aur.a1{left:-90px;top:60px;background:radial-gradient(circle,rgba(88,120,255,.55),transparent 68%)}
+.aur.a2{right:-110px;bottom:120px;background:radial-gradient(circle,rgba(190,90,255,.42),transparent 68%)}
+.aur.lv{animation:aurA 7s ease-in-out infinite alternate}.aur.a2.lv{animation-name:aurB}
+@keyframes aurA{to{transform:translate(48px,56px) scale(1.18)}}@keyframes aurB{to{transform:translate(-52px,-44px) scale(1.15)}}
+.cl-av{width:104px;height:104px;margin:0 auto 22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:46px;font-weight:500;color:#fff;background:linear-gradient(160deg,#9aa0ad,#6b7080);box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 12px 30px rgba(0,0,0,.35)}
+.scr .cl-it .c.b{box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4),inset 0 -6px 12px rgba(0,0,0,.12),0 10px 26px rgba(0,0,0,.32)}
+.scr .cl{padding-top:88px}
+@media (prefers-reduced-motion:reduce){.aur.lv{animation:none}}
+
+/* ═════ v9 · 상단 버튼 · 전화 걸기 · 영상통화 ═════ */
+.acts .btn.play{background:#111;border-color:#111;color:#fff;box-shadow:none}
+.acts .btn.play:hover{background:#000;border-color:#000;box-shadow:none}
+.cl-av.sm{width:88px;height:88px;font-size:38px;margin-bottom:18px}
+.cl-av.ringing{animation:avr 1.6s ease-out infinite}
+@keyframes avr{0%{box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 0 0 0 rgba(255,255,255,.28)}100%{box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 0 0 26px rgba(255,255,255,0)}}
+.scr .cl-it .c.s.dl{background:rgba(255,255,255,.16)!important}
+.dl-g .cl-it{font-size:12.5px;gap:8px;min-height:96px}
+.fc-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:16px;background:rgba(120,120,128,.34);box-shadow:inset 0 .5px 0 rgba(255,255,255,.3);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);font-size:14px;opacity:1}
+.pv .fc-pill{-webkit-backdrop-filter:none;backdrop-filter:none}
+.fc-dot{width:7px;height:7px;border-radius:50%;background:#34c759;flex:none}
+.fc-ph{width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:54px;font-weight:500;color:#fff;background:linear-gradient(160deg,rgba(255,255,255,.22),rgba(255,255,255,.08));box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+.scr .fc-pip{box-shadow:0 10px 28px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.22)}
+.scr .fc-btn{box-shadow:inset 0 1px 0 rgba(255,255,255,.34),inset 0 -6px 12px rgba(0,0,0,.1)}
+.scr .fc-btn.red{box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4),0 6px 18px rgba(255,59,48,.4)}
+@media (prefers-reduced-motion:reduce){.cl-av.ringing{animation:none}}
+
+/* ═════ v10 · iOS 26 스타일 전화 걸기 · 영상통화 ═════ */
+.scr .cl-sub.dsub{font-size:18px;margin-top:6px}
+.scr .cl.dialtop .cl-name{margin-top:0}
+.scr .cl-it .c.s.dl{background:rgba(255,255,255,.17)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.42),inset 0 -8px 14px rgba(255,255,255,.04),inset 0 0 0 .5px rgba(255,255,255,.18),0 8px 20px rgba(0,0,0,.2)!important}
+.ein{animation:einA .6s cubic-bezier(.2,.8,.2,1) both}
+@keyframes einA{from{opacity:0;transform:translateY(-14px)}}
+.cl-it.ein{animation-name:einB}
+@keyframes einB{from{opacity:0;transform:translateY(24px) scale(.85)}}
+.fc-bar.ein{animation-name:einC}
+@keyframes einC{from{opacity:0;transform:translateY(44px)}}
+.fc-pip.ein{animation-name:einD}
+@keyframes einD{from{opacity:0;transform:translateY(30px) scale(.86)}}
+.fph{position:relative;width:120px;height:120px}
+.fph-r{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);background:rgba(255,255,255,.06)}
+.fph-r.lv{animation:fphA 2.2s ease-out infinite}.fph-r.lv.d{animation-delay:1.1s}
+@keyframes fphA{from{transform:scale(1);opacity:.32}to{transform:scale(1.55);opacity:0}}
+.fc-ph{position:relative}
+.fc-ph.lvb{animation:fphB 4s ease-in-out infinite}
+@keyframes fphB{50%{transform:scale(1.03)}}
+.fc-dot.lv{animation:dotp 1.6s ease-in-out infinite}
+@keyframes dotp{50%{opacity:.4}}
+.scr .fc-bar{padding:22px 18px 18px!important;background:rgba(60,60,64,.4)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.34),inset 0 0 0 .5px rgba(255,255,255,.16),0 14px 36px rgba(0,0,0,.32)!important}
+.scr .fc-btn{width:54px;height:54px;background:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.42),inset 0 0 0 .5px rgba(255,255,255,.16)}
+.scr .fc-btn.red{background:#ff3b30;box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4),0 6px 18px rgba(255,59,48,.4)}
+.scr .fc-pip{top:auto!important;bottom:150px;right:16px;border-radius:22px;box-shadow:0 10px 28px rgba(0,0,0,.42),0 0 0 1px rgba(255,255,255,.22)}
+@media (prefers-reduced-motion:reduce){.ein,.fph-r.lv,.fc-ph.lvb,.fc-dot.lv{animation:none}}
 </style>
 </head>
 <body>
@@ -995,9 +1057,9 @@ body.dr-on #drawer{transform:none}
     <div class="acts">
       <button class="btn sm ghost" data-act="copy">복사</button>
       <button class="btn sm ghost" data-act="png">PNG</button>
-      <button class="btn sm ghost" data-act="play">▶ 미리보기</button>
+      <button class="btn sm ghost" data-act="vid">영상</button>
       <button class="btn sm ghost" data-act="gif">GIF</button>
-      <button class="btn sm" data-act="vid">영상</button>
+      <button class="btn sm play" data-act="play">▶ 미리보기</button>
     </div>
   </header>
   <aside class="panel"><div class="pbody" id="pbody"></div></aside>
@@ -1196,7 +1258,7 @@ const LK_MAX={phone:6,vert:4,horiz:2,four:2};
 const lkMax=s=>LK_MAX[(s.device&&s.device.ratio)||'phone']||6;
 /* 칸 수를 넘는 알림은 아래에서 새로 올라오고, 기존 알림은 한 칸씩 위로 밀려나요 */
 function lkShown(s){const mx=lkMax(s),ns=s.lock.notis;return ns.length>mx?ns.slice(-mx):ns.slice();}
-const DIMS={phone:[380,824],vert:[380,676],horiz:[760,428],four:[600,450]};
+const DIMS={phone:[380,740],vert:[380,676],horiz:[760,428],four:[600,450]};
 function imgLayout(im,ca){
   const a=im.ar||1,z=Math.max(1,(im.z||100)/100),H=1/ca;
   let iw=Math.max(1,a*H),ih=iw/a;iw*=z;ih*=z;
@@ -1355,18 +1417,39 @@ function screenSms(s){
 }
 const FC_FLIP='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 13.5-5.8L20 8.5M20 4v4.5h-4.5M20 12a8 8 0 0 1-13.5 5.8L4 15.5M4 20v-4.5h4.5"/></svg>';
 function screenFace(s){
-  const F=s.face;
-  const bg=`<div class="bgl" style="background:linear-gradient(175deg,#4a4d55,#1b1c20)">${F.other?.url?bgImg(F.other,SA):`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center"><div style="display:flex;width:34px;height:34px;transform:scale(3.2)">${I.person('rgba(255,255,255,.14)')}</div></div>`}</div>`;
-  const body=`<div class="fc-shade"></div><div class="fc-top"><h2>${esc(F.name)}</h2><p>${esc(F.status)}</p></div>
-  ${F.pip?`<div class="fc-pip">${F.me?.url?bgImg(F.me,104/156):`<div style="position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center">${I.person('rgba(255,255,255,.35)')}</div>`}<i class="fc-flip">${FC_FLIP}</i></div>`:''}
-  <div class="fc-bar"><div class="fc-btn">${I.speaker('#fff')}</div><div class="fc-btn">${I.video('#fff')}</div><div class="fc-btn">${I.mic('#fff')}</div><div class="fc-btn red">${I.phone('#fff',28,135)}</div></div>`;
+  const F=s.face,t=s._ct,an=t!=null,lv=!an&&!s._still;
+  const q=(d,l)=>an?Math.min(1,Math.max(0,(t-d)/l)):1,e3=x=>1-Math.pow(1-x,3);
+  const ini=esc([...String(F.name||'?').trim()][0]||'?');
+  const hasV=!!(F.other&&F.other.url);
+  let rings='';
+  if(!hasV){
+    if(an){for(const o of [0,.5]){const p=((t/2.2)+o)%1;rings+=`<i class="fph-r" style="transform:scale(${(1+p*.55).toFixed(3)});opacity:${(.32*(1-p)).toFixed(2)}"></i>`;}}
+    else if(lv)rings='<i class="fph-r lv"></i><i class="fph-r lv d"></i>';
+  }
+  const dx=an?Math.sin(t*.8)*30:0,dy=an?Math.cos(t*.6)*36:0,ds=an?1+Math.sin(t*.7)*.1:1;
+  const d1=an?`transform:translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px) scale(${ds.toFixed(3)})`:'';
+  const d2=an?`transform:translate(${(-dx).toFixed(1)}px,${(-dy).toFixed(1)}px) scale(${(2-ds).toFixed(3)})`:'';
+  const aur=hasV?'':`<i class="aur a1${lv?' lv':''}" style="${d1}"></i><i class="aur a2${lv?' lv':''}" style="${d2}"></i>`;
+  const breathe=an?`transform:scale(${(1+Math.sin(t*2)*.02).toFixed(3)})`:'';
+  const bg=`<div class="bgl" style="background:linear-gradient(175deg,#4a4d55,#1b1c20)">${aur}${hasV?bgImg(F.other,SA):`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center"><div class="fph">${rings}<div class="fc-ph${lv?' lvb':''}" style="${breathe}">${ini}</div></div></div>`}</div>`;
+  const qt=e3(q(0,.6)),qb=e3(q(.1,.6)),qp=e3(q(.35,.6));
+  const st=qt<1?`opacity:${qt.toFixed(2)};transform:translateY(${((1-qt)*-12).toFixed(1)}px)`:'';
+  const sb=qb<1?`opacity:${qb.toFixed(2)};transform:translateY(${((1-qb)*44).toFixed(1)}px)`:'';
+  const sp=qp<1?`opacity:${qp.toFixed(2)};transform:translateY(${((1-qp)*30).toFixed(1)}px) scale(${(.86+.14*qp).toFixed(3)})`:'';
+  const dot=an?(.55+.45*Math.sin(t*5)).toFixed(2):'';
+  const more='<svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><circle cx="5.5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="18.5" cy="12" r="1.9"/></svg>';
+  const body=`<div class="fc-shade"></div><div class="fc-top${lv?' ein':''}" style="${st}"><h2>${esc(F.name)}</h2><p><span class="fc-pill"><i class="fc-dot${lv?' lv':''}"${dot?` style="opacity:${dot}"`:''}></i>${esc(F.status)}</span></p></div>
+  ${F.pip?`<div class="fc-pip${lv?' ein':''}" style="${sp}${lv?';animation-delay:.35s':''}">${F.me?.url?bgImg(F.me,104/156):`<div style="position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center">${I.person('rgba(255,255,255,.35)')}</div>`}<i class="fc-flip">${FC_FLIP}</i></div>`:''}
+  <div class="fc-bar${lv?' ein':''}" style="${sb}${lv?';animation-delay:.1s':''}"><div class="fc-btn">${more}</div><div class="fc-btn">${I.video('#fff')}</div><div class="fc-btn">${I.mic('#fff')}</div><div class="fc-btn">${I.speaker('#fff')}</div><div class="fc-btn red">${I.phone('#fff',28,135)}</div></div>`;
   return{bg,body};
 }
 function screenCall0(s){
   const cf=s.device.ratio==='four'||s.device.ratio==='horiz',C=s.call, p=s._pulse||0, t=s._ct, anim=t!=null;
   const z=anim?1+Math.min(.07,t*.014):1;
   const photo=C.photo?.url?`<div class="${!anim&&!s._still?'lvz':''}" style="position:absolute;left:0;top:0;right:0;bottom:0;transform:scale(${z.toFixed(4)})">${bgImg(C.photo,SA)}</div><div class="bgl" style="background:rgba(0,0,0,.38)"></div>`:'';
-  const bg=`<div class="bgl" style="background:linear-gradient(175deg,#3c3f46,#1a1b1f 60%,#0f0f11)">${photo}</div>`;
+  const ab=anim?`transform:translate(${(Math.sin(t*.9)*34).toFixed(1)}px,${(Math.cos(t*.7)*40).toFixed(1)}px) scale(${(1+Math.sin(t*.8)*.12).toFixed(3)})`:'',lv0=!anim&&!s._still?' lv':'';
+  const aur=photo?'':`<i class="aur a1${lv0}" style="${ab}"></i><i class="aur a2${lv0}" style="${ab?ab.replace('translate(','translate(-').replace(',',',-'):''}"></i>`;
+  const bg=`<div class="bgl" style="background:linear-gradient(175deg,#3a3d48,#1a1b20 62%,#0e0e10)">${aur}${photo}</div>`;
   const ring=p?`box-shadow:0 0 0 ${p*7}px rgba(52,199,89,${(0.42-p*0.1).toFixed(2)})`:'';
   let rings='',wig=0;
   if(anim){
@@ -1377,7 +1460,7 @@ function screenCall0(s){
   const live=!anim&&!s._still;if(live)rings='<i class="rp lv"></i><i class="rp lv d"></i>';
   const eo=anim?1-Math.pow(1-Math.min(1,t/.7),3):1;
   const st1=eo<1?`opacity:${eo.toFixed(2)};transform:translateY(${((1-eo)*-14).toFixed(1)}px)`:'',st2=eo<1?`opacity:${eo.toFixed(2)};transform:translateY(${((1-eo)*46).toFixed(1)}px)`:'';
-  const body=`<div class="cl${cf?' cf':''}" style="${st1}"><div class="cl-sub">${esc(C.sub)}</div><div class="cl-name">${esc(C.name)}</div></div>
+  const body=`<div class="cl${cf?' cf':''}" style="${st1}">${C.photo?.url?'':`<div class="cl-av">${esc([...String(C.name||'?').trim()][0]||'?')}</div>`}<div class="cl-sub">${esc(C.sub)}</div><div class="cl-name">${esc(C.name)}</div></div>
   <div class="cl-bot${cf?' cf':''}" style="${st2}${C.swipe?';display:none':''}"><div class="cl-row" style="margin-bottom:${cf?26:46}px"><div class="cl-it"><div class="c s">${I.alarm('#fff',22)}</div>리마인더</div><div class="cl-it"><div class="c s">${I.msg('#fff',22)}</div>메시지</div></div>
   <div class="cl-row"><div class="cl-it"><div class="c b" style="background:#ff3b30">${I.phone('#fff',34,135)}</div>거절</div><div class="cl-it"><div class="c b" style="background:#34c759;${ring}">${rings}<span class="${live?'lvw':''}" style="display:flex;transform:rotate(${wig.toFixed(1)}deg)">${I.phone('#fff',34)}</span></div>수락</div></div></div>`;
   return{bg,body};
@@ -1385,15 +1468,15 @@ function screenCall0(s){
 function screenGallery(s){
   const G=s.gallery, n=G.items.length, cols=G.cols;
   if(G.view==='viewer')return screenGalleryViewer(s);
-  const tiles=n?G.items.map(it=>`<div class="gl-t">${bgImg(it.img)}</div>`).join(''):Array.from({length:cols*4},(_,i)=>`<div class="gl-t" style="background:${i%3?'#ececef':'#e4e4e8'}"></div>`).join('');
+  const gp=s._gp,tiles=n?G.items.map((it,i)=>`<div class="gl-t"${gp!=null&&i===n-1?` style="transform:scale(${(.82+.18*gp).toFixed(3)});opacity:${(.25+.75*gp).toFixed(2)};z-index:2"`:''}>${bgImg(it.img)}</div>`).join(''):Array.from({length:cols*4},(_,i)=>`<div class="gl-t" style="background:${i%3?'#ececef':'#e4e4e8'}"></div>`).join('');
   const bg=`<div class="bgl" style="background:#fff"></div>`;
   const GI=[c=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg>`,
     c=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>`,
     c=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M6.5 4h11"/></svg>`,
     c=>`<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.7" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6"/><path d="M15 15l5 5"/></svg>`];
-  const tab=[['보관함',1],['For You',0],['앨범',0],['검색',0]].map(([t,on],i)=>`<div class="${on?'on':''}">${GI[i](on?'#0a84ff':'#8e8e93')}${t}</div>`).join('');
+  const tab=[['보관함',1,0],['컬렉션',0,2]].map(([t,on,i])=>`<div class="${on?'on':''}">${GI[i](on?'#0a84ff':'#3c3c43')}${t}</div>`).join('')+`</div><div class="gl-srch">${GI[3]('#3c3f43')}`;
   const body=`<div class="gl-head"><h3>${esc(G.title)}</h3><div class="gl-hr"><span class="gl-sel">선택</span><i class="gl-more"><svg width="16" height="16" viewBox="0 0 24 24" fill="#111"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></i></div></div><div class="gl-sub">사진 ${n}장</div>
-  <div class="gl-box" style="flex:1;min-height:0;overflow:hidden"><div class="gl-grid" style="grid-template-columns:repeat(${cols},1fr);${x_glS(s)}">${tiles}</div></div><div class="gl-tab">${tab}</div>`;
+  <div class="gl-box" style="flex:1;min-height:0;overflow:hidden"><div class="gl-grid" style="grid-template-columns:repeat(${cols},1fr);${x_glS(s)}">${tiles}</div><div class="gl-cnt"><b>${n?n+'장의 사진':'사진 없음'}</b><span>방금 업데이트됨</span></div></div><div class="gl-tab">${tab}</div>`;
   return{bg,body};
 }
 /* ── 인스타 DM · LINE · 텔레그램 ── */
@@ -1557,7 +1640,9 @@ function screenDial(s){
   let sub=esc(base)+dots;
   if(ph==='end')sub=res==='answer'?(()=>{const m=String(C.startT||'').match(/^(\d+):(\d{1,2})$/),tt=Math.floor(te)+(m?+m[1]*60+ +m[2]:0);return pad(Math.floor(tt/60))+':'+pad(tt%60);})():esc(C.endText||'통화 종료');
   const photo=C.photo&&C.photo.url?`${bgImg(C.photo,SA)}<div class="bgl" style="background:rgba(0,0,0,.5)"></div>`:'';
-  const bg=`<div class="bgl" style="background:linear-gradient(175deg,#3c3f46,#1a1b1f 60%,#0f0f11)">${photo}</div>`;
+  const ab=t!=null?`transform:translate(${(Math.sin(t*.9)*34).toFixed(1)}px,${(Math.cos(t*.7)*40).toFixed(1)}px) scale(${(1+Math.sin(t*.8)*.12).toFixed(3)})`:'',lvd=t==null&&!s._still?' lv':'';
+  const aur=photo?'':`<i class="aur a1${lvd}" style="${ab}"></i><i class="aur a2${lvd}" style="${ab?ab.replace('translate(','translate(-').replace(',',',-'):''}"></i>`;
+  const bg=`<div class="bgl" style="background:linear-gradient(175deg,#3a3d48,#1a1b20 62%,#0e0e10)">${aur}${photo}</div>`;
   const kp='<svg width="26" height="26" viewBox="0 0 24 24" fill="#fff">'+[4,12,20].map(y=>[4,12,20].map(x=>`<circle cx="${x}" cy="${y}" r="1.9"/>`).join('')).join('')+'</svg>';
   const b=(ic,l)=>`<div class="cl-it"><div class="c s dl">${ic}</div>${l}</div>`;
   const k=Math.min(1,te/.3),rej=res==='reject'&&ph==='end';
@@ -1567,9 +1652,18 @@ function screenDial(s){
   const endBg=rej?`rgb(${mix([255,59,48],[92,92,98],k)})`:'#ff3b30',rowOp=rej?1-.4*k:1;
   const fade=rej?Math.min(1,Math.max(0,(te-1.2)/.6)):0;                          // 거절 뒤 화면이 꺼져요
   const ov=fade>0?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;background:#000;opacity:${fade.toFixed(2)};z-index:9;pointer-events:none"></div>`:'';
-  const body=`<div class="cl"><div class="cl-sub" style="font-variant-numeric:tabular-nums">${sub}</div><div class="cl-name">${esc(C.name)}</div></div>
-  <div class="cl-bot" style="bottom:56px;padding:0 40px"><div class="dl-g" style="opacity:${op.toFixed(2)}${pop}">${b(I.mic('#fff',26),' ')}${b(kp,'')}${b(I.speaker('#fff',26),'')}${b(I.plus('#fff',26),' ')}${b(I.video('#fff',26),'FaceTime')}${b(I.person('#fff'),'')}</div>
-  <div class="cl-row" style="justify-content:center;margin-top:34px;opacity:${rowOp.toFixed(2)}"><div class="cl-it"><div class="c b" style="background:${endBg}">${I.phone('#fff',34,135)}</div></div></div></div>${ov}`;
+  const an=t!=null,qq=(d,l)=>an?Math.min(1,Math.max(0,(t-d)/l)):1,e3=x=>1-Math.pow(1-x,3),liv=!an&&!s._still;
+  const qh=e3(qq(0,.6)),hs=qh<1?`opacity:${qh.toFixed(2)};transform:translateY(${((1-qh)*-14).toFixed(1)}px)`:'';
+  let avS='',avC='';
+  if(ph==='ring'){if(an){const pp=(t/1.6)%1;avS=`box-shadow:inset 0 1px 0 rgba(255,255,255,.4),0 0 0 ${(pp*26).toFixed(1)}px rgba(255,255,255,${(.28*(1-pp)).toFixed(2)})`;}else if(liv)avC=' ringing';}
+  const cells=[[I.mic('#fff',26),'소리 끔'],[kp,'키패드'],[I.speaker('#fff',26),'스피커'],[I.plus('#fff',26),'통화 추가'],[I.video('#fff',26),'FaceTime'],[I.person('#fff'),'연락처']].map((c,i)=>{
+    const z=e3(qq(.12+i*.05,.45)),st=z<1?`opacity:${z.toFixed(2)};transform:translateY(${((1-z)*24).toFixed(1)}px) scale(${(.85+.15*z).toFixed(3)})`:'';
+    return `<div class="cl-it${liv?' ein':''}" style="${st}${liv?`;animation-delay:${(.12+i*.05).toFixed(2)}s`:''}"><div class="c s dl">${c[0]}</div>${c[1]}</div>`;}).join('');
+  const subO=(res==='answer'&&ph==='end')?(.4+.35*k).toFixed(2):'.75';
+  const av=C.photo&&C.photo.url?'':`<div class="cl-av sm${avC}" style="${avS}">${esc([...String(C.name||'?').trim()][0]||'?')}</div>`;
+  const body=`<div class="cl dialtop${liv?' ein':''}" style="${hs}">${av}<div class="cl-name">${esc(C.name)}</div><div class="cl-sub dsub" style="font-variant-numeric:tabular-nums;opacity:${subO}">${sub}</div></div>
+  <div class="cl-bot" style="bottom:56px;padding:0 40px"><div class="dl-g" style="opacity:${op.toFixed(2)}${pop}">${cells}</div>
+  <div class="cl-row" style="justify-content:center;margin-top:34px;opacity:${rowOp.toFixed(2)}"><div class="cl-it${liv?' ein':''}" style="${liv?'animation-delay:.4s':''}"><div class="c b" style="background:${endBg}">${I.phone('#fff',34,135)}</div></div></div></div>${ov}`;
   return{bg,body};
 }
 function screenStory(s){
@@ -3288,7 +3382,7 @@ function buildFrames(s){
         push(c=>{c._gi=(start+n-1)%n;c._gq=0;},hold);break;
       }
       const G=s.gallery,tot=G.items.length,n=Math.min(tot,40),sc=!!G.scroll&&tot>G.cols*4;
-       if(G.fill!==false){for(let k=0;k<=n;k++)push(c=>{c.gallery.items=c.gallery.items.slice(0,k);c._gs=0;},(k===n&&!sc)?hold:D*.6);}
+       if(G.fill!==false){for(let k=0;k<=n;k++){if(k>0)for(const g of [.35,.75])push(c=>{c.gallery.items=c.gallery.items.slice(0,k);c._gs=0;c._gp=g;},34/sp);push(c=>{c.gallery.items=c.gallery.items.slice(0,k);c._gs=0;c._gp=null;},(k===n&&!sc)?hold:D*.6);}}
        else push(c=>{c._gs=0;},sc?D:hold);
        if(sc)for(let i=1;i<=18;i++){const e=(1-Math.cos(Math.PI*i/18))/2;push(c=>{c._gs=e;},i===18?hold:65/sp);}
        break;}
