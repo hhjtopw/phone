@@ -698,6 +698,16 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .lk-notis.top{top:214px;bottom:auto;justify-content:flex-start;max-height:none;padding-bottom:0}
 .ig-head{border-bottom:0;height:60px}.ig-avw{width:40px;height:40px}
 .ig-ring{width:40px;height:40px;border-radius:50%;padding:2.5px;background:conic-gradient(from 200deg,#f9ce34,#ee2a7b,#6228d7,#f9ce34)}
+.scr,.scr *{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Apple SD Gothic Neo','Noto Sans KR','Pretendard',sans-serif}
+.nt{border-radius:24px;backdrop-filter:blur(30px) saturate(1.8);-webkit-backdrop-filter:blur(30px) saturate(1.8);box-shadow:0 6px 24px rgba(0,0,0,.14),inset 0 0 0 .5px rgba(255,255,255,.22)}
+.nt.light{background:rgba(255,255,255,.78)}.nt.dark{background:rgba(40,40,44,.72)}.nt.glass{background:rgba(120,120,128,.36)}
+.nt-ic{border-radius:9.5px;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.08)}.nt-h b{font-weight:600}.nt-b{opacity:.88}
+.im-b{box-shadow:none}.im-row.r .im-b{background:linear-gradient(#2a9bff,#0a7cff)!important}
+.kt-b,.im-b,.ig-b,.ln-b,.tw-b{transition:transform .2s}
+.pkbtn,.chip,.btn,.seg button{transition:transform .12s,background .15s,color .15s,border-color .15s}.pkbtn:active,.btn:active,.chip:active{transform:scale(.96)}
+.pv .nt,.pv .popn .nt{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.pv .scr,.pv .scr *{will-change:auto}
+#preview .scr{contain:paint}
 .popn .nt{border-radius:26px;padding:12px 15px;gap:12px;align-items:center;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .popn .nt-ic{width:38px;height:38px;border-radius:10px}.popn .nt-h{font-size:15px;font-weight:600}.popn .nt-h span{font-size:13px;opacity:.55}.popn .nt-b{font-size:15px;line-height:1.28;opacity:.92}
 .ig-ring.off{background:none;padding:2.5px}.ig-ring .ig-av.lg{width:35px;height:35px;border:2px solid #fff;box-sizing:border-box}
@@ -898,10 +908,16 @@ function imgLayout(im,ca){
   l=Math.min(0,Math.max(1-iw,l));t=Math.min(0,Math.max(H-ih,t));
   return{iw,ih,H,l,t,vx:-l/iw,vy:-t/ih,vw:1/iw,vh:H/ih};
 }
+let PV=false;const PVC=new Map();
+function pvUrl(u){
+  if(!PV||!u||u.slice(0,5)!=='data:')return u;
+  let b=PVC.get(u);if(b)return b;
+  try{const i=u.indexOf(','),m=u.slice(5,i).split(';')[0],s=atob(u.slice(i+1)),a=new Uint8Array(s.length);for(let k=0;k<s.length;k++)a[k]=s.charCodeAt(k);b=URL.createObjectURL(new Blob([a],{type:m}));PVC.set(u,b);return b;}catch(e){return u;}
+}
 function bgImg(im,ca=1){
   if(!im||!im.url)return'';
   const L=imgLayout(im,ca);
-  return `<div class="imgbox"><div style="left:${(L.l*100).toFixed(3)}%;top:${(L.t/L.H*100).toFixed(3)}%;width:${(L.iw*100).toFixed(3)}%;height:${(L.ih/L.H*100).toFixed(3)}%;background-image:url('${im.url}')"></div></div>`;
+  return `<div class="imgbox"><div style="left:${(L.l*100).toFixed(3)}%;top:${(L.t/L.H*100).toFixed(3)}%;width:${(L.iw*100).toFixed(3)}%;height:${(L.ih/L.H*100).toFixed(3)}%;background-image:url('${pvUrl(im.url)}')"></div></div>`;
 }
 function aspectOf(p,im){
   if(/^(lock\.wall|face\.other|call\.photo|dial\.photo|story\.slots\.\d+\.img|chat\.bgImg)$/.test(p))return SA;
@@ -1377,7 +1393,7 @@ function screenSearch(s){
 }
 function E_search(){
   return card('검색창 타이핑',`${fld('검색어 (한 글자씩 입력돼요)',txt('search.query','검색어'))}${fld('빈 칸일 때 문구',txt('search.ph','검색어를 입력하세요'))}
-    ${fld('자동완성 (한 줄에 하나)',area('search.sugg','자동완성 문구'))}${tog('search.snd','타이핑 소리 (키보드)')}${rng('search.cps',2,20,1,'속도','자/초')}<div class="hint" style="margin-top:6px">속도는 1초에 몇 글자를 치는지예요. 소리는 ▶ 미리보기와 영상(MP4/WebM)에 들어가요.</div><div class="hint" style="margin-top:8px">자동완성은 첫 글자가 입력되면 나타나고, 입력된 글자는 굵게 보여요.</div>`);
+    ${fld('자동완성 (한 줄에 하나)',area('search.sugg','자동완성 문구'))}${tog('search.snd','타이핑 소리 (키보드)')}${rng('search.cps',1,20,1,'속도','자/초')}<div class="hint" style="margin-top:6px">속도는 1초에 몇 글자를 치는지예요. 소리는 ▶ 미리보기와 영상(MP4/WebM)에 들어가요.</div><div class="hint" style="margin-top:8px">자동완성은 첫 글자가 입력되면 나타나고, 입력된 글자는 굵게 보여요.</div>`);
 }
 function E_recents(){
   const L=S.recents.items,n=L.length;
@@ -1850,16 +1866,16 @@ async function playPreview0(){
   if(playing){playing=false;return;}
   blankPreview=false;playing=true;toast('미리보기 재생 중 — 다시 누르면 멈춰요');
   const ok=(S.exp.sfx!=='off'||popOn())?await sfxInit():false;
-  const plan=videoPlan(),host=$('#preview');let finished=true,acc=0;const t0=performance.now();
+  const plan=videoPlan(),host=$('#preview');let finished=true,acc=0;const t0=performance.now();PV=true;document.body.classList.add('pv');
   for(const f of plan){
     if(!playing){finished=false;break;}
-    const st=await stateOf(f);
-    host.innerHTML=stageHTML(st);applySlide(host,st);
+    const late=performance.now()-(t0+acc),skip=late>Math.max(60,f.delay)&&f!==plan[plan.length-1];
+    if(!skip){const st=await stateOf(f);host.innerHTML=stageHTML(st);applySlide(host,st);}
     if(ok&&f.snd&&wantSfx(S,f.snd))sfxPlay(null,S.exp.sfxVol/100);
     if(ok&&f.pop&&popOn())popPlay(null,S.exp.pop.vol/100);
     acc+=f.delay;const w=t0+acc-performance.now();if(w>0)await sleep(w);
   }
-  playing=false;
+  playing=false;PV=false;document.body.classList.remove('pv');
   renderPreview();
 }
 const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
@@ -1906,7 +1922,7 @@ async function encodeExact({plan,store,bg,TR,fmt,ok,faceVid}){
         plan.forEach((f,i)=>{if(f.pop&&popBuf&&popOn()){const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=popBuf;gn.gain.value=S.exp.pop.vol/100;b.connect(gn);gn.connect(oc.destination);b.start(Math.max(0,T[i]+off));}});
         if(faceVid){try{const fb=await actx.decodeAudioData(await VID.other.file.arrayBuffer());const b=oc.createBufferSource();b.buffer=fb;b.loop=true;b.connect(oc.destination);b.start(0);}catch(e){console.warn('영상 소리 디코딩 실패',e);}}
         if((S.screen==='call'||S.screen==='dial')&&RING){try{const rb=await actx.decodeAudioData(await (await fetch(RING.url)).arrayBuffer());const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=rb;b.loop=true;gn.gain.value=.9;b.connect(gn);gn.connect(oc.destination);b.start(0);const D=S.dial;if(S.screen==='dial'&&D.result&&D.result!=='none')b.stop(Math.max(1,+D.ringSec||3));}catch(e){console.warn('벨소리 오류',e);}}
-        if(typeOn()){try{const sp=typeSpan(plan);if(sp){const tb=await actx.decodeAudioData(await (await fetch(TYPE_URL)).arrayBuffer()),b=oc.createBufferSource(),gn=oc.createGain();b.buffer=tb;b.loop=true;gn.gain.value=.85;b.connect(gn);gn.connect(oc.destination);b.start(sp.t0);b.stop(sp.t1);}}catch(e){console.warn('타이핑 소리 오류',e);}}
+        if(typeOn()){try{const sp=typeSpan(plan);if(sp){const tb=await x_typeBuf(),b=oc.createBufferSource(),gn=oc.createGain();b.buffer=tb;b.loop=true;b.loopStart=tb._off;gn.gain.value=.85;b.connect(gn);gn.connect(oc.destination);b.start(sp.t0,tb._off);b.stop(sp.t1);}}catch(e){console.warn('타이핑 소리 오류',e);}}
         abuf=await oc.startRendering();
         as=new M.AudioBufferSource({codec:ac,bitrate:128e3});out.addAudioTrack(as);
       }
@@ -2378,7 +2394,7 @@ function buildFrames(s){
         for(let j=1;j<=n;j++){push(c=>{c.story._cur=i;c.story._p=j/n;},(j===n&&i===sl.length-1)?hold*.6:(vo?1000/fps:1000/fps/sp));F[F.length-1].sv={i,t:(j-1)/fps};}
       });break;}
     case'profile':{push(c=>{c._pt=0;},D*1.3);for(const t of [.12,.25,.4,.55,.7,.85])push(c=>{c._pt=t;},75/sp);push(c=>{c._pt=1;},hold);break;}
-    case'search':{const n=[...s.search.query].length,cps=Math.max(2,+s.search.cps||7);push(c=>{c.search._n=0;c.search._j=0;},700);for(let j=1;j<=n;j++)push(c=>{c.search._n=j;c.search._j=j;},1000/cps*(.78+.44*((j*37)%10)/10));for(let j=1;j<=4;j++)push(c=>{c.search._n=n;c.search._j=n+j;},j===4?hold:130);break;}
+    case'search':{const n=[...s.search.query].length,cps=Math.max(1,+s.search.cps||7);push(c=>{c.search._n=0;c.search._j=0;},700);for(let j=1;j<=n;j++)push(c=>{c.search._n=j;c.search._j=j;},1000/cps*(.78+.44*((j*37)%10)/10));for(let j=1;j<=4;j++)push(c=>{c.search._n=n;c.search._j=n+j;},j===4?hold:130);break;}
     case'recents':{const n=s.recents.items.length;push(c=>{c.recents.items=[];},D*.8);for(let k=1;k<=n;k++){for(const t of [.35,.7])push(c=>{c.recents.items=c.recents.items.slice(0,k);c._rp=t;},55/sp);push(c=>{c.recents.items=c.recents.items.slice(0,k);},k===n?hold:D*.55);}break;}
     case'gallery':{
       if(s.gallery.view==='viewer'){
@@ -2509,7 +2525,7 @@ async function exportGIF(){
 const x_eo=t=>1-Math.pow(1-t,3),x_ss=e=>e*e*(3-2*e);
 function x_ntFx(isNew,q,sh){
   if(!isNew)return '';
-  if(q!=null&&q<1){const e=x_eo(q);return`max-height:${(e*78).toFixed(0)}px;opacity:${e.toFixed(2)};transform:translateY(${((1-e)*-22).toFixed(1)}px);overflow:hidden`;}
+  if(q!=null&&q<1){const c=1.6,e=Math.max(.001,1+(c+1)*Math.pow(q-1,3)+c*Math.pow(q-1,2));return`max-height:${(Math.min(1,e)*78).toFixed(0)}px;opacity:${Math.min(1,q*2.4).toFixed(2)};transform:translateY(${((1-e)*-34).toFixed(1)}px) scale(${(.9+.1*e).toFixed(3)});overflow:hidden`;}
   if(sh!=null)return`transform:translateX(${(Math.sin(sh*Math.PI*7)*(1-sh)*8).toFixed(1)}px)`;
   return '';
 }
@@ -2541,9 +2557,11 @@ let RING={url:DEF_RING,name:'기본 벨소리 (ringing_phone)'};
 document.addEventListener('change',e=>{const f=e.target.matches?.('[data-ring]')&&e.target.files[0];if(!f)return;if(RING)URL.revokeObjectURL(RING.url);RING={url:URL.createObjectURL(f),name:f.name};renderEditor();toast('벨소리를 넣었어요 — ▶ 미리보기에서 재생돼요');});
 async function playPreview(){
   if(playing)return playPreview0();
-  const tsp=typeOn()?typeSpan(videoPlan()):null,ta=tsp?new Audio(TYPE_URL):null,tt=[];if(ta){tt.push(setTimeout(()=>ta.play().catch(()=>{}),tsp.t0*1000+150),setTimeout(()=>ta.pause(),tsp.t1*1000+150));}
-  const isD=S.screen==='dial',a=((S.screen==='call'||isD)&&RING)?new Audio(RING.url):null;if(a){a.loop=true;a.play().catch(()=>{});if(isD&&S.dial.result&&S.dial.result!=='none')setTimeout(()=>a.pause(),Math.max(1,+S.dial.ringSec||3)*1000);}
-  try{await playPreview0();}finally{if(a)a.pause();tt.forEach(clearTimeout);if(ta)ta.pause();}
+  const isD=S.screen==='dial',a=((S.screen==='call'||isD)&&RING)?new Audio(RING.url):null;
+  if(a){a.loop=true;a.play().catch(()=>{});if(isD&&S.dial.result&&S.dial.result!=='none')setTimeout(()=>a.pause(),Math.max(1,+S.dial.ringSec||3)*1000);}
+  let ts=null;
+  if(typeOn()){try{if(await sfxInit()){const sp=typeSpan(videoPlan());if(sp){const b=await x_typeBuf(),g=actx.createGain(),w=actx.currentTime+.12;ts=actx.createBufferSource();ts.buffer=b;ts.loop=true;ts.loopStart=b._off;g.gain.value=.9;ts.connect(g);g.connect(actx.destination);ts.start(w+sp.t0,b._off);ts.stop(w+sp.t1);}}}catch(e){console.warn(e);}}
+  try{await playPreview0();}finally{if(a)a.pause();if(ts){try{ts.stop();}catch(e){}}}
 }
 function E_lock(){return E_lock0()+card('알림 연출',`${tog('lock.newTop','새 알림이 위에 쌓이고, 기존 알림은 아래로 밀리기')}${tog('lock.shake','알림이 뜰 때 팝업 흔들림(진동)')}<div class="hint" style="margin-top:6px">▶ 미리보기 · GIF · 영상에서 알림이 하나씩 떨어지며 연달아 쌓여요.</div>`);}
 function E_call(){const C=S.call;return E_call0()+card('수신 화면 옵션',`${fld('화면 스타일',seg('call.style',[['full','전체 화면'],['banner','상단 배너']]))}${C.style!=='banner'?tog('call.swipe','밀어서 수락 애니메이션'):''}<label class="btn line upl">＋ 벨소리 mp3 넣기<input type="file" accept="audio/*" data-ring></label><div class="hint" style="margin-top:8px">${RING?esc(RING.name)+' 적용됨 · ':''}벨소리는 ▶ 미리보기에서 재생돼요. (GIF·영상 파일에는 소리가 들어가지 않아요)</div>`);}
@@ -2588,7 +2606,15 @@ function typeSpan(plan){
     if(q&&q._j>=1&&t0<0)t0=t;
     if(q&&q._j>=1&&(q._n>=[...(q.query||'')].length)&&t1<0)t1=t;
     t+=d;}
-  return t0<0?null:{t0,t1:t1<0?t:Math.max(t1,t0+.2)};
+  return t0<0?null:{t0,t1:(t1<0?t:t1)+.22};
+}
+let TYPE_BUF=null;
+async function x_typeBuf(){
+  if(TYPE_BUF)return TYPE_BUF;
+  const s=atob(TYPE_URL.split(',')[1]),u=new Uint8Array(s.length);for(let i=0;i<s.length;i++)u[i]=s.charCodeAt(i);
+  const b=await (actx||(actx=new (window.AudioContext||window.webkitAudioContext)())).decodeAudioData(u.buffer);
+  const d=b.getChannelData(0);let k=0;while(k<d.length&&Math.abs(d[k])<.015)k++;b._off=Math.max(0,k/b.sampleRate-.03);
+  return TYPE_BUF=b;
 }
 const typeOn=()=>S.search.snd!==false&&(S.screen==='search'||(S.exp.vidMode==='seq'&&(S.exp.vidSeq||[]).includes('search')));
 
