@@ -2505,7 +2505,7 @@ function cmtSeq(push,s,sp,D,hold,base,forceAn){
       push(c=>{base(c);cut(c,k);c._sh=1;c._rs=0;},(k===n&&!sc)?hold:D*.55);
     }
   }else push(c=>{base(c);c._sh=1;c._rs=0;},sc?D:hold);
-  if(sc)for(let i=1;i<=18;i++){const e=(1-Math.cos(Math.PI*i/18))/2;push(c=>{base(c);c._sh=1;c._rs=e;},i===18?hold:65/sp);}
+  if(sc)hScroll(push,'_rs',c=>{base(c);c._sh=1;},sp,hold);   // 사람이 손으로 내리듯: 훅 → 잠깐 멈춤 → 훅
 }
 
 /* ── 편집 화면 ── */
@@ -2542,7 +2542,7 @@ function E_reels(){
     ${rng('reels.sheetH',40,92,1,'댓글창 높이','%')}
     <div class="g2">${fld('제목',txt('reels.title','댓글'))}${fld('입력창 문구',txt('reels.ph','username(으)로 댓글 달기...'))}</div>
     ${imgField('reels.me','내 프로필 사진',false)}${tog('reels.emoji','이모지 빠른 반응 줄')}`)
-  +card('연출',`${tog('reels.anim','댓글창이 올라오고 댓글이 하나씩 떠요')}${tog('reels.scroll','아래로 스크롤')}${R.scroll?rng('reels.scrollAt',0,100,1,'정지 화면 위치','%'):''}<div class="hint" style="margin-top:6px">스크롤은 댓글이 댓글창보다 많을 때 적용되고, 슬라이더는 PNG 같은 정지 화면 위치예요.</div>`)
+  +card('연출',`${tog('reels.anim','댓글창이 올라오고 댓글이 하나씩 떠요')}${tog('reels.scroll','GIF · 영상: 사람이 손으로 내리듯 아래로 스크롤')}${R.scroll?rng('reels.scrollAt',0,100,1,'정지 화면 위치','%'):''}<div class="hint" style="margin-top:6px">훅 내리고 잠깐 멈추고 다시 내려가요. 댓글이 댓글창보다 길 때만 움직이니, 스크롤이 안 보이면 댓글을 더 추가하거나 댓글창 높이를 줄여 보세요. 슬라이더는 PNG 같은 정지 화면 위치예요.</div>`)
   +card(`릴스 ${vi+1}의 댓글`,cs.map((c,i)=>`<div class="item"><div class="item-h"><span class="badge">댓글 ${i+1}</span>${mv(cp+'.comments',i,cs.length)}</div>
     ${imgField(`${cp}.comments.${i}.av`,'프로필 사진',false)}
     <div class="g2">${fld('아이디',txt(`${cp}.comments.${i}.name`,'username'))}${fld('시간',txt(`${cp}.comments.${i}.time`,'1일'))}</div>
