@@ -4285,11 +4285,12 @@ Object.assign(ACT,{
   dqa:el=>{const t=document.querySelector(`.acts [data-act="${el.dataset.val}"]`);drawerOpen(false);if(t)setTimeout(()=>t.click(),260);},
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape')drawerOpen(false);});
-function scrollTopNow(instant){const b=instant?'auto':'smooth';const pn=$('.panel');if(pn)pn.scrollTo({top:0,behavior:b});window.scrollTo({top:0,behavior:b});}
+function scrollTopNow(instant){const b=instant?'auto':'smooth';const pn=$('.panel');if(pn)pn.scrollTo({top:0,behavior:b});window.scrollTo({top:0,behavior:b});document.body.scrollTo({top:0,behavior:b});document.documentElement.scrollTo({top:0,behavior:b});}
 (function(){
   const btn=$('#qbar'),pn=$('.panel');let last=0,lastW=0;
-  const cur=()=>Math.max(pn?pn.scrollTop:0,window.scrollY||document.documentElement.scrollTop||0);
-  function onScroll(){
+  const cur=()=>Math.max(pn?pn.scrollTop:0,window.scrollY||0,document.documentElement.scrollTop||0,document.body.scrollTop||0);
+  function onScroll(e){
+    const t=e&&e.target;if(t&&t!==document&&t!==pn&&t!==document.body&&t!==document.documentElement)return;
     const y=cur(),d=y-last;
     if(y<160)btn.classList.remove('on');
     else if(d<-6)btn.classList.add('on');       // 살짝 위로 올리면 나타나고
@@ -4300,6 +4301,7 @@ function scrollTopNow(instant){const b=instant?'auto':'smooth';const pn=$('.pane
   window.syncQbar=()=>btn.querySelectorAll('.qr button').forEach(b=>b.classList.toggle('on',b.dataset.val===((S.device&&S.device.ratio)||'phone')));
   const _re=renderEditor;renderEditor=function(){const r=_re.apply(this,arguments);syncQbar();return r;};syncQbar();
   window.addEventListener('scroll',onScroll,{passive:true});
+  document.body.addEventListener('scroll',onScroll,{passive:true});
   window.addEventListener('resize',()=>{if(window.innerWidth!==lastW){lastW=window.innerWidth;fit();}});
   lastW=window.innerWidth;
 })();
