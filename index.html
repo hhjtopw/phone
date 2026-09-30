@@ -2530,10 +2530,10 @@ function ovApply(root,st){
       const d=document.createElement('div');
       d.className='popn';
       d.style.cssText=`position:absolute;left:0;right:0;margin:0 auto;top:${top}px;width:calc(100% - 20px);max-width:${flat?380:999}px;z-index:${50+q.i};pointer-events:none;transform-origin:50% 0;transform:translateY(${(-(1-v)*(top+96)).toFixed(1)}px) scale(${(.94+.06*Math.min(v,1)).toFixed(3)});opacity:${Math.min(1,v*2.2).toFixed(2)}`;
-      if(it.app==='incall'){d.innerHTML=callBannerHtml(it,dk);}else
+      if(it.app==='incall'){d.innerHTML=callBannerHtml(it,dk);callAnim(d,q.tm==null?.5:q.tm);}else
       d.innerHTML=`<div class="nt ${dk?'dark':'light'}" style="background:${dk?'rgba(50,50,54,.94)':'rgba(247,247,249,.94)'};box-shadow:0 10px 30px rgba(0,0,0,.24),0 0 0 .5px rgba(0,0,0,.1)"><div class="nt-ic" style="background:${a.bg}">${a.ic()}</div><div class="nt-tx"><div class="nt-h"><b>${esc(it.title||a.n)}</b><span>${esc(it.time||'')}</span></div>${it.body?`<div class="nt-b">${esc(it.body)}</div>`:''}</div><i class="grab"></i></div>`;
       if(q.ni&&q.v<1){const nt0=d.firstElementChild;if(nt0){   // 등장할 때 내용이 차례로 또렷해져요 (아이콘 → 글자)
-          [...nt0.children].forEach((ch,ci)=>{const o=Math.max(0,Math.min(1,(q.v-.2-ci*.12)/.5));ch.style.opacity=o.toFixed(2);});}}
+          [...nt0.children].forEach((ch,ci)=>{const o=Math.max(0,Math.min(1,(q.v-.2-ci*.12)/.5));ch.style.opacity=o.toFixed(2);if(it.app==='incall'&&ci>=2)ch.style.transform=`scale(${(.55+.45*o).toFixed(3)})`;});}}
       scr.appendChild(d);els.push({d,q});
     }
     if(P.mode==='overlap'&&els.length){   // 겹쳐서: 새 알림이 맨 앞, 이전 알림은 뒤에서 살짝 작게 겹쳐 보여요 (아이폰 알림 묶음처럼)
@@ -3012,6 +3012,14 @@ function callBannerHtml(it,dk){
   // 실제 아이폰의 전화 수신 배너는 라이트/다크 모드와 상관없이 항상 어두운 유리 재질에 흰 글씨예요
   return `<div class="nt dark nt-call" style="background:rgba(40,40,43,.95)"><div class="cv-av">${av}</div><div class="cv-tx"><div class="cv-n">${esc(nm)}</div><div class="cv-s">${esc(sub)}</div></div><div class="cv-b" style="background:#ff453a">${I.phone('#fff',22,135)}</div><div class="cv-b" style="background:#30d158">${I.phone('#fff',22)}</div></div>`;
 }
+// 전화 배너 벨소리 애니메이션: 수락 버튼에서 초록 파동이 퍼지고, 수화기가 '르르릉' 하듯 흔들려요 (tm = 배너가 뜬 뒤 흐른 시간, 초)
+function callAnim(d,tm){
+  const acc=d.querySelector('.nt-call .cv-b:last-child');if(!acc)return;
+  const ph=(tm%1.5)/1.5,rr=(ph*11).toFixed(1),ra=(.5*Math.pow(1-ph,1.4)).toFixed(2);
+  acc.style.boxShadow=`0 0 0 ${rr}px rgba(48,209,88,${ra}),inset 0 .5px 0 rgba(255,255,255,.35)`;
+  const cy=tm%1.5,sv=acc.firstElementChild;
+  if(sv&&cy<.75){const k=cy/.75,ang=Math.sin(cy*Math.PI*2*5.5)*15*(1-k*k);sv.style.transform=`rotate(${ang.toFixed(1)}deg)`;}
+}
 // 팝업 소리 고르기: 전화 수신(incall) 팝업은 진동음, 그 외는 기본 알림음 (진동음 파일이 없으면 기본 알림음)
 const popBufFor=f=>(f&&f.popVib&&sxBuf.vib)||popBuf;
 const popOn=()=>!!(S.exp.pop&&S.exp.pop.on&&S.exp.pop.snd);
@@ -3061,14 +3069,15 @@ function popApplyMap(plan){
       if(bb.t0>a&&bb.t0<b)cuts.add(bb.t0);if(bb.t1>a&&bb.t1<b)cuts.add(bb.t1);
       for(let x=bb.t0;x<bb.t0+IN;x+=STEP)if(x>a&&x<b)cuts.add(x);
       for(let x=bb.t1-OUT;x<bb.t1;x+=STEP)if(x>a&&x<b)cuts.add(x);
+      if((IT[B.indexOf(bb)]||{}).app==='incall')for(let x=bb.t0+IN;x<bb.t1-OUT;x+=.08)if(x>a&&x<b)cuts.add(x);   // 전화 배너: 벨 울리는 애니메이션용 프레임
     });
     const xs=[...cuts].sort((m,n)=>m-n);
     for(let k=0;k<xs.length-1;k++){
       const x=xs[k],y=xs[k+1];if(y-x<.004)continue;
-      const mid=(x+y)/2,list=[];B.forEach((bb,j)=>{const v=vis(bb,mid);if(v>0)list.push({i:j,v,ni:(mid-bb.t0)<IN});});
+      const mid=(x+y)/2,list=[];B.forEach((bb,j)=>{const v=vis(bb,mid);if(v>0)list.push({i:j,v,ni:(mid-bb.t0)<IN,tm:IT[j].app==='incall'?mid-bb.t0:undefined});});
       const base={...f,delay:(y-x)*1000,snd:k===0?f.snd:undefined,sx:k===0?f.sx:undefined,lks:k===0?f.lks:undefined};
       if(!list.length){out.push(tag(k===0?base:{...base,key:(f.key||'g'+i)+'_r'+k},seenAt(mid),i));continue;}
-      const nf=tag({...base,s:{...f.s,_pop:{list}},key:(f.key||'g'+i)+'_pop'+list.map(q=>q.i+'-'+Math.round(q.v*100)+(q.ni?'i':'')).join('_')},seenAt(mid),i);
+      const nf=tag({...base,s:{...f.s,_pop:{list}},key:(f.key||'g'+i)+'_pop'+list.map(q=>q.i+'-'+Math.round(q.v*100)+(q.ni?'i':'')+(q.tm!=null?'t'+Math.round(q.tm*100):'')).join('_')},seenAt(mid),i);
       list.forEach(q=>{if(!fired.has(q.i)&&x>=B[q.i].t0-1e-6){fired.add(q.i);nf.pop=1;if((popItems(S.exp.pop)[q.i]||{}).app==='incall')nf.popVib=1;nf.popDur=Math.max(nf.popDur||0,B[q.i].t1-x);}});
       if(list.some(q=>q.v>=1)&&hold<0)hold=out.length;
       out.push(nf);
@@ -3535,7 +3544,7 @@ function E_tl(){
   if(T.sync==null)T.sync=true;
   return card('타임라인',`${fld('상단 탭 (탭마다 트윗이 따로예요)',seg('tl.tab',[[0,'추천'],[1,'팔로잉']]))}
     ${fld('화면',seg('tl.mode',[['light','화이트'],['dark','다크']]))}
-    ${imgField('tl.me','내 프로필 사진 (상단 왼쪽 아이콘 · 위치·크기는 고정)')}${tog('tl.sync','이름이 같으면 프로필 사진 · 아이디 자동 통일')}${tog('tl.fab','글쓰기 버튼')}${tog('tl.rise','최신 트윗이 맨 위 · 아래에서부터 쌓이며 올라오기 (트윗 1이 가장 아래, 마지막 트윗이 맨 위)')}
+    ${imgField('tl.me','내 프로필 사진 (상단 왼쪽 아이콘 · 위치·크기는 고정)')}${tog('tl.sync','이름이 같으면 프로필 사진 · 아이디 자동 통일 (인용 트윗 · 답글 표시 포함)')}${tog('tl.fab','글쓰기 버튼')}${tog('tl.rise','최신 트윗이 맨 위 · 아래에서부터 쌓이며 올라오기 (트윗 1이 가장 아래, 마지막 트윗이 맨 위)')}
     ${fld('GIF · 영상 스크롤 방식',seg('tl.scrollMode',[['add','트윗이 하나씩 올라옴'],['down','사람이 아래로 스크롤'],['up','맨 아래에서 위로']]))}${T.scrollMode==='add'?rng('tl.speed',0.25,4,0.25,'트윗 올라오는 속도','배')+'<div class="hint" style="margin:-4px 0 8px">1배가 기본이에요. 숫자가 클수록 트윗이 빠르게 연달아 올라오고, 작을수록 천천히 올라와요. (▶ 미리보기 · GIF · 영상에 적용)</div>':''}
     ${T.scrollMode!=='add'?'<div class="hint" style="margin:-4px 0 8px">디스패치처럼 전체 트윗이 이미 떠 있고, 사람이 손가락으로 훅 내렸다 멈췄다 하듯 스크롤돼요. 트윗이 화면보다 길게(여러 개) 있어야 움직여요.</div>':''}
     ${tog('exp.tlPress','GIF · 영상: 하트 · 리트윗 누르는 애니메이션')}
@@ -3698,22 +3707,37 @@ document.addEventListener('input',e=>{
   if(el.type==='checkbox'||el.tagName==='SELECT')renderEditor();
   commit();
 });
-// 타임라인에서 같은 사람의 이름 · 아이디 · 사진을 함께 바꿔 줘요
+// 타임라인에서 같은 사람의 이름 · 아이디 · 사진을 함께 바꿔 줘요 (트윗 본문 · 인용 트윗 모두 같은 사람으로 봐요)
 function tlSync(p){
   const T=S.tl;if(T.sync===false)return;
-  const m=String(p).match(/^tl\.(tweets|tweetsF)\.(\d+)\.(name|handle|av)$/);if(!m)return;
-  const t=(T[m[1]]||[])[+m[2]];if(!t)return;
+  const m=String(p).match(/^tl\.(tweets|tweetsF)\.(\d+)(\.q)?\.(name|handle|av)$/);if(!m)return;
+  const tw=(T[m[1]]||[])[+m[2]];if(!tw)return;
+  const t=m[3]?tw.q:tw;if(!t)return;
   const nm=x=>String(x&&x.name||'').trim().toLowerCase(),k=nm(t);if(!k)return;
-  const all=[];['tweets','tweetsF'].forEach(a=>(T[a]||[]).forEach((x,j)=>{if(x!==t&&nm(x)===k)all.push([a,j,x]);}));
+  const all=[];   // 같은 이름을 가진 다른 사람들: 트윗 본문 + 인용 트윗
+  ['tweets','tweetsF'].forEach(a=>(T[a]||[]).forEach((x,jx)=>{
+    if(x!==t&&nm(x)===k)all.push({a,j:jx,pre:'',x});
+    if(x.q&&x.q!==t&&nm(x.q)===k)all.push({a,j:jx,pre:'.q',x:x.q});
+  }));
   if(!all.length)return;
-  const setIn=(a,j,v)=>{const e=document.querySelector(`[data-bind="tl.${a}.${j}.handle"]`);if(e&&e!==document.activeElement)e.value=v;};
-  if(m[3]==='name'){
-    const src=all.find(o=>o[2].handle)||all[0],sa=all.find(o=>o[2].av&&o[2].av.url);
-    if(src[2].handle){t.handle=src[2].handle;setIn(m[1],+m[2],t.handle);}
-    if(sa)t.av={...sa[2].av};
-  }else all.forEach(([a,j,x])=>{if(m[3]==='handle'){x.handle=t.handle;setIn(a,j,t.handle);}else x.av=t.av?{...t.av}:null;});
+  const me=[m[1],+m[2],m[3]||''];
+  const setIn=(a,jx,pre,v)=>{const e=document.querySelector(`[data-bind="tl.${a}.${jx}${pre}.handle"]`);if(e&&e!==document.activeElement)e.value=v;};
+  if(m[4]==='name'){
+    const src=all.find(o=>o.x.handle)||all[0],sa=all.find(o=>o.x.av&&o.x.av.url);
+    if(src.x.handle){t.handle=src.x.handle;setIn(me[0],me[1],me[2],t.handle);}
+    if(sa)t.av={...sa.x.av};
+  }else all.forEach(o=>{if(m[4]==='handle'){o.x.handle=t.handle;setIn(o.a,o.j,o.pre,t.handle);}else o.x.av=t.av?{...t.av}:null;});
 }
-document.addEventListener('change',e=>{const b=e.target&&e.target.dataset&&e.target.dataset.bind;if(b&&/^tl\.tweets(F)?\.\d+\.name$/.test(b))renderEditor();});
+document.addEventListener('change',e=>{const b=e.target&&e.target.dataset&&e.target.dataset.bind;if(b&&/^tl\.tweets(F)?\.\d+(\.q)?\.name$/.test(b))renderEditor();
+  // 답글 표시에 이름을 적으면 그 사람의 아이디로 바꿔 줘요 (이름이 같은 트윗 · 인용의 아이디)
+  if(b&&/^tl\.tweets(F)?\.\d+\.replyTo$/.test(b)&&S.tl.sync!==false){
+    const v=String(e.target.value||'').trim().replace(/^@/,'').toLowerCase();if(!v)return;
+    let h='';['tweets','tweetsF'].forEach(a=>(S.tl[a]||[]).forEach(x=>{
+      if(!h&&x.handle&&String(x.name||'').trim().toLowerCase()===v)h=x.handle;
+      if(!h&&x.q&&x.q.handle&&String(x.q.name||'').trim().toLowerCase()===v)h=x.q.handle;}));
+    if(h){h='@'+String(h).replace(/^@/,'');sp(b,h);e.target.value=h;commit();}
+  }
+});
 const TPL={
   ...Object.fromEntries([['poll','투표 질문','예','아니오'],['question','질문을 남겨주세요','',''],['link','example.com','',''],['location','서울','',''],['time',new Date().toTimeString().slice(0,5),'',''],['mention','username','','']].map(([k,t,a,b])=>['stk_'+k,()=>({id:uid(),k,text:k==='time'?new Date().toTimeString().slice(0,5):t,a:a||'예',b:b||'아니오',x:50,y:Math.min(88,45+(S.story.stickers||[]).length*12),size:100,rot:0})])),
   sresitem:()=>({id:uid(),dt:'2일 전',img:null,t:'검색 결과 제목',u:'example.com',d:'검색 결과 설명 문구가 여기에 들어가요.'}),
