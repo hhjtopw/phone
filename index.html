@@ -1131,7 +1131,7 @@ body.dr-on #drawer{transform:none}
 .pbody{padding-bottom:84px}
 @media (max-width:900px){#qbar{width:100%}}
 /* ═════ 상단 팝업 알림 · 전화 수신 배너 (실제 아이폰 배너처럼) — 팝업(.popn)에만 적용돼서 잠금화면 알림은 그대로예요 ═════ */
-.popn .nt{align-items:flex-start;gap:11px;padding:12px 14px 12px 12px;border-radius:28px;-webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Apple SD Gothic Neo','Noto Sans KR',sans-serif;box-shadow:0 12px 32px rgba(0,0,0,.18),inset 0 0 0 .5px rgba(0,0,0,.08)!important}
+.popn .nt{align-items:flex-start;gap:11px;padding:12px 14px 12px 12px;border-radius:20px;-webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Apple SD Gothic Neo','Noto Sans KR',sans-serif;box-shadow:0 12px 32px rgba(0,0,0,.18),inset 0 0 0 .5px rgba(0,0,0,.08)!important}
 .popn .nt.light{color:#000}
 .popn .nt.dark{box-shadow:0 12px 32px rgba(0,0,0,.45),inset 0 0 0 .5px rgba(255,255,255,.14)!important}
 .popn .nt-ic{width:38px;height:38px;border-radius:9px;margin-top:0;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.14)}
@@ -1730,10 +1730,11 @@ function screenTw(s){
   return{bg,body};
 }
 // [화면] X 타임라인 (트윗 · 리트윗 · 인용 · 스레드선 · 액션바)
-// 뉴스 계정 기본 프로필: 남색 배경에 흰 글씨 "뉴스" (사진을 직접 넣으면 그 사진이 우선이에요)
+// 뉴스 계정 기본 프로필: 남색 배경에 흰 글씨 "NEWS" (사진을 직접 넣으면 그 사진이 우선이에요)
 function newsAv(t){
-  if(((t.name||'').trim()!=='뉴스')&&((t.handle||'').trim().toLowerCase()!=='@news'))return '';
-  return '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1b2a5c;color:#fff;font-size:14px;font-weight:700;letter-spacing:-.5px;line-height:1">뉴스</div>';
+  const nm=(t.name||'').trim().toLowerCase(),hd=(t.handle||'').trim().toLowerCase();
+  if(nm!=='뉴스'&&nm!=='news'&&hd!=='@news')return '';
+  return '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#1b2a5c;color:#fff;font-family:-apple-system,\'Helvetica Neue\',Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:.3px;line-height:1">NEWS</div>';
 }
 function screenTl(s){
   const T=s.tl,dk=T.mode==='dark',TW=T.tab?(T.tweetsF||[]):T.tweets,nT=TW.length;
@@ -2959,12 +2960,18 @@ function popPlay(dest,vol,when,buf,f){
   const B=buf||popBuf;if(!actx||!B)return;
   const src=actx.createBufferSource();src.buffer=B;
   const g=actx.createGain();g.gain.value=vol;src.connect(g);g.connect(dest||actx.destination);
-  src.start(when||0);popLimit(src,g,vol,when||actx.currentTime,f);
+  src.start(when||0,sndOnset(B));popLimit(src,g,vol,when||actx.currentTime,f);
+}
+// 소리 파일 앞쪽 무음을 건너뛰는 시작 위치(초): 팝업이 뜨는 순간 첫 소리가 바로 나도록 싱크를 맞춰요
+function sndOnset(b){
+  if(!b)return 0;if(b._on!=null)return b._on;
+  const d=b.getChannelData(0);let k=0;while(k<d.length&&Math.abs(d[k])<.02)k++;
+  return b._on=k>=d.length?0:Math.min(1.5,Math.max(0,k/b.sampleRate-.01));
 }
 // 팝업이 떠 있는 동안만 소리 나게: 전화 수신(진동음)은 반복 재생하고, 팝업이 사라지는 순간 0.15초 페이드아웃 후 멈춰요
 function popLimit(src,g,vol,when,f){
   const d=f&&f.popDur;if(!(d>0))return;
-  const t=when+d;src.loop=!!f.popVib;
+  const t=when+d;src.loop=!!f.popVib;if(src.loop)src.loopStart=sndOnset(src.buffer);
   g.gain.setValueAtTime(vol,Math.max(when,t-.15));g.gain.linearRampToValueAtTime(0,t);src.stop(t);
 }
 // 아이폰 전화 수신 상단 배너: 다른 팝업 알림과 같은 재질·둥글기·여백·그림자를 쓰고(스타일 밝게/어둡게도 그대로 따라감), 프로필 원 + 이름/부제 + 거절(빨강)·수락(초록)만 달라요
@@ -3329,7 +3336,7 @@ async function encodeExact({plan,store,bg,TR,fmt,ok,faceVid}){
         const oc=new OfflineAudioContext(2,Math.ceil(total*48000),48000),g=S.exp.sfxVol/100,off=(S.exp.sfxOff||0)/1000;
         plan.forEach((f,i)=>{const bf=(f.snd&&wantSfx(S,f.snd))?sfxBufFor(f):null;if(bf){const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=bf;gn.gain.value=g;b.connect(gn);gn.connect(oc.destination);b.start(Math.max(0,T[i]+off));}});
         plan.forEach((f,i)=>{if(sxNeed(f)&&sxBuf[f.sx]){const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=sxBuf[f.sx];gn.gain.value=sxV();b.connect(gn);gn.connect(oc.destination);b.start(Math.max(0,T[i]+off));}});
-        plan.forEach((f,i)=>{if(popBuf&&popWant(f)){const b=oc.createBufferSource(),gn=oc.createGain(),pv=S.exp.pop.vol/100,pw=Math.max(0,T[i]+off);b.buffer=popBufFor(f);gn.gain.value=pv;b.connect(gn);gn.connect(oc.destination);b.start(pw);popLimit(b,gn,pv,pw,f);}});
+        plan.forEach((f,i)=>{if(popBuf&&popWant(f)){const b=oc.createBufferSource(),gn=oc.createGain(),pv=S.exp.pop.vol/100,pw=Math.max(0,T[i]+off);b.buffer=popBufFor(f);gn.gain.value=pv;b.connect(gn);gn.connect(oc.destination);b.start(pw,sndOnset(b.buffer));popLimit(b,gn,pv,pw,f);}});
         if(faceVid){try{const fb=await actx.decodeAudioData(await VID.other.file.arrayBuffer());const b=oc.createBufferSource();b.buffer=fb;b.loop=true;b.connect(oc.destination);b.start(0);}catch(e){console.warn('영상 소리 디코딩 실패',e);}}
         if((S.screen==='call'||S.screen==='dial')&&RING){try{const rb=await actx.decodeAudioData(await (await fetch(RING.url)).arrayBuffer());const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=rb;b.loop=true;gn.gain.value=.9;b.connect(gn);gn.connect(oc.destination);b.start(0);const D=S.dial;if(S.screen==='dial'&&D.result&&D.result!=='none')b.stop(Math.max(1,+D.ringSec||3));}catch(e){console.warn('벨소리 오류',e);}}
         if(typeOn()){try{const sp=typeSpan(plan);if(sp){const tb=await x_typeBuf(),b=oc.createBufferSource(),gn=oc.createGain();b.buffer=tb;b.loop=true;b.loopStart=tb._off;gn.gain.value=.85;b.connect(gn);gn.connect(oc.destination);b.start(sp.t0,tb._off);b.stop(sp.t1);}}catch(e){console.warn('타이핑 소리 오류',e);}}
@@ -4141,7 +4148,7 @@ function x_banner(s){
   const bg=`<div class="bgl" style="background:${WALLS[s.lock.preset]?.[0]||WALLS[0][0]}">${bgImg(s.lock.wall,SA)}<div class="bgl" style="background:rgba(0,0,0,.18)"></div></div>`;
   const av=C.photo?.url?bgImg(C.photo,1):I.person('#fff');
   const ring=anim?`<i class="rp" style="left:${(-p*10).toFixed(1)}px;top:${(-p*10).toFixed(1)}px;right:${(-p*10).toFixed(1)}px;bottom:${(-p*10).toFixed(1)}px;opacity:${(.7*(1-p)).toFixed(2)};border-width:2px"></i>`:'<i class="rp lv" style="border-width:2px"></i>';
-  const body=`<div style="position:absolute;left:10px;right:10px;top:54px;z-index:5;transform:translateY(${((1-e)*-130).toFixed(1)}px);opacity:${Math.min(1,e*1.4).toFixed(2)};background:rgba(50,50,54,.94);-webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);color:#fff;border-radius:28px;padding:12px 14px 12px 12px;display:flex;align-items:center;gap:12px;box-shadow:0 12px 32px rgba(0,0,0,.45),inset 0 0 0 .5px rgba(255,255,255,.14)"><div style="width:46px;height:46px;border-radius:50%;background:#8e8e93;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;flex:none">${av}</div><div style="flex:1;min-width:0"><div style="font-size:18px;font-weight:600;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(C.name)}</div><div style="font-size:13px;opacity:.65">${esc(C.sub)}</div></div><div style="width:44px;height:44px;border-radius:50%;background:#ff3b30;display:flex;align-items:center;justify-content:center;flex:none">${I.phone('#fff',22,135)}</div><div style="width:44px;height:44px;border-radius:50%;background:#34c759;display:flex;align-items:center;justify-content:center;position:relative;flex:none">${ring}${I.phone('#fff',22)}</div></div>`;
+  const body=`<div style="position:absolute;left:10px;right:10px;top:54px;z-index:5;transform:translateY(${((1-e)*-130).toFixed(1)}px);opacity:${Math.min(1,e*1.4).toFixed(2)};background:rgba(50,50,54,.94);-webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);color:#fff;border-radius:20px;padding:12px 14px 12px 12px;display:flex;align-items:center;gap:12px;box-shadow:0 12px 32px rgba(0,0,0,.45),inset 0 0 0 .5px rgba(255,255,255,.14)"><div style="width:46px;height:46px;border-radius:50%;background:#8e8e93;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:center;flex:none">${av}</div><div style="flex:1;min-width:0"><div style="font-size:18px;font-weight:600;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(C.name)}</div><div style="font-size:13px;opacity:.65">${esc(C.sub)}</div></div><div style="width:44px;height:44px;border-radius:50%;background:#ff3b30;display:flex;align-items:center;justify-content:center;flex:none">${I.phone('#fff',22,135)}</div><div style="width:44px;height:44px;border-radius:50%;background:#34c759;display:flex;align-items:center;justify-content:center;position:relative;flex:none">${ring}${I.phone('#fff',22)}</div></div>`;
   return{bg,body};
 }
 // [화면] 전화 수신 (벨소리 · 밀어서 받기)
