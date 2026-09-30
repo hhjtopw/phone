@@ -1257,7 +1257,7 @@ UI.tw='<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path
 UI.tg='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21 4L3 11l6 2.2L11 20l3-4.2L18.5 19z"/><path d="M9 13.2L21 4"/></svg>';
 UI.tl='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>';
 UI.news='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 16.5h5"/></svg>';
-UI.dial=UI.call;UI.recents=UI.call;UI.profile=UI.chat;UI.search=UI.gallery;UI.story=UI.ig;UI.live=UI.ig;UI.sres=UI.search;UI.camera='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 5L7.5 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2.5L15 5z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+UI.dial=UI.call;UI.recents=UI.call;UI.profile=UI.chat;UI.search=UI.gallery;UI.story=UI.ig;UI.live=UI.ig;UI.sres=UI.search;UI.namu=UI.search;UI.camera='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 5L7.5 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2.5L15 5z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 UI.nc='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="7" rx="2"/><rect x="4" y="12" width="7" height="9" rx="2"/><rect x="13" y="12" width="7" height="9" rx="2"/></svg>';UI.music='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l11-2v12"/><circle cx="6.500" cy="18" r="2.500"/><circle cx="17.500" cy="16" r="2.500"/></svg>';
 UI.igprof=UI.ig;UI.igact='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>';
 UI.yt='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="4"/><path d="M10.5 9.5l4 2.5-4 2.5z"/></svg>';
@@ -1265,8 +1265,8 @@ UI.post='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="cur
 UI.reelv=UI.reels='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M3.5 9h17M9 3.5l3 5.5M15 3.5l3 5.5"/><path d="M10.5 12.5l4 2.3-4 2.3z"/></svg>';
 const DSP_LOGO='Image/Dispatch.svg';
 /* ═════════════ Data tables ═════════════ */
-const SCREENS=[['live','인스타 라이브'],['sres','검색 결과'],['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램'],['tw','트위터 DM'],['tl','X 타임라인'],['news','디스패치'],['dial','전화 걸기'],['story','인스타 스토리'],['post','인스타 게시물'],['reels','릴스 댓글'],['igprof','인스타 프로필'],['igact','인스타 활동'],['reelv','릴스 본화면'],['yt','유튜브 댓글'],['recents','최근 통화'],['profile','카톡 프로필'],['search','검색창 타이핑'],['camera','카메라'],['nc','알림·제어센터'],['music','음악 재생']];
-const SCREEN_GROUPS=[['메신저',['chat','sms','line','tg','tw','profile']],['인스타',['ig','story','live','post','reels','reelv','igprof','igact']],['전화',['dial','recents','call','face']],['SNS와 뉴스',['tl','yt','news']],['기기 화면',['lock','nc','gallery','camera','search','sres']],['기타',['music']]];
+const SCREENS=[['live','인스타 라이브'],['sres','검색 결과'],['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램'],['tw','트위터 DM'],['tl','X 타임라인'],['news','디스패치'],['namu','나무위키'],['dial','전화 걸기'],['story','인스타 스토리'],['post','인스타 게시물'],['reels','릴스 댓글'],['igprof','인스타 프로필'],['igact','인스타 활동'],['reelv','릴스 본화면'],['yt','유튜브 댓글'],['recents','최근 통화'],['profile','카톡 프로필'],['search','검색창 타이핑'],['camera','카메라'],['nc','알림·제어센터'],['music','음악 재생']];
+const SCREEN_GROUPS=[['메신저',['chat','sms','line','tg','tw','profile']],['인스타',['ig','story','live','post','reels','reelv','igprof','igact']],['전화',['dial','recents','call','face']],['SNS와 뉴스',['tl','yt','news','namu']],['기기 화면',['lock','nc','gallery','camera','search','sres']],['기타',['music']]];
 const screenLabel=k=>(SCREENS.find(x=>x[0]===k)||[k,k])[1];
 const WALLS=[
   ['linear-gradient(170deg,#4a4a50 0%,#1c1c1f 100%)','그라파이트'],
@@ -1333,6 +1333,7 @@ function defaults(){
     search:{kb:true,style:'google',cps:7,snd:true,query:'아이폰 최근 통화 기록 삭제',ph:'검색어를 입력하세요',sugg:'아이폰 최근 통화 기록 삭제 복구\n아이폰 최근 통화 기록 삭제 안됨\n아이폰 최근 통화 기록 전체 삭제'},
     recents:{title:'최근 통화',items:[{id:uid(),name:'이름',kind:'missed',time:'오후 3:24'},{id:uid(),name:'이름',kind:'missed',time:'오후 3:21'},{id:uid(),name:'이름',kind:'out',time:'오후 3:18'}]},
     live:{anim:true,hearts:true,img:null,avatar:null,name:'username',viewers:'1.2천',cmts:'user1|안녕하세요!\nuser2|와 대박\nuser3|ㅋㅋㅋㅋ 진짜',hint:'댓글 달기...'},
+    namu:{dark:false,title:'예시 문서',stars:'1,234',cats:'예시 분류\n문서 예시',toc:true,info:true,infoTitle:'예시 문서',img:null,infoRows:'분류|예시\n최초 작성|2020년 1월 1일\n관련 문서|예시 2',fn:'첫 번째 각주 내용입니다.\n두 번째 각주 내용입니다.',sections:[{id:uid(),h:'개요',lv:1,t:'[[예시 문서]]는 이 화면에 들어가는 내용을 보여 주기 위한 문서다.[1] 굵은 글씨는 **이렇게** 쓴다.\n두 번째 문단은 이렇게 한 줄에 하나씩 적는다.'},{id:uid(),h:'역사',lv:1,t:'역사에 대한 설명이 들어간다.\n* 목록은 앞에 별표와 띄어쓰기를 붙인다.\n* 두 번째 항목이다.[2]'},{id:uid(),h:'초기',lv:2,t:'작은 제목의 내용이다.'},{id:uid(),h:'평가',lv:1,t:'평가에 대한 내용이 들어간다.'}]},
     sres:{ai:true,aiOpen:false,aiText:'전화 앱의 최근 통화 탭에서 삭제할 기록을 왼쪽으로 밀어 삭제하거나, 편집을 눌러 여러 기록을 한 번에 지울 수 있어요.\n삭제한 기록은 되돌리기 어렵기 때문에 필요한 번호는 미리 저장해 두는 것이 좋아요.',paa:true,paaList:'아이폰 통화 기록은 얼마나 저장되나요?\n삭제한 통화 기록을 복구할 수 있나요?\n통화 기록 전체를 한 번에 지우는 방법은?\niCloud에도 통화 기록이 남나요?',rel:true,relList:'아이폰 통화 기록 복구\n아이폰 통화 기록 확인\n아이폰 통화 기록 백업\n아이폰 최근 통화 삭제 안됨\n아이폰 통화 기록 icloud\n통화 기록 전체 삭제',style:'google',q:'아이폰 최근 통화 기록 삭제',tab:'전체',items:[{id:uid(),dt:'2일 전',img:null,t:'아이폰 최근 통화 기록 삭제하는 방법',s:'Apple 지원',u:'support.apple.com › ko-kr',d:'전화 앱에서 최근 통화 탭을 열고 삭제할 기록을 왼쪽으로 밀어 삭제할 수 있어요.'},{id:uid(),dt:'2일 전',img:null,t:'최근 통화 기록 복구 가능할까? - 블로그',s:'예시 블로그',u:'blog.example.com',d:'삭제한 통화 기록을 다시 확인하는 방법과 주의할 점을 정리했습니다.'},{id:uid(),dt:'2일 전',img:null,t:'통화 기록 완전 삭제 후 확인하는 법',s:'예시 커뮤니티',u:'community.example.com',d:'설정에서 통화 기록과 관련된 항목을 확인하고 정리하는 순서를 안내합니다.'},{id:uid(),dt:'2일 전',img:null,t:'아이폰 통화 기록 백업과 복원 정리',s:'예시 테크',u:'tech.example.com',d:'백업본에서 통화 기록을 되살릴 수 있는지 조건별로 살펴봤어요.'},{id:uid(),dt:'2일 전',img:null,t:'자주 묻는 질문 - 통화 기록',s:'예시 도움말',u:'help.example.com',d:'통화 기록이 사라졌을 때 자주 묻는 질문을 모았습니다.'},{id:uid(),dt:'2일 전',img:null,t:'통화 기록이 안 지워질 때 해결 방법',s:'예시 FAQ',u:'faq.example.com',d:'삭제가 되지 않을 때 확인해야 할 설정과 재시작 방법을 알려드려요.'},{id:uid(),dt:'2일 전',img:null,t:'iCloud 통화 기록 동기화 끄는 방법',s:'예시 가이드',u:'guide.example.com',d:'다른 기기에 통화 기록이 남지 않도록 동기화를 끄는 순서입니다.'},{id:uid(),dt:'2일 전',img:null,t:'통화 기록 관련 자주 하는 실수 5가지',s:'예시 팁',u:'tips.example.com',d:'많은 분들이 놓치는 부분을 사례와 함께 정리했습니다.'}]},
     story:{texts:[],stickers:[],slots:[{id:uid(),img:null},{id:uid(),img:null},{id:uid(),img:null}],avatar:null,name:'username',time:'3시간',cur:1,prog:40,imgSec:3,text:'',textStyle:'plain',textY:50,textX:50,textSize:100,textRot:0,hint:'메시지 보내기...'},
     tl:{rise:true,speed:1,scrollMode:'add',mode:'light',tab:0,fab:true,me:null,tweetsF:[
@@ -1475,6 +1476,7 @@ function statusColor(s){
     case'igprof':return (s.igprof.dark||(s._hv&&s._hv.open>.5))?'#fff':'#000';
     case'igact':return s.igact.dark?'#fff':'#000';
     case'yt':return '#fff';
+    case'namu':return s.device.uiTop===false?'#000':'#fff';
     case'reelv':return'#fff';
     case'reels':return'#fff';
     case'news':return s.device.uiTop===false?'#000':'#fff';
@@ -1494,6 +1496,7 @@ function homeColor(s){
     case'yt':return s.yt.dark?'rgba(255,255,255,.85)':'#111';
     case'reels':return s.reels.sheet==='dark'?'rgba(255,255,255,.85)':'#111';
     case'news':return'#111';
+    case'namu':return s.namu.dark?'rgba(255,255,255,.85)':'#111';
     case'ig':case'line':case'tg':return'#111';
     case'chat':return KT[s.chat.theme].dark?'rgba(255,255,255,.85)':'#111';
     case'sms':case'gallery':return'#111';
@@ -1970,6 +1973,36 @@ function screenSres(s){
     return `<span style="display:inline-flex;align-items:center;gap:5px;padding:11px 0 9px;color:${col};font-weight:${on?700:500};border-bottom:3px solid ${on?(nv?'#111':'#1f1f1f'):'transparent'};border-radius:${nv?0:'3px 3px 0 0'};margin-bottom:-1px">${ic}${t}</span>`;}).join('')}</div>`;
   return{bg:'<div class="bgl" style="background:#fff"></div>',body:`<div style="flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;color:#111"><div class="tl-list" style="background:#fff;color:inherit"><div class="tl-inner"><div class="sr-head">${head}</div><div class="sr-tabs" style="position:relative;z-index:2;background:#fff">${tb}</div>${body}<div style="height:60px"></div></div></div></div>`};
 }
+// [화면] 나무위키 문서
+function screenNamu(s){
+  const N=s.namu,e=esc,dk=!!N.dark,ln=t=>String(t||'').split('\n').filter(x=>x.trim());
+  const G='#00a495',C=dk?{bg:'#1b1b1b',tx:'#dcdcdc',mu:'#8f8f8f',bd:'#3a3a3a',lk:'#3ed3c1',th:'#2a2a2a',bx:'#222'}:{bg:'#fff',tx:'#373a3c',mu:'#777',bd:'#ddd',lk:'#008275',th:'#f3f3f3',bx:'#fafafa'};
+  const sbh=(s.device.ratio&&s.device.ratio!=='phone')?30:({island:54,notch:48,punch:40})[s.device.model]||54;
+  const hh=(s.device.uiTop!==false?sbh:0)+52;
+  const fmt=t=>e(t).replace(/\[\[([^\]]+)\]\]/g,`<span style="color:${C.lk}">$1</span>`).replace(/\[(\d{1,2})\]/g,`<sup style="color:${C.lk};font-size:11px;margin-left:1px">[$1]</sup>`).replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
+  const sv=(d,c,w=22,sw=2)=>`<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" style="flex:none">${d}</svg>`;
+  const bar=`<div style="flex:none;height:52px;background:${G};display:flex;align-items:center;gap:8px;padding:0 14px;color:#fff"><svg width="26" height="26" viewBox="0 0 24 24" style="flex:none"><circle cx="12" cy="9" r="7.5" fill="#fff"/><rect x="10.8" y="14" width="2.4" height="8" rx="1.1" fill="#fff"/></svg><span style="font-size:20px;font-weight:800;letter-spacing:-.5px">나무위키</span><span style="flex:1"></span>${sv('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/>','#fff',22)}<span style="width:6px"></span>${sv('<path d="M4 6.5h16M4 12h16M4 17.5h16"/>','#fff',24)}</div>`;
+  const pill=(t,ic)=>`<span style="display:inline-flex;align-items:center;gap:4px;border:1px solid ${C.bd};border-radius:4px;padding:5px 10px;font-size:13px;color:${C.tx};background:${C.bg};white-space:nowrap">${ic||''}${t}</span>`;
+  const star=sv('<path d="M12 3.5l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17.2l-5.4 3 1.1-6.1-4.5-4.2 6.1-.8z"/>',C.mu,14,1.8);
+  const acts=`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">${pill(e(N.stars||'0'),star)}${pill('역링크')}${pill('토론')}${pill('편집')}${pill('역사')}</div>`;
+  const cats=ln(N.cats).length?`<div style="margin-top:14px;border:1px solid ${C.bd};background:${C.bx};padding:8px 12px;font-size:13.5px;line-height:1.7;color:${C.tx}"><b>분류</b>&nbsp; ${ln(N.cats).map(x=>`<span style="color:${C.lk}">${e(x)}</span>`).join(`<span style="color:${C.mu}"> | </span>`)}</div>`:'';
+  const rows=ln(N.infoRows).map(r=>{const k=r.split('|')[0],v=r.split('|').slice(1).join('|');return `<div style="display:flex;border-top:1px solid ${C.bd};font-size:13.5px;line-height:1.55"><div style="width:32%;flex:none;background:${C.th};font-weight:700;padding:7px 10px;color:${C.tx};overflow-wrap:anywhere">${e(k)}</div><div style="flex:1;min-width:0;padding:7px 10px;color:${C.tx};overflow-wrap:anywhere">${fmt(v)}</div></div>`;}).join('');
+  const info=N.info?`<div style="margin-top:14px;border:1px solid ${C.bd};background:${C.bg}"><div style="background:${G};color:#fff;font-weight:700;font-size:15px;text-align:center;padding:9px 10px;overflow-wrap:anywhere">${e(N.infoTitle||N.title)}</div>${N.img&&N.img.url?`<div style="position:relative;overflow:hidden;aspect-ratio:1;background:#eee">${bgImg(N.img,1)}</div>`:''}${rows}</div>`:'';
+  let n1=0,n2=0;const secs=(N.sections||[]).map(x=>{const lv=+x.lv===2?2:1;if(lv===1){n1++;n2=0;}else{if(!n1)n1=1;n2++;}return{...x,lv,no:lv===1?n1+'.':n1+'.'+n2+'.'};});
+  const toc=(N.toc&&secs.length)?`<div style="margin-top:14px;border:1px solid ${C.bd};background:${C.bx};padding:12px 14px"><div style="font-size:15px;font-weight:700;color:${C.tx};margin-bottom:6px">목차</div>${secs.map(x=>`<div style="font-size:14px;line-height:1.9;margin-left:${x.lv===2?18:0}px;color:${C.tx}"><span style="color:${C.lk}">${x.no}</span> <span style="color:${C.lk}">${e(x.h)}</span></div>`).join('')}</div>`:'';
+  const body=secs.map(x=>{
+    const ps=ln(x.t).map(l=>/^\* /.test(l)?`<div style="display:flex;gap:8px;font-size:15px;line-height:1.7;color:${C.tx};margin:0 0 4px 6px"><span style="width:5px;height:5px;border-radius:50%;background:${C.tx};flex:none;margin-top:11px"></span><span style="flex:1;min-width:0;overflow-wrap:anywhere">${fmt(l.slice(2))}</span></div>`:`<div style="font-size:15px;line-height:1.7;color:${C.tx};margin:0 0 8px;overflow-wrap:anywhere">${fmt(l)}</div>`).join('');
+    return `<div style="display:flex;align-items:baseline;gap:7px;margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid ${C.bd};font-size:${x.lv===1?20:17}px;font-weight:700;color:${C.tx};line-height:1.35"><span style="color:${C.lk};flex:none">${x.no}</span><span style="flex:1;min-width:0;overflow-wrap:anywhere">${e(x.h)}</span><span style="flex:none;font-size:12px;font-weight:400;color:${C.mu}">[편집]</span></div>${ps}`;}).join('');
+  const fns=ln(N.fn),fn=fns.length?`<div style="margin-top:26px;padding-top:12px;border-top:1px solid ${C.bd}">${fns.map((t,i)=>`<div style="display:flex;gap:6px;font-size:13.5px;line-height:1.65;color:${C.tx};margin-bottom:4px"><span style="color:${C.lk};flex:none">[${i+1}]</span><span style="flex:1;min-width:0;overflow-wrap:anywhere">${fmt(t)}</span></div>`).join('')}</div>`:'';
+  const page=`<div style="padding:18px 16px 0"><div style="font-size:26px;font-weight:700;line-height:1.3;color:${C.tx};overflow-wrap:anywhere">${e(N.title)}</div>${acts}${cats}${info}${toc}${body}${fn}<div style="margin-top:28px;font-size:11.5px;line-height:1.6;color:${C.mu};text-align:center">이 저작물은 CC BY-NC-SA 2.0 KR에 따라 이용할 수 있습니다. (단, 라이선스가 명시된 일부 문서 및 삽화 제외)</div></div>`;
+  return{bg:`<div class="bgl" style="background:linear-gradient(${G} ${hh}px,${C.bg} ${hh}px)"></div>`,body:`<div style="flex:1;min-height:0;display:flex;flex-direction:column;background:${C.bg};color:${C.tx}">${bar}<div class="tl-list" style="background:${C.bg};color:inherit"><div class="tl-inner">${page}<div style="height:60px"></div></div></div></div>`};
+}
+// [편집 패널] 나무위키
+function E_namu(){const N=S.namu,n=(N.sections||[]).length;
+  return card('나무위키 문서',`${tog('namu.dark','다크 모드')}${fld('문서 제목',txt('namu.title'))}<div class="g2">${fld('별표 수',txt('namu.stars','0'))}${tog('namu.toc','목차 표시')}</div>${fld('분류 (한 줄에 하나)',area('namu.cats'))}`)
+  +card('인포박스',`${tog('namu.info','인포박스 표시')}${N.info?`${fld('제목 (비우면 문서 제목)',txt('namu.infoTitle'))}${imgField('namu.img','대표 이미지 (선택)',false)}${fld('항목 (한 줄에 하나, 항목|내용)',area('namu.infoRows'))}`:''}`)
+  +card('본문 섹션',(N.sections||[]).map((x,i)=>`<div class="item" data-dp="namu.sections" data-di="${i}"><div class="item-h"><span class="badge">섹션 ${i+1}</span>${mv('namu.sections',i,n)}</div>${fld('제목',txt(`namu.sections.${i}.h`))}${fld('단계',seg(`namu.sections.${i}.lv`,[[1,'큰 제목 (1.)'],[2,'작은 제목 (1.1.)']]))}${fld('내용 (한 줄에 한 문단 · [[링크]] · [1] 각주 · **굵게** · "* "로 시작하면 목록)',area(`namu.sections.${i}.t`))}</div>`).join('')+(n<20?'<button class="btn line" data-act="add" data-path="namu.sections" data-tpl="namusec">＋ 섹션 추가</button>':''))
+  +card('각주',`${fld('각주 (한 줄에 하나, 본문의 [1] [2]… 순서)',area('namu.fn'))}`);}
 // [편집 패널] 인스타 라이브
 function E_live(){const L=S.live;return card('인스타 라이브',`${imgField('live.img','화면 사진',true)}${imgField('live.avatar','프로필 사진',false)}<div class="g2">${fld('아이디',txt('live.name'))}${fld('시청자 수',txt('live.viewers'))}</div>${fld('입력창 문구',txt('live.hint'))}${fld('댓글 (한 줄에 하나, 이름|내용)',area('live.cmts','user1|안녕하세요'))}${tog('live.anim','GIF · 영상: 댓글이 하나씩 올라오기')}${tog('live.hearts','하트가 떠오르기')}<div class="hint" style="margin-top:6px">▶ 미리보기 · GIF · 영상에 적용돼요.</div>`);}
 // [편집 패널] 검색 결과
@@ -2451,14 +2484,14 @@ function hlViewer(s,P){
   const x='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>';
   return`<div style="position:absolute;left:0;top:0;right:0;bottom:0;z-index:4;background:#000;overflow:hidden;transform-origin:${ox}px ${oy}px;transform:scale(${(.12+.88*e).toFixed(3)});opacity:${Math.min(1,e*2).toFixed(2)};border-radius:${((1-e)*40).toFixed(0)}px">${bgImg(h.img,SA)}<div class="bgl" style="background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,0) 22%,rgba(0,0,0,0) 76%,rgba(0,0,0,.45))"></div><div style="position:absolute;left:10px;right:10px;top:58px;display:flex;gap:4px">${bars}</div><div style="position:absolute;left:12px;right:12px;top:72px;display:flex;align-items:center;gap:9px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.4)">${igPf(P.av,32)}<b style="font-size:14px;font-weight:600">${esc(P.name)}</b><span style="font-size:13px;opacity:.7">${esc(h.label)}</span><span style="margin-left:auto">${x}</span></div><div style="position:absolute;left:14px;right:14px;bottom:30px;height:44px;border:1px solid rgba(255,255,255,.7);border-radius:22px;display:flex;align-items:center;padding:0 16px;color:#fff;font-size:14px">메시지 보내기...</div></div>`;
 }
-const SCREEN_FN={camera:screenCamera,lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw,tl:screenTl,news:screenNews,dial:screenDial,story:screenStory,live:screenLive,sres:screenSres,post:screenPost,reels:screenReels,igprof:screenIgProf,igact:screenIgAct,reelv:screenReelV,yt:screenYt,recents:screenRecents,profile:screenProfile,search:screenSearch,nc:screenNc,music:screenMusic};
+const SCREEN_FN={camera:screenCamera,lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw,tl:screenTl,news:screenNews,dial:screenDial,story:screenStory,live:screenLive,sres:screenSres,namu:screenNamu,post:screenPost,reels:screenReels,igprof:screenIgProf,igact:screenIgAct,reelv:screenReelV,yt:screenYt,recents:screenRecents,profile:screenProfile,search:screenSearch,nc:screenNc,music:screenMusic};
 
 let BOX=1;
 ['chat','ig','line','tg','tw'].forEach(k=>{const f=SCREEN_FN[k];SCREEN_FN[k]=s=>{const r=f(s);if(s.chat.kb!==false&&(hasDraft(s)||s.chat.kbStill||s._kb)&&DIMS[s.device.ratio||'phone'][1]>=676){r.body=r.body.replace(/class="(kt-in|ig-in|ln-in|tg-in|tw-in)"/,'class="$1 kbp"')+smsKbd(s._kq!=null?x_eo(Math.min(1,+s._kq)):1,s._kp);}return r;};});
 // (자리만 남겨 둔 함수) 상태를 그대로 돌려줘요
 function msgFx(s){return s;}
 const MSGR_SCR=['chat','sms','ig','line','tg','tw'];
-const SCROLL_SEL={chat:['.list','.inner'],sms:['.list','.inner'],ig:['.list','.inner'],line:['.list','.inner'],tg:['.list','.inner'],tw:['.list','.inner'],tl:['.tl-list','.tl-inner'],news:['.nw-list','.nw-inner'],sres:['.tl-list','.tl-inner']};
+const SCROLL_SEL={chat:['.list','.inner'],sms:['.list','.inner'],ig:['.list','.inner'],line:['.list','.inner'],tg:['.list','.inner'],tw:['.list','.inner'],tl:['.tl-list','.tl-inner'],news:['.nw-list','.nw-inner'],sres:['.tl-list','.tl-inner'],namu:['.tl-list','.tl-inner']};
 // 메신저 스크롤 위치를 DOM 에 적용
 function scrollApply(root,st){
   if(st._scrollT==null)return;
@@ -3693,7 +3726,7 @@ function renderEditor(){
   let h='';
   if(ui.tab==='screen'){
     h=`<div class="sgrps">${SCREEN_GROUPS.map(([gl,ks])=>`<div class="sgrp"><div class="sgl">${gl}</div><div class="sgb">${ks.map(k=>`<button class="pkbtn ${S.screen===k?'on':''}" data-act="screen" data-val="${k}">${UI[k]}${screenLabel(k)}</button>`).join('')}</div></div>`).join('')}</div>`
-      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램'),tw:E_tw,tl:E_tl,news:E_news,dial:E_dial,story:E_story,live:E_live,sres:E_sres,post:E_post,reels:E_reels,igprof:E_igprof,igact:E_igact,camera:E_camera,reelv:E_reelv,yt:E_yt,recents:E_recents,profile:E_profile,search:E_search,nc:E_nc,music:E_music})[S.screen]();
+      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램'),tw:E_tw,tl:E_tl,news:E_news,dial:E_dial,story:E_story,live:E_live,sres:E_sres,namu:E_namu,post:E_post,reels:E_reels,igprof:E_igprof,igact:E_igact,camera:E_camera,reelv:E_reelv,yt:E_yt,recents:E_recents,profile:E_profile,search:E_search,nc:E_nc,music:E_music})[S.screen]();
   }else if(ui.tab==='device')h=E_device();
   else if(ui.tab==='ooc')h=E_ooc();
   else if(ui.tab==='extra')h=E_extra();
@@ -3751,6 +3784,7 @@ document.addEventListener('change',e=>{const b=e.target&&e.target.dataset&&e.tar
 });
 const TPL={
   ...Object.fromEntries([['poll','투표 질문','예','아니오'],['question','질문을 남겨주세요','',''],['link','example.com','',''],['location','서울','',''],['time',new Date().toTimeString().slice(0,5),'',''],['mention','username','','']].map(([k,t,a,b])=>['stk_'+k,()=>({id:uid(),k,text:k==='time'?new Date().toTimeString().slice(0,5):t,a:a||'예',b:b||'아니오',x:50,y:Math.min(88,45+(S.story.stickers||[]).length*12),size:100,rot:0})])),
+  namusec:()=>({id:uid(),h:'새 섹션',lv:1,t:'내용을 입력하세요.'}),
   sresitem:()=>({id:uid(),dt:'2일 전',img:null,t:'검색 결과 제목',s:'예시 사이트',u:'example.com',d:'검색 결과 설명 문구가 여기에 들어가요.'}),
   slot:()=>({id:uid(),img:null}),
   stext:()=>{const n=(S.story.texts||[]).length;return{id:uid(),text:'텍스트를 입력하세요',font:'classic',bg:'none',color:'#ffffff',align:'center',x:50,y:Math.min(85,42+n*10),size:100,rot:0,slot:0};},
