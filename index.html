@@ -2481,9 +2481,7 @@ function ovApply(root,st){
       const d=document.createElement('div');
       d.className='popn';
       d.style.cssText=`position:absolute;left:0;right:0;margin:0 auto;top:${top}px;width:calc(100% - 20px);max-width:${flat?380:999}px;z-index:${50+q.i};pointer-events:none;transform-origin:50% 0;transform:translateY(${(-(1-v)*(top+96)).toFixed(1)}px) scale(${(.94+.06*Math.min(v,1)).toFixed(3)});opacity:${Math.min(1,v*2.2).toFixed(2)}`;
-      if(it.app==='incall'){const nm=it.title||'이름',ini=esc([...nm.trim()][0]||'?');
-        d.innerHTML=`<div class="nt" style="background:rgba(28,28,30,.97);color:#fff;border-radius:38px;padding:13px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,.35)"><div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(#a5aab3,#7c818a);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:500;flex:none">${ini}</div><div style="flex:1;min-width:0"><div style="font-size:17px;font-weight:600;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(nm)}</div><div style="font-size:14px;opacity:.6;margin-top:1px">${esc(it.body||'휴대전화')}</div></div><div style="width:46px;height:46px;border-radius:50%;background:#ff3b30;display:flex;align-items:center;justify-content:center;flex:none">${I.phone('#fff',23,135)}</div><div style="width:46px;height:46px;border-radius:50%;background:#34c759;display:flex;align-items:center;justify-content:center;flex:none">${I.phone('#fff',23)}</div></div>`;
-      }else
+      if(it.app==='incall'){d.innerHTML=callBannerHtml(it);}else
       d.innerHTML=`<div class="nt ${dk?'dark':'light'}" style="background:${dk?'rgba(44,44,46,.96)':'rgba(255,255,255,.95)'};box-shadow:0 10px 30px rgba(0,0,0,.24),0 0 0 .5px rgba(0,0,0,.1)"><div class="nt-ic" style="background:${a.bg}">${a.ic()}</div><div class="nt-tx"><div class="nt-h"><b>${esc(it.title||a.n)}</b><span>${esc(it.time||'')}</span></div>${it.body?`<div class="nt-b">${esc(it.body)}</div>`:''}</div></div>`;
       scr.appendChild(d);els.push({d,q});
     }
@@ -2497,7 +2495,7 @@ function ovApply(root,st){
           const hb=e.d.offsetHeight,T=D*10+(hf-hb*(1-.05*D))*Math.min(1,D);
           e.d.style.transform=`translateY(${T.toFixed(1)}px) scale(${(1-.05*D).toFixed(3)})`;
           const nt=e.d.firstElementChild;
-          if(nt)nt.style.background=dk?`rgba(${44-Math.round(12*Dc)},${44-Math.round(12*Dc)},${46-Math.round(12*Dc)},.97)`:`rgba(${255-Math.round(24*Dc)},${255-Math.round(24*Dc)},${255-Math.round(20*Dc)},.97)`;
+          if(nt&&!nt.dataset.ic)nt.style.background=dk?`rgba(${44-Math.round(12*Dc)},${44-Math.round(12*Dc)},${46-Math.round(12*Dc)},.97)`:`rgba(${255-Math.round(24*Dc)},${255-Math.round(24*Dc)},${255-Math.round(20*Dc)},.97)`;
           e.d.style.opacity=(Math.min(1,e.q.v*2.2)*Math.max(0,Math.min(1,3-dep))).toFixed(2);
         }
         dep+=v;
@@ -2867,7 +2865,7 @@ function E_export(){
 /* ─ 효과음 파일 설정 (GitHub 폴더: phone/sound effect/파일명) — 파일을 바꾸거나 이름을 고치려면 여기만 수정하세요 ─ */
 const SOUND_DIR='phone/sound effect/';
 const SOUND_FILES={sfx:'message.mp3',pop:'notification.mp3',ring:'ringtone.mp3',type:'typing.mp3',
-  recv:'whatsapp-audio-2020-08-23-at-04_cMHstO4.mp3',shutter:'iphone-camera-shutter-fast.mp3',shot:'iphone-screenshot.mp3'};   // recv 상대 메시지 수신음 · shutter 카메라 셔터 · shot 스크린샷
+  recv:'whatsapp-audio-2020-08-23-at-04_cMHstO4.mp3',shutter:'iphone-camera-shutter-fast.mp3',shot:'iphone-screenshot.mp3',vib:'mobile-phone-vibration.mp3'};   // recv 상대 메시지 수신음 · shutter 카메라 셔터 · shot 스크린샷 · vib 전화 수신 팝업 진동음
 const soundUrl=k=>encodeURI(SOUND_DIR+SOUND_FILES[k]);
 const SOUND_TRY=k=>[...new Set([SOUND_DIR,'./'+SOUND_DIR,'/'+SOUND_DIR,'sound effect/','sound_effect/','sounds/',''].map(d=>encodeURI(d+SOUND_FILES[k])))];
 const SOUND_PICK={};   // 직접 고른 파일 (file:// 로 열었을 때도 동작)
@@ -2908,7 +2906,7 @@ async function sfxInit(){
 }
 /* 추가 효과음: recv=상대 메시지 수신음, shutter=카메라 셔터, shot=스크린샷 (파일은 SOUND_FILES 참고) */
 const sxBuf={};
-const SX_KEYS=['recv','shutter','shot'],sxTried=new Set();
+const SX_KEYS=['recv','shutter','shot','vib'],sxTried=new Set();
 // 효과음 파일들을 미리 읽어 두기
 async function sxLoad(){
   for(const k of SX_KEYS){
@@ -2934,11 +2932,26 @@ function sfxPlay(dest,vol,when,buf){
   const g=actx.createGain();g.gain.value=vol;src.connect(g);g.connect(dest||actx.destination);src.start(when||0);
 }
 // 알림 팝 효과음 재생
-function popPlay(dest,vol,when){
-  if(!actx||!popBuf)return;
-  const src=actx.createBufferSource();src.buffer=popBuf;
+function popPlay(dest,vol,when,buf){
+  const B=buf||popBuf;if(!actx||!B)return;
+  const src=actx.createBufferSource();src.buffer=B;
   const g=actx.createGain();g.gain.value=vol;src.connect(g);g.connect(dest||actx.destination);src.start(when||0);
 }
+// 아이폰 전화 수신 상단 배너 (iOS 14+ 컴팩트 배너): 어두운 반투명 카드 · 회색 프로필 원 · 이름 + 부제 · 거절(빨강) / 수락(초록)
+function callBannerHtml(it){
+  const nm=(it.title||'').trim()||'이름',sub=it.body||'휴대전화';
+  const isNum=/^[\d\s+\-()]+$/.test(nm);   // 전화번호면 기본 사람 모양, 이름이면 첫 글자를 프로필에 써요
+  const av=isNum
+    ?'<svg width="32" height="32" viewBox="0 0 24 24" fill="#fff" opacity=".92"><circle cx="12" cy="8.6" r="4.1"/><path d="M4.2 21c0-4.3 3.5-7.4 7.8-7.4s7.8 3.100 7.800 7.400z"/></svg>'
+    :`<span style="font-size:24px;font-weight:500;line-height:1;color:#fff">${esc([...nm][0])}</span>`;
+  const btn=(bg,ic)=>`<div style="width:46px;height:46px;border-radius:50%;background:${bg};display:flex;align-items:center;justify-content:center;flex:none">${ic}</div>`;
+  return `<div class="nt" data-ic="1" style="background:rgba(30,30,32,.94);-webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);color:#fff;border-radius:30px;padding:14px 14px 14px 15px;display:flex;align-items:center;gap:12px;box-shadow:0 14px 34px rgba(0,0,0,.42),inset 0 0 0 .5px rgba(255,255,255,.12);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Apple SD Gothic Neo','Noto Sans KR',sans-serif">`
+    +`<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(#a9adb6,#7d818b);display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden">${av}</div>`
+    +`<div style="flex:1;min-width:0"><div style="font-size:17px;font-weight:600;letter-spacing:-.3px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(nm)}</div><div style="font-size:14px;line-height:1.3;margin-top:1px;color:rgba(235,235,245,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(sub)}</div></div>`
+    +btn('#ff3b30',I.phone('#fff',22,135))+btn('#34c759',I.phone('#fff',22))+'</div>';
+}
+// 팝업 소리 고르기: 전화 수신(incall) 팝업은 진동음, 그 외는 기본 알림음 (진동음 파일이 없으면 기본 알림음)
+const popBufFor=f=>(f&&f.popVib&&sxBuf.vib)||popBuf;
 const popOn=()=>!!(S.exp.pop&&S.exp.pop.on&&S.exp.pop.snd);
 const lkSnd=()=>S.lock.snd!==false;   // 잠금화면 알림도 상단 팝업과 같은 알림음(notification.mp3)
 const lkOn=()=>lkSnd()&&(S.screen==='lock'||(S.exp.vidMode==='seq'&&(S.exp.vidSeq||[]).includes('lock')));
@@ -2949,6 +2962,12 @@ const popStill=s=>(s.exp.pop&&s.exp.pop.on&&s.exp.pop.still)?{...s,_pop:{list:s.
 function popApplyMap(plan){
   const P=S.exp.pop,map=plan.map((_,i)=>i);
   if(!P||!P.on||!plan.length)return{out:plan,map,hold:-1};
+  const IT0=popItems(P);
+  if(IT0.length>1){
+    const need=Math.max(...IT0.map(it=>Math.max(0,+it.at||0)+Math.max(1,+it.dur||3)));
+    let cur=0;for(const f of plan)cur+=f.delay/1000;
+    if(need>cur+1e-6){plan=plan.slice();const L=plan.length-1;plan[L]={...plan[L],delay:plan[L].delay+(need-cur)*1000};}
+  }
   const T=[0];plan.forEach((f,i)=>T.push(T[i]+f.delay/1000));const total=T[plan.length];
   const IN=.4,OUT=.3,STEP=.05,IT=popItems(P),N=IT.length;
   // 각 알림의 시작·끝. 여러 개면 다음 알림이 뜰 때 앞 알림은 위로 밀려나가요 (아이폰처럼 교체)
@@ -2987,7 +3006,7 @@ function popApplyMap(plan){
       const base={...f,delay:(y-x)*1000,snd:k===0?f.snd:undefined,sx:k===0?f.sx:undefined,lks:k===0?f.lks:undefined};
       if(!list.length){out.push(tag(k===0?base:{...base,key:(f.key||'g'+i)+'_r'+k},seenAt(mid),i));continue;}
       const nf=tag({...base,s:{...f.s,_pop:{list}},key:(f.key||'g'+i)+'_pop'+list.map(q=>q.i+'-'+Math.round(q.v*100)).join('_')},seenAt(mid),i);
-      list.forEach(q=>{if(!fired.has(q.i)&&x>=B[q.i].t0-1e-6){fired.add(q.i);nf.pop=1;}});
+      list.forEach(q=>{if(!fired.has(q.i)&&x>=B[q.i].t0-1e-6){fired.add(q.i);nf.pop=1;if((popItems(S.exp.pop)[q.i]||{}).app==='incall')nf.popVib=1;}});
       if(list.some(q=>q.v>=1)&&hold<0)hold=out.length;
       out.push(nf);
     }
@@ -3232,7 +3251,7 @@ async function playPreview0(){
     if(!skip){const st=await stateOf(f);host.innerHTML=stageHTML(st);applySlide(host,st);}
     if(ok&&f.snd&&wantSfx(S,f.snd))sfxPlay(null,S.exp.sfxVol/100,0,sfxBufFor(f));
     if(ok&&sxNeed(f))sxPlay(f.sx,null,sxV());
-    if(ok&&popWant(f))popPlay(null,S.exp.pop.vol/100);
+    if(ok&&popWant(f))popPlay(null,S.exp.pop.vol/100,0,popBufFor(f));
     acc+=f.delay;const w=t0+acc-performance.now();if(w>0)await sleep(w);
   }
   playing=false;PV=false;document.body.classList.remove('pv');
@@ -3283,7 +3302,7 @@ async function encodeExact({plan,store,bg,TR,fmt,ok,faceVid}){
         const oc=new OfflineAudioContext(2,Math.ceil(total*48000),48000),g=S.exp.sfxVol/100,off=(S.exp.sfxOff||0)/1000;
         plan.forEach((f,i)=>{const bf=(f.snd&&wantSfx(S,f.snd))?sfxBufFor(f):null;if(bf){const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=bf;gn.gain.value=g;b.connect(gn);gn.connect(oc.destination);b.start(Math.max(0,T[i]+off));}});
         plan.forEach((f,i)=>{if(sxNeed(f)&&sxBuf[f.sx]){const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=sxBuf[f.sx];gn.gain.value=sxV();b.connect(gn);gn.connect(oc.destination);b.start(Math.max(0,T[i]+off));}});
-        plan.forEach((f,i)=>{if(popBuf&&popWant(f)){const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=popBuf;gn.gain.value=S.exp.pop.vol/100;b.connect(gn);gn.connect(oc.destination);b.start(Math.max(0,T[i]+off));}});
+        plan.forEach((f,i)=>{if(popBuf&&popWant(f)){const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=popBufFor(f);gn.gain.value=S.exp.pop.vol/100;b.connect(gn);gn.connect(oc.destination);b.start(Math.max(0,T[i]+off));}});
         if(faceVid){try{const fb=await actx.decodeAudioData(await VID.other.file.arrayBuffer());const b=oc.createBufferSource();b.buffer=fb;b.loop=true;b.connect(oc.destination);b.start(0);}catch(e){console.warn('영상 소리 디코딩 실패',e);}}
         if((S.screen==='call'||S.screen==='dial')&&RING){try{const rb=await actx.decodeAudioData(await (await fetch(RING.url)).arrayBuffer());const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=rb;b.loop=true;gn.gain.value=.9;b.connect(gn);gn.connect(oc.destination);b.start(0);const D=S.dial;if(S.screen==='dial'&&D.result&&D.result!=='none')b.stop(Math.max(1,+D.ringSec||3));}catch(e){console.warn('벨소리 오류',e);}}
         if(typeOn()){try{const sp=typeSpan(plan);if(sp){const tb=await x_typeBuf(),b=oc.createBufferSource(),gn=oc.createGain();b.buffer=tb;b.loop=true;b.loopStart=tb._off;gn.gain.value=.85;b.connect(gn);gn.connect(oc.destination);b.start(sp.t0,tb._off);b.stop(sp.t1);}}catch(e){console.warn('타이핑 소리 오류',e);}}
@@ -3368,7 +3387,7 @@ async function exportVideo(){
     const lead=.4,off=(S.exp.sfxOff||0)/1000,V0=performance.now()+lead*1000;
     if(ok){
       const A0=actx.currentTime+lead;
-      plan.forEach((f,i)=>{if(f.snd&&wantSfx(S,f.snd))sfxPlay(dest,S.exp.sfxVol/100,Math.max(actx.currentTime,A0+T[i]+off),sfxBufFor(f));if(sxNeed(f))sxPlay(f.sx,dest,sxV(),Math.max(actx.currentTime,A0+T[i]+off));if(popWant(f))popPlay(dest,S.exp.pop.vol/100,Math.max(actx.currentTime,A0+T[i]+off));});
+      plan.forEach((f,i)=>{if(f.snd&&wantSfx(S,f.snd))sfxPlay(dest,S.exp.sfxVol/100,Math.max(actx.currentTime,A0+T[i]+off),sfxBufFor(f));if(sxNeed(f))sxPlay(f.sx,dest,sxV(),Math.max(actx.currentTime,A0+T[i]+off));if(popWant(f))popPlay(dest,S.exp.pop.vol/100,Math.max(actx.currentTime,A0+T[i]+off),popBufFor(f));});
       if(fbuf){const s=actx.createBufferSource();s.buffer=fbuf;s.loop=true;s.connect(dest);s.start(A0,0);s.stop(A0+total);}
     }
     for(let i=0;i<plan.length;i++){
@@ -3422,7 +3441,7 @@ function E_pop(){
     ${tog('exp.pop.snd','알림음 재생 (영상 · 미리보기)')}${P.snd?rng('exp.pop.vol',0,100,5,'알림음 볼륨','%'):''}
     ${tog('exp.pop.still','PNG · 정지 화면에도 팝업 표시')}
     <button class="btn line" style="width:100%;margin-top:4px" data-act="popTest">🔔 알림음 들어보기</button>${soundPickBtn()}
-    <div class="hint" style="margin-top:8px">위에서 슬라이드로 내려왔다가 올라가요. 알림을 여러 개 넣으면 '여러 개 동시에'는 새 알림이 맨 위에 쌓이고 기존 알림은 아래로 밀려나며, '하나씩 교체'는 앞 알림이 위로 밀려나가요(아이폰 배너와 같음). 알림마다 뜨는 순간에 알림음이 나요. 영상 · GIF · ▶ 미리보기에서 움직이고, 알림음은 팝업이 뜨는 순간에 맞춰 영상에 들어가요 (GIF는 소리 없음). 뜨는 시점은 영상 시작 기준이고, 영상보다 뒤면 끝에 맞춰 떠요.</div>`:''}`);
+    <div class="hint" style="margin-top:8px">위에서 슬라이드로 내려왔다가 올라가요. 알림을 여러 개 넣으면 '여러 개 동시에'는 새 알림이 맨 위에 쌓이고 기존 알림은 아래로 밀려나며, '하나씩 교체'는 앞 알림이 위로 밀려나가요(아이폰 배너와 같음). 알림마다 뜨는 순간에 알림음이 나요. 영상 · GIF · ▶ 미리보기에서 움직이고, 알림음은 팝업이 뜨는 순간에 맞춰 영상에 들어가요 (GIF는 소리 없음). 뜨는 시점은 영상 시작 기준이에요. 알림이 여러 개면 마지막 알림까지 보이도록 영상이 자동으로 길어지고, 1개일 때는 영상보다 뒤면 끝에 맞춰 떠요.</div>`:''}`);
 }
 // [편집 패널] 영상 · 여러 화면 이어 붙이기
 function E_video(){
