@@ -1178,6 +1178,9 @@ body.dr-on #drawer{transform:none}
 .item.dragging{opacity:.5;outline:1.5px dashed var(--ink)}
 .dline{height:3px;background:#1d9bf0;border-radius:2px;margin:3px 0}
 body.dragging-list,body.dragging-list *{cursor:grabbing!important;user-select:none!important}
+.item.msg>.item-h{flex-wrap:wrap;row-gap:6px}
+.item.msg>.item-h .in.sm{flex:1;min-width:72px;width:auto!important}
+.item.msg>.item-h .ibs{flex-wrap:nowrap}
 </style>
 </head>
 <body>
@@ -2792,7 +2795,7 @@ function E_lock0(){
 function E_msgs(){
   const ms=S.chat.messages;
   return card('말풍선 크기',`${rng('chat.bs',60,160,5,'크기','%')}<div class="hint" style="margin-top:8px">모든 채팅 화면(카톡·메시지·인스타·LINE·텔레그램)의 말풍선 글자와 여백이 함께 커지고 작아져요. 프로필 · 이름 · 시간 · 사진과 하단 입력창도 함께 따라가요.</div>`)+pasteCard()+quickCard()+card('메시지',`<div class="hint box">카카오톡 · 메시지 · 인스타 · LINE · 텔레그램 화면이 같은 대화를 사용해요. 같은 사람이 연달아 보내면 프로필이 자동으로 묶여요.</div>
-    ${ms.map((m,i)=>`<div class="item msg ${m.side}"><div class="item-h">${seg(`chat.messages.${i}.side`,[['left','상대'],['right','나']],'sm')}<input class="in sm" style="width:108px" data-bind="chat.messages.${i}.time" value="${esc(m.time)}" placeholder="시간">${mv('chat.messages',i,ms.length)}</div>
+    ${ms.map((m,i)=>`<div class="item msg ${m.side}" data-dp="chat.messages" data-di="${i}"><div class="item-h">${seg(`chat.messages.${i}.side`,[['left','상대'],['right','나']],'sm')}<input class="in sm" style="width:108px" data-bind="chat.messages.${i}.time" value="${esc(m.time)}" placeholder="시간">${mv('chat.messages',i,ms.length,true)}</div>
       ${area(`chat.messages.${i}.text`,'메시지 내용')}
       <div class="item-f">${imgMini(`chat.messages.${i}.img`)}<div style="width:120px">${tog(`chat.messages.${i}.unread`,'안읽음 1')}</div></div>
       ${fld('인용 답장 (인용할 문구 · 비우면 없음)',txt(`chat.messages.${i}.quote`,'예: 이름: 원래 보낸 메시지'))}
@@ -3555,7 +3558,7 @@ function E_tl(){
     ${T.scrollMode!=='add'?'<div class="hint" style="margin:-4px 0 8px">디스패치처럼 전체 트윗이 이미 떠 있고, 사람이 손가락으로 훅 내렸다 멈췄다 하듯 스크롤돼요. 트윗이 화면보다 길게(여러 개) 있어야 움직여요.</div>':''}
     ${tog('exp.tlPress','GIF · 영상: 하트 · 리트윗 누르는 애니메이션')}
     <div class="hint" style="margin-top:6px">GIF · 영상 · ▶ 미리보기에서는 트윗이 올라올 때마다 화면이 함께 스크롤돼요. 지금 <b>${T.tab?'팔로잉':'추천'}</b> 탭의 트윗을 편집 중이에요.</div>`)
-  +card(T.tab?'팔로잉 탭 트윗':'추천 탭 트윗',ts.map((t,i)=>`<div class="item" data-dp="tl.${key}" data-di="${i}"><div class="item-h"><span class="badge">트윗 ${i+1}</span><span class="dgh" title="잡고 끌어서 순서 바꾸기">⋮⋮</span>${mv('tl.'+key,i,ts.length,true)}</div>
+  +card(T.tab?'팔로잉 탭 트윗':'추천 탭 트윗',ts.map((t,i)=>`<div class="item" data-dp="tl.${key}" data-di="${i}"><div class="item-h"><span class="badge">트윗 ${i+1}</span>${mv('tl.'+key,i,ts.length,true)}</div>
     ${imgField(`${b}${i}.av`,'이 트윗의 프로필 사진 (위치 조절 가능)')}${(t.av&&t.av.url&&ts.length>1)?`<button class="mini" style="margin:-4px 0 10px" data-act="tlAvAll" data-val="${i}">이 프사를 모든 트윗에 적용</button>`:''}
     <div class="g2">${fld('이름',txt(`${b}${i}.name`,'이름'))}${fld('아이디',txt(`${b}${i}.handle`,'@username'))}</div>
     ${area(`${b}${i}.text`,'트윗 내용 (#해시태그 · @멘션은 파랗게)')}
@@ -4550,6 +4553,7 @@ function foldItems(){
       const btn=document.createElement('button');btn.className='ib fd';btn.dataset.act='itemFold';btn.title='세부 사항 접기 · 펼치기';
       btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
       head.insertBefore(sum,head.querySelector('.ibs')||null);head.insertBefore(btn,head.firstChild);
+      if(it.dataset.dp){const dg=document.createElement('span');dg.className='dgh';dg.title='잡고 끌어서 순서 바꾸기';dg.textContent='⋮⋮';btn.after(dg);}   // 드래그 손잡이: 펼치기 버튼 바로 옆
       if(ui.itemFold[key])it.classList.add('folded');
     });
     if(items.length>1){
