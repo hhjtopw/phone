@@ -492,6 +492,9 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 .scr.noBottom .pt-tab,.scr.noBottom .rl-in,.scr.noBottom .kt-in,.scr.noBottom .im-in,.scr.noBottom .ig-in,.scr.noBottom .ln-in,.scr.noBottom .tg-in,.scr.noBottom .tw-in,.scr.noBottom .home{display:none!important}
 /* 배경 끄기: 말풍선만 */
 .scr.bgoff{background:transparent!important;color:#111}
+/* 팝업만 내보내기: 팝업(.popn) 외의 모든 것(화면·상태바·홈바·전환 오버레이)을 숨기고 투명하게 */
+.scr.popOnly{background:transparent!important}.scr.popOnly>*:not(.popn){display:none!important}
+body.popOnly #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%) 0 0/22px 22px}
 .scr.bgoff .pt-head,.scr.bgoff .pt-tab,.scr.bgoff .rl-top,.scr.bgoff .bgl,.scr.bgoff .sb,.scr.bgoff .home,.scr.bgoff .kt-head,.scr.bgoff .im-head,.scr.bgoff .ig-head,.scr.bgoff .ln-head,.scr.bgoff .tg-head,.scr.bgoff .tw-head,.scr.bgoff .tw-in,.scr.bgoff .tw-dw,.scr.bgoff .kt-in,.scr.bgoff .im-in,.scr.bgoff .ig-in,.scr.bgoff .ln-in,.scr.bgoff .tg-in,.scr.bgoff .kt-dw,.scr.bgoff .im-date,.scr.bgoff .ig-date,.scr.bgoff .ln-dw,.scr.bgoff .tg-dw,.scr.bgoff .islandc,.scr.bgoff .notchc,.scr.bgoff .punchc{display:none!important}
 /* 공통 */
 .mrow{display:flex}
@@ -1499,7 +1502,7 @@ function defaults(){
     music:{art:null,title:'곡 제목',artist:'아티스트',total:'3:42',pos:32,playing:true,pal:0,anim:true,animSec:6},
     camera:{photo:null,thumb:null,mode:'photo',zoom:'1',flash:false,anim:true,live:true,menu:false,grid:false,level:false,face:false,night:false,macro:false,aspect:'43',timer:0,countdown:0,rec:true,recTime:'00:07',light:'자연광',ui:'26',recSec:6},
     gallery:{title:'최근 항목',cols:3,items:[],view:'grid',cur:1,scroll:false,fill:true,scrollAt:0,vtheme:'light',vdate:'오늘',vtime:'오후 3:24'},
-    exp:{rcv:true,sxOn:true,sxVol:100,shutterSnd:true,scrollFxM:false,scrollAmt:100,scrollDirM:'up',pop:{on:false,app:'sms',title:'이름',body:'메시지 내용',time:'지금',style:'light',at:1,dur:4,snd:true,vol:100,still:true,more:[],mode:'overlap',max:3,sb:true,sbKeep:true,_m2:0},scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,typeChars:true,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',fx:'none',fxY:60,vidMode:'single',vidSeq:['lock','chat'],trans:'cut',shutter:'none',scrollFx:false,gifScreens:['lock','chat','sms'],gifAnim:true,tlPress:true},
+    exp:{rcv:true,sxOn:true,sxVol:100,shutterSnd:true,scrollFxM:false,scrollAmt:100,scrollDirM:'up',pop:{on:false,only:false,app:'sms',title:'이름',body:'메시지 내용',time:'지금',style:'light',at:1,dur:4,snd:true,vol:100,still:true,more:[],mode:'overlap',max:3,sb:true,sbKeep:true,_m2:0},scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,typeChars:true,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',fx:'none',fxY:60,vidMode:'single',vidSeq:['lock','chat'],trans:'cut',shutter:'none',scrollFx:false,gifScreens:['lock','chat','sms'],gifAnim:true,tlPress:true},
   };
 }
 // 저장본을 기본값 위에 덮어 합쳐요 (저장본에 없는 항목은 기본값 유지)
@@ -3026,12 +3029,12 @@ function E_recents(){
 function stageHTML(s,opt={}){
   s=msgFx(s);DPH=s._dph==null?null:s._dph;
   BOX=1+((((s.chat&&s.chat.bs)||100)/100)-1)*.4;   // 말풍선 변화의 40%만 주변에 반영
-  const d=s.device, ratio=d.ratio||'phone', off=!!d.bgOff, [W,H]=DIMS[ratio]||DIMS.phone; SA=W/H;
+  const d=s.device, ratio=d.ratio||'phone', po=popOnly(s), off=!!d.bgOff||po, [W,H]=DIMS[ratio]||DIMS.phone; SA=W/H;
   const sc=statusColor(s);
   const {bg,body}=SCREEN_FN[s.screen](opt.exp&&s.screen==='call'&&s._ct==null?{...s,_still:1}:s);
   const hc=homeColor(s);const home=d.homeBar?`<div class="home" style="background:${hc};${/255,255,255/.test(hc)?'border:.5px solid rgba(0,0,0,.14)':''}"></div>`:'';
   const inner=`${bg}<div class="lay" style="--bs:${((s.chat&&s.chat.bs)||100)/100};--bo:${BOX.toFixed(3)}">${statusHTML(s,sc)}${body}</div>${home}`;
-  const cls=(d.uiTop===false?'noTop ':'')+(d.uiBottom===false?'noBottom ':'')+(off?'bgoff ':'')+(ratio==='phone'?'pm':'r-'+ratio);
+  const cls=(d.uiTop===false?'noTop ':'')+(d.uiBottom===false?'noBottom ':'')+(off?'bgoff ':'')+(po?'popOnly ':'')+(ratio==='phone'?'pm':'r-'+ratio);
   if(!d.bezel||ratio!=='phone'||off)return`<div class="stage flat"><div class="scr ${cls}" style="border-radius:0;--sw:${W}px;--sh:${H}px">${inner}</div></div>`;
   const F=FRAMES[d.frame]||FRAMES.black, m=d.model;
   const cut=m==='island'?'<div class="islandc"></div>':m==='notch'?'<div class="notchc"></div>':'<div class="punchc"></div>';
@@ -3049,8 +3052,8 @@ function renderPreview(){
   $('#preview').innerHTML=stageHTML(S);
   if(S.screen==='story'){const x=$('#preview .stx[data-i="'+(ui.stSel||0)+'"]')||$('#preview .stx');if(x)x.insertAdjacentHTML('beforeend','<i class="stx-h"></i>');}
   const pel=$('#preview').firstElementChild;if(pel)applySlide(pel,popStill(S));   // 인용·반응·실패 같은 고정 장식은 정지 화면에도 바로 보여요
-  $('#dockLbl').textContent=SCREENS.find(x=>x[0]===S.screen)[1]+'  ·  '+(S.device.ratio&&S.device.ratio!=='phone'?({vert:'9:16',horiz:'16:9',four:'4:3'})[S.device.ratio]:({island:'DYNAMIC ISLAND',notch:'NOTCH',punch:'PUNCH HOLE'})[S.device.model])+(S.device.bgOff?'  ·  TRANSPARENT':'');
-  document.body.classList.toggle('bgoff',!!S.device.bgOff);
+  $('#dockLbl').textContent=SCREENS.find(x=>x[0]===S.screen)[1]+'  ·  '+(S.device.ratio&&S.device.ratio!=='phone'?({vert:'9:16',horiz:'16:9',four:'4:3'})[S.device.ratio]:({island:'DYNAMIC ISLAND',notch:'NOTCH',punch:'PUNCH HOLE'})[S.device.model])+((S.device.bgOff||popOnly(S))?'  ·  TRANSPARENT':'');
+  document.body.classList.toggle('bgoff',!!S.device.bgOff||popOnly(S));document.body.classList.toggle('popOnly',popOnly(S));
   fit();
 }
 // 미리보기를 창 크기에 맞춰 축소·확대
@@ -3428,7 +3431,8 @@ const lkSnd=()=>S.lock.snd!==false;   // 잠금화면 알림도 상단 팝업과
 const lkOn=()=>lkSnd()&&(S.screen==='lock'||(S.exp.vidMode==='seq'&&(S.exp.vidSeq||[]).includes('lock')));
 const popWant=f=>!!((f.pop&&popOn())||(f.lks&&lkSnd()));
 const popItems=P=>[{app:P.app,title:P.title,body:P.body,time:P.time,at:+P.at||0,dur:+P.dur||3},...(P.more||[]).map(m=>({app:m.app,title:m.title,body:m.body,time:m.time,at:+m.at||0,dur:+m.dur||3}))];
-const popStill=s=>(s.exp.pop&&s.exp.pop.on&&s.exp.pop.still)?{...s,_pop:{list:s.exp.pop.mode==='replace'?[{i:0,v:1}]:popItems(s.exp.pop).slice(0,Math.max(1,+s.exp.pop.max||3)).map((_,i)=>({i,v:1}))}}:s;
+function popOnly(s){return !!(s&&s.exp&&s.exp.pop&&s.exp.pop.on&&s.exp.pop.only);}
+const popStill=s=>(s.exp.pop&&s.exp.pop.on&&(s.exp.pop.still||s.exp.pop.only))?{...s,_pop:{list:s.exp.pop.mode==='replace'?[{i:0,v:1}]:popItems(s.exp.pop).slice(0,Math.max(1,+s.exp.pop.max||3)).map((_,i)=>({i,v:1}))}}:s;
 /* 상단 팝업 알림 — 재생 계획(plan)의 해당 구간을 잘게 나눠 슬라이드 인 → 유지 → 슬라이드 아웃 */
 function popApplyMap(plan){
   const P=S.exp.pop,map=plan.map((_,i)=>i);
@@ -3910,7 +3914,8 @@ document.addEventListener('change',async e=>{
 function E_pop(){
   const P=S.exp.pop;
   return fcard('pop','상단 팝업 알림 (알림음)',`${tog('exp.pop.on','화면 위에 팝업 알림 띄우기')}
-    ${P.on?`${fld('앱',appPick('exp.pop.app'))}
+    ${P.on?`${tog('exp.pop.only','팝업만 내보내기 — 나머지 화면 전부 투명')}${P.only?'<div class="hint" style="margin:-2px 0 8px">화면 · 폰 프레임 · 상태바 · 홈바가 모두 사라지고 <b>팝업만</b> 남아요. 크기와 위치는 그대로라서 영상 편집 프로그램에서 겹쳐 올리면 딱 맞아요. 저장 배경은 <b>투명</b>으로 두세요 (PNG · GIF 투명 배경).</div>':''}
+    ${fld('앱',appPick('exp.pop.app'))}
     <div class="g2">${fld('제목',txt('exp.pop.title','이름'))}${fld('시간 표시',txt('exp.pop.time','지금'))}</div>
     ${fld('내용',area('exp.pop.body','알림 내용'))}
     ${fld('스타일',seg('exp.pop.style',[['light','밝게'],['dark','어둡게']]))}
