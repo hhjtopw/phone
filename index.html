@@ -18,7 +18,7 @@
 <title>휴대폰 영상 메이커</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Oswald:wght@500;600&family=Yellowtail&family=Courier+Prime:wght@400;700&family=Montserrat:ital,wght@1,800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Oswald:wght@500;600&family=Yellowtail&family=Courier+Prime:wght@400;700&family=Montserrat:ital,wght@1,800&family=Inter:wght@500;600;700&display=swap">
 <script defer src="https://cdn.jsdelivr.net/npm/modern-screenshot@4.7.0/dist/index.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -1208,6 +1208,105 @@ body.dragging-list,body.dragging-list *{cursor:grabbing!important;user-select:no
 .apk-c:active .apk-i{transform:scale(.94)}
 .apk-c.on .apk-i{transform:scale(1.08);box-shadow:0 0 0 2.5px #fff,0 0 0 4.5px #0a84ff,0 4px 10px rgba(0,0,0,.25)}
 .apk-c.on .apk-n{font-weight:700}
+
+/* ═════ v8 : 아이폰 리얼 패치 (iPhone 17 Pro 스펙 참고) ═════
+   · 화면 402×874pt · 다이나믹 아일랜드 ≈125×37pt(상단 11pt) · 홈 인디케이터 34pt · 상태바 54pt
+   · 정지 장식(테두리·유리 반사·카메라 렌즈)은 저장 파일에도 그대로 들어가요
+   · 움직이는 효과(둥실·기울기·조명)는 #preview 바깥에만 걸려서 PNG/GIF/영상 저장에는 영향 없어요 */
+/* 프레임: 티타늄 테두리 하이라이트 + 다층 그림자 */
+.dev{box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),inset 0 1.5px 1px rgba(255,255,255,.55),inset 0 -1.5px 1px rgba(0,0,0,.38),0 0 0 .6px rgba(0,0,0,.6),0 60px 80px -36px rgba(0,0,0,.5),0 22px 34px -14px rgba(0,0,0,.3),0 4px 8px -2px rgba(0,0,0,.18)}
+.stage.nosh .dev{box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),inset 0 1.5px 1px rgba(255,255,255,.55),inset 0 -1.5px 1px rgba(0,0,0,.38),0 0 0 .6px rgba(0,0,0,.6)}
+.bez{background:#000;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07),inset 0 0 8px rgba(0,0,0,.95)}
+/* 옆 버튼: 금속 입체감 */
+.sbtn{box-shadow:inset 1px 0 0 rgba(255,255,255,.4),inset -1px 0 0 rgba(0,0,0,.4),0 0 0 .5px rgba(0,0,0,.35);border-radius:2.5px}
+/* 화면 유리 반사 (베젤 있는 폰에만) */
+.dev .scr::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:45;background:linear-gradient(118deg,rgba(255,255,255,.11) 0%,rgba(255,255,255,.035) 24%,transparent 40%,transparent 72%,rgba(255,255,255,.045) 100%);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.09)}
+/* 다이나믹 아일랜드: 전면 카메라 렌즈 + Face ID 센서 */
+.islandc{background:radial-gradient(circle at calc(100% - 20px) 50%,#0b0e22 0 2.2px,#1a2140 2.8px 4.4px,#05060c 5px 7px,transparent 7.6px),radial-gradient(circle at 26% 50%,#0c0c10 0 1.8px,transparent 2.5px),#000;box-shadow:0 0 0 .5px rgba(255,255,255,.05)}
+.islandc::after{content:'';position:absolute;right:18.5px;top:15.5px;width:3px;height:3px;border-radius:50%;background:radial-gradient(circle,rgba(150,170,255,.75),rgba(90,110,220,0) 70%)}
+/* 상태바: SF Pro 느낌 (Inter 대체) */
+.sb,.sb *{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter','Noto Sans KR',sans-serif;font-variant-numeric:tabular-nums}
+.sb-l{font-weight:600;letter-spacing:-.2px}
+/* 홈 인디케이터: 실제 비율(139pt) */
+.home{width:132px;margin-left:-66px;height:5px;bottom:8px;border-radius:100px}
+
+/* ── 미리보기 무대 애니메이션 ── */
+.scaler{z-index:1;transition:transform .35s cubic-bezier(.32,.72,0,1)}
+.view::before{content:'';position:absolute;inset:-25%;z-index:0;pointer-events:none;background:radial-gradient(38% 38% at 24% 28%,rgba(255,255,255,.95),transparent 70%),radial-gradient(34% 34% at 76% 72%,rgba(184,200,255,.38),transparent 70%),radial-gradient(28% 28% at 72% 22%,rgba(255,205,222,.34),transparent 70%);animation:pv-amb 22s ease-in-out infinite alternate}
+body.bgoff .view::before{display:none}
+#view{--rx:0deg;--ry:0deg}
+#preview{transform:perspective(1800px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .6s cubic-bezier(.22,1,.36,1);animation:pv-in .9s cubic-bezier(.22,1,.36,1) backwards,pv-float 7s ease-in-out .9s infinite}
+.scaler::after{content:'';position:absolute;left:50%;bottom:8px;width:60%;height:26px;translate:-50% 0;background:radial-gradient(closest-side,rgba(0,0,0,.3),transparent);filter:blur(10px);z-index:-1;pointer-events:none;animation:pv-shadow 7s ease-in-out .9s infinite}
+@keyframes pv-in{from{opacity:0;translate:0 44px;scale:.93}to{opacity:1;translate:0 0;scale:1}}
+@keyframes pv-float{0%,100%{translate:0 0}50%{translate:0 -10px}}
+@keyframes pv-shadow{0%,100%{scale:1;opacity:.95}50%{scale:.88;opacity:.6}}
+@keyframes pv-amb{from{translate:-3% -2%;rotate:0deg}to{translate:4% 3%;rotate:8deg}}
+
+/* ── 편집기 UI : iOS 스타일 눌림 · 스프링 토글 ── */
+button{transition:transform .22s cubic-bezier(.32,.72,0,1),background .2s,color .2s,border-color .2s,opacity .2s,box-shadow .2s}
+button:active{transform:scale(.96)}
+.chip:active,.seg button:active{transform:scale(.95)}
+.tog i{transition:background .25s}
+.tog i:after{width:18px;transition:left .32s cubic-bezier(.34,1.56,.64,1),width .2s}
+.tog:active i:after{width:23px}.tog:active input:checked+i:after{left:13px}
+.sw{transition:box-shadow .2s,transform .25s cubic-bezier(.34,1.56,.64,1)}.sw:hover{transform:scale(1.12)}.sw:active{transform:scale(.92)}
+.tabs button.on:after{animation:tab-in .3s cubic-bezier(.32,.72,0,1)}
+@keyframes tab-in{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){#preview,.scaler::after,.view::before,.tabs button.on:after{animation:none!important}#preview{transition:none}}
+body.nofloat #preview{animation:pv-in .9s cubic-bezier(.22,1,.36,1) backwards}body.nofloat .scaler::after{animation:none}
+/* ═════ v9 : iOS 26 리퀴드 글래스 (설정 > 기기 > iOS 26 스타일 로 끄고 켜요) ═════
+   iOS 기본 앱(메시지 · 사진 · 잠금화면 알림)에 적용. 카톡·인스타·LINE 같은 서드파티 앱은 각 앱 고유 디자인을 지켜요.
+   blur 가 안 먹는 저장 방식에서도 예쁘도록 배경은 어느 정도 불투명하게 잡았어요 */
+body.i26{--gl:rgba(255,255,255,.72);--glsh:inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 .5px rgba(255,255,255,.7),0 0 0 .5px rgba(0,0,0,.07),0 6px 16px -4px rgba(0,0,0,.14)}
+/* 메시지 */
+body.i26 .im-head{background:linear-gradient(180deg,rgba(255,255,255,.97) 40%,rgba(255,255,255,.78));border-bottom:0;padding:0 12px 8px;-webkit-backdrop-filter:blur(22px) saturate(1.8);backdrop-filter:blur(22px) saturate(1.8)}
+body.i26 .im-back,body.i26 .im-vid{width:auto;min-width:42px;height:42px;margin-top:6px;padding:0 12px;justify-content:center;align-items:center;border-radius:21px;background:var(--gl);box-shadow:var(--glsh)}
+body.i26 .im-av{box-shadow:0 0 0 2px #fff,0 4px 10px -2px rgba(0,0,0,.25)}
+body.i26 .im-in{background:linear-gradient(0deg,#fff 55%,rgba(255,255,255,0));gap:10px;padding:8px 12px 30px}
+body.i26 .im-plus{width:42px;height:42px;background:var(--gl);box-shadow:var(--glsh)}
+body.i26 .im-field{height:42px;border:0;border-radius:21px;background:var(--gl);box-shadow:var(--glsh);padding:0 16px}
+body.i26 .im-b{border-radius:21px}
+/* 사진(갤러리) : 떠 있는 캡슐 탭바 */
+body.i26 .gl-tab{left:14px;right:92px;bottom:24px;height:66px;padding-top:0;border:0;border-radius:33px;background:rgba(250,250,252,.8);box-shadow:var(--glsh);-webkit-backdrop-filter:blur(24px) saturate(1.8);backdrop-filter:blur(24px) saturate(1.8)}
+body.i26 .gl-srch{bottom:24px;width:66px;height:66px;background:rgba(250,250,252,.8);box-shadow:var(--glsh)}
+body.i26 .gl-sel,body.i26 .gl-more{background:var(--gl);box-shadow:var(--glsh)}
+body.i26 .gl-grid{gap:1.5px}
+/* 잠금화면 */
+body.i26 .lk-time{font-weight:700;letter-spacing:-2.5px;text-shadow:0 2px 18px rgba(0,0,0,.12)}
+body.i26 .lk-btn{background:rgba(255,255,255,.2);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 0 0 .5px rgba(255,255,255,.28),0 6px 16px -4px rgba(0,0,0,.25);-webkit-backdrop-filter:blur(20px) saturate(1.6);backdrop-filter:blur(20px) saturate(1.6)}
+body.i26 .nt{border-radius:26px;padding:12px 15px;border:0}
+body.i26 .nt.glass{background:rgba(255,255,255,.26);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 0 0 .5px rgba(255,255,255,.28),0 8px 22px -6px rgba(0,0,0,.2);-webkit-backdrop-filter:blur(30px) saturate(1.7);backdrop-filter:blur(30px) saturate(1.7)}
+body.i26 .nt.light{background:rgba(255,255,255,.82);box-shadow:inset 0 1px 0 #fff,0 0 0 .5px rgba(0,0,0,.05),0 8px 22px -6px rgba(0,0,0,.22);-webkit-backdrop-filter:blur(30px) saturate(1.7);backdrop-filter:blur(30px) saturate(1.7)}
+body.i26 .nt.dark{background:rgba(34,34,38,.66);box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 0 0 .5px rgba(255,255,255,.1),0 8px 22px -6px rgba(0,0,0,.4);-webkit-backdrop-filter:blur(30px) saturate(1.7);backdrop-filter:blur(30px) saturate(1.7)}
+/* v9-b : 상단 팝업 알림 · 전화 수신 배너 (iOS 26 리퀴드 글래스) */
+body.i26 .popn .nt{border-radius:28px!important;padding:13px 16px 13px 14px!important;-webkit-backdrop-filter:blur(34px) saturate(1.9);backdrop-filter:blur(34px) saturate(1.9)}
+body.i26 .popn .nt.light{background:rgba(250,250,252,.74)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 .5px rgba(255,255,255,.6),0 0 0 .5px rgba(0,0,0,.06),0 14px 34px -8px rgba(0,0,0,.3)!important}
+body.i26 .popn .nt.dark{background:rgba(40,40,44,.62)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 0 0 .5px rgba(255,255,255,.12),0 14px 34px -8px rgba(0,0,0,.55)!important}
+body.i26 .popn .nt-ic{border-radius:11px;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.12),0 2px 6px -1px rgba(0,0,0,.18)}
+body.i26 .popn .grab{opacity:.5}
+body.i26 .popn .nt-call{background:rgba(40,40,44,.66)!important;border-radius:32px!important}
+body.i26 .popn .cv-b{box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 4px 10px -2px rgba(0,0,0,.35)}
+/* v9-c : 아이메시지 세부 다듬기 (꼬리 모양이 어긋나지 않게 말풍선 곡률은 원래대로) */
+body.i26 .im-b{border-radius:19px}
+body.i26 .im-b,body.i26 .im-nm,body.i26 .im-date,body.i26 .im-read,body.i26 .im-field,body.i26 .im-field *,body.i26 .im-back span{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter','Noto Sans KR',sans-serif;letter-spacing:-.2px}
+body.i26 .im-b{font-size:16.5px;padding:8px 14px}
+body.i26 .im-row.r .im-b:not(.typ){background-image:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,0) 62%)}
+body.i26 .im-row.l .im-b{background:#e9e9eb}
+body.i26 .im-nm{font-size:12px;font-weight:500;color:#111}
+body.i26 .im-back span{background:#0a84ff;color:#fff;font-weight:600;border-radius:10px;min-width:19px;text-align:center;margin-left:2px}
+body.i26 .im-date{font-size:11.5px;letter-spacing:-.1px}
+body.i26 .im-read{font-size:11.5px;letter-spacing:-.1px}
+body.i26 .im-field{font-size:16.5px}
+body.i26 .im-inner{padding:12px 14px 14px}
+/* 키보드: iOS 26 처럼 키가 더 둥글고 그림자가 은은하게 */
+body.i26 .im-kb{background:#d3d5db!important}
+body.i26 .im-kb div[style*="border-radius:5px"]{border-radius:9px!important;box-shadow:0 1px 0 rgba(0,0,0,.3),0 0 0 .5px rgba(0,0,0,.04)!important;font-weight:400!important;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter','Noto Sans KR',sans-serif}
+body.i26 .im-kb div[style*="#adb3bc"]{background:#aeb3bd!important}
+/* v9-d : 사진 옆 공유(전달) 버튼 — 받은 사진은 오른쪽, 보낸 사진은 왼쪽 */
+.im-row .im-img{flex:none}
+.im-shr{flex:none;align-self:flex-end;width:30px;height:30px;margin:0 9px 3px;border-radius:50%;background:rgba(120,120,128,.14);display:flex;align-items:center;justify-content:center}
+.im-row.r .im-shr{order:-1}
+body.i26 .im-shr{background:var(--gl);box-shadow:var(--glsh)}
 </style>
 </head>
 <body>
@@ -1351,7 +1450,7 @@ function defaults(){
   const kt=`${t.ap} ${t.h12}:${pad(t.m)}`;
   return {
     screen:'chat',
-    device:{model:'island',frame:'black',bezel:true,statusColor:'auto',homeBar:true,ratio:'phone',uiTop:true,uiBottom:true,bgOff:false},
+    device:{ios26:true,float:true,floatExp:false,model:'island',frame:'black',bezel:true,statusColor:'auto',homeBar:true,ratio:'phone',uiTop:true,uiBottom:true,bgOff:false},
     status:{show:true,time:`${t.h12}:${pad(t.m)}`,battery:82,signal:4,net:'5G',showPct:false,charging:false},
     lock:{wall:null,preset:0,dim:0,date:`${d.getMonth()+1}월 ${d.getDate()}일 ${WD[d.getDay()]}요일`,time:`${t.h12}:${pad(t.m)}`,timeColor:'auto',weight:600,buttons:true,shadow:true,newTop:true,shake:true,snd:true,notiStyle:'glass',
       notis:[{id:uid(),app:'sms',title:'이름',body:'알림 내용',time:'지금'},{id:uid(),app:'alarm',title:'알람',body:'알림 내용',time:'지금'}]},
@@ -1624,6 +1723,7 @@ function screenChat(s){
   return{bg,body};
 }
 // [화면] 문자 메시지
+const IM_SHR='<div class="im-shr"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8e8e93" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M8 7l4-4 4 4M7 11H5.5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h13a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1H17"/></svg></div>';
 function screenSms(s){
   const C=s.chat, M=s.sms, blue=M.service==='sms'?'#34c759':'#0a84ff';
   const ms=s.chat.messages.filter(visibleMsg).slice();
@@ -1637,7 +1737,7 @@ function screenSms(s){
     if(m._t){const dph=s._dph,lv=dph==null&&!s._still;bub=`<div class="im-b typ" ${L?'':`style="--bc:${blue};color:#fff"`}><div class="dots${lv?' wv':''}">${[0,1,2].map(j=>`<i style="background:${L?'#8e8e93':'rgba(255,255,255,.85)'}${lv?`;animation-delay:${(j*.18).toFixed(2)}s`:`;opacity:${dph==null?1:(j===dph?1:.4)}`}"></i>`).join('')}</div></div>`;}
     else if(m.img?.url){const w=Math.round(200*BOX),h=Math.min(280,Math.round(w/(m.img.ar||1)));bub=`<div class="im-img" style="width:${w}px;height:${h}px">${bgImg(m.img,w/h)}</div>`;}
     else bub=`<div class="im-b" ${L?'':`style="--bc:${blue};color:#fff"`}>${esc(m.text)}</div>`;
-    return`<div class="mrow im-row ${L?'l':'r'} ${first?'first':''} ${last?'last':''}">${bub}</div>${(i===lastRight||i===lastLeft)&&M.read?`<div class="im-read${L?' l':''}">${esc(M.read).replace(/^(\S+)/,'<b>$1</b>')}</div>`:''}`;
+    return`<div class="mrow im-row ${L?'l':'r'} ${first?'first':''} ${last?'last':''}">${(m.img&&m.img.url&&!m._t)?bub+IM_SHR:bub}</div>${(i===lastRight||i===lastLeft)&&M.read?`<div class="im-read${L?' l':''}">${esc(M.read).replace(/^(\S+)/,'<b>$1</b>')}</div>`:''}`;
   }).join('');
   const av=C.profile?.url?bgImg(C.profile):esc((C.name||'?').trim().charAt(0));
   const label=M.service==='sms'?'문자 메시지':'iMessage';
@@ -2789,7 +2889,7 @@ function msgDeco(root,st){
     const R=m.side==='right',fail=m.state==='failed'&&!m._nofail,rx=m.react&&!m._noreact,hq=m.quote&&m.quote.trim();
     if(!fail&&!rx&&!hq)return;
     const t=(m.text||'').trim(),leaf=t?[...row.querySelectorAll('*')].find(e=>!e.children.length&&e.textContent.trim()===t):null;
-    const b=leaf||row.querySelector('.kt-img')||row.lastElementChild;if(!b)return;
+    const b=leaf||row.querySelector('.kt-img')||row.querySelector('.im-img')||row.lastElementChild;if(!b)return;
     b.style.position='relative';b.style.overflow='visible';
     if(hq){const q=document.createElement('div');q.style.cssText='display:block;background:rgba(0,0,0,.08);border-radius:8px;padding:4px 8px;margin:0 0 5px;font-size:.82em;opacity:.75;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left';q.textContent=m.quote;b.insertBefore(q,b.firstChild);}
     if(fail){   // 빨간 ! 는 내 말풍선 바로 옆 (카톡·LINE·텔레그램은 왼쪽 시간 자리, 아이폰 메시지는 오른쪽)
@@ -3184,7 +3284,7 @@ function E_device(){
     ${tog('device.bgOff','배경 끄기 — 말풍선만 (투명)')}${tog('device.uiTop','상단 UI (상태바 · 헤더)')}${tog('device.uiBottom','하단 UI (입력창 · 홈바)')}`)
   +card('기기',`${fld('모델',seg('device.model',[['island','다이나믹 아일랜드'],['notch','노치'],['punch','펀치홀']]))}
     ${fld('프레임 색상',sws('device.frame',Object.entries(FRAMES).map(([k,f])=>[k,f.band,f.n])))}
-    ${tog('device.bezel','기기 프레임 표시 (끄면 스크린샷처럼)')}${tog('device.homeBar','하단 홈 바')}`)
+    ${tog('device.bezel','기기 프레임 표시 (끄면 스크린샷처럼)')}${tog('device.homeBar','하단 홈 바')}<div class="sep"></div>${tog('device.ios26','iOS 26 리퀴드 글래스 스타일 (메시지 · 사진 · 잠금화면)')}${tog('device.float','폰 둥실 효과 (미리보기)')}${tog('device.floatExp','둥실 효과를 저장에도 적용 (GIF · 영상)')}<div class="hint" style="margin:2px 0 0">PNG 한 장은 정지 상태로 저장돼요. 프레임이 1장뿐인 GIF는 7초 루프(28프레임)로 만들어져요.</div>`)
   +card('상단바',`${tog('status.show','상단바 표시')}<div class="sep"></div>
     <div class="g2">${fld('시간',txt('status.time','12:00','data-fmt="time" maxlength="5"'))}${fld('배터리 %',txt('status.battery','80','data-fmt="bat" maxlength="3"'))}</div>
     ${fld('네트워크',seg('status.net',[['5G','5G'],['LTE','LTE'],['wifi','Wi‑Fi']]))}
@@ -3423,7 +3523,16 @@ function applySlide(root,st){
   const e=1-Math.pow(1-t,3);
   if(shift>0)inner.style.transform=`translateY(${((1-e)*shift).toFixed(1)}px)`;
   last.style.opacity=String(Math.min(1,e*1.4));
-  if(st.screen==='sms'){const c1=1.70158,bk=1+(c1+1)*Math.pow(t-1,3)+c1*Math.pow(t-1,2);last.style.transformOrigin=last.classList.contains('r')?'100% 100%':'0% 100%';last.style.transform=`translateY(${((1-e)*10).toFixed(1)}px) scale(${(.62+.38*bk).toFixed(3)})`;}
+  if(st.screen==='sms'){   // 아이메시지 전송 모션: 입력창에서 올라오며 스프링으로 안착 · 회색빛 → 파랑으로 물들기 · 읽음 표시는 뒤늦게 슬라이드
+    const R=last.classList.contains('r'),c1=R?2.1:1.6,bk=1+(c1+1)*Math.pow(t-1,3)+c1*Math.pow(t-1,2);
+    const tgt=last.querySelector('.im-b,.im-img'),isImg=!!(tgt&&tgt.classList.contains('im-img'));
+    const rise=(1-e)*(R?(isImg?64:50):22)+(shift>0?(1-e)*8:0),sc=(isImg?.8:.84)+(isImg?.2:.16)*bk;
+    last.style.transformOrigin=R?'100% 100%':'0% 100%';
+    last.style.transform=`translateY(${rise.toFixed(1)}px) scale(${sc.toFixed(3)})`;
+    if(R&&tgt&&!isImg&&!tgt.classList.contains('typ')){const k=Math.min(1,t*2.4);tgt.style.filter=`saturate(${(.3+.7*k).toFixed(2)}) brightness(${(1.22-.22*k).toFixed(2)})`;}
+    if(isImg&&tgt){tgt.style.filter=`blur(${((1-Math.min(1,t*2.2))*3).toFixed(1)}px)`;}
+    const rd=last.nextElementSibling;if(rd&&rd.classList.contains('im-read')){const k=Math.max(0,(t-.65)/.35),ek=1-Math.pow(1-k,3);rd.style.opacity=ek.toFixed(2);rd.style.transform=`translateY(${((1-ek)*-7).toFixed(1)}px)`;}
+  }
   else{const P={ig:[.7,14,1.5],tg:[.86,10,1.2],line:[.88,10,1.2],tw:[.84,12,1.3],chat:[.9,12,1.1]}[st.screen]||[.9,10,1.1],c1=P[2],bk=1+(c1+1)*Math.pow(t-1,3)+c1*Math.pow(t-1,2);
     last.style.transformOrigin=last.classList.contains('r')?'100% 100%':'0% 100%';
     last.style.transform=`translateY(${((1-e)*P[1]).toFixed(1)}px) scale(${(P[0]+(1-P[0])*bk).toFixed(3)})`;}
@@ -3685,11 +3794,12 @@ async function encodeExact({plan,store,bg,TR,fmt,ok,faceVid}){
     }
     await out.start();
     const ap=as?as.add(abuf):null;
-    let pi=-1;
+    let pi=-1,cb=null;const FLV=floatExpOn(),FSC=+S.exp.vidScale||1;
     for(let n=0;n<N;n++){
       const t=n/FPS;let q=Math.max(pi,0);while(q<plan.length-1&&T[q+1]<=t+1e-6)q++;
-      if(q!==pi){pi=q;const b=await createImageBitmap(store.get(plan[q].key).blob);
-        if(TR)cx.clearRect(0,0,W,H);else{cx.fillStyle=bg;cx.fillRect(0,0,W,H);}cx.drawImage(b,0,0,W,H);b.close();}
+      let dirty=false;
+      if(q!==pi){pi=q;if(cb)cb.close();cb=await createImageBitmap(store.get(plan[q].key).blob);dirty=true;}
+      if(dirty||FLV){if(TR)cx.clearRect(0,0,W,H);else{cx.fillStyle=bg;cx.fillRect(0,0,W,H);}cx.drawImage(cb,0,FLV?floatDy(t,FSC):0,W,H);}
       await vs.add(t,1/FPS);
       if(n%10===0){busy(`영상 인코딩 중… ${n}/${N}`,.78+.2*(n/N));await tick();}
     }
@@ -3734,7 +3844,8 @@ async function exportVideo(){
     const f0=store.get(plan[0].key),W=f0.w&~1,H=f0.h&~1;
     const cv=document.createElement('canvas');cv.width=W;cv.height=H;
     const cx=cv.getContext('2d',{alpha:true});
-    const draw=b=>{if(TR)cx.clearRect(0,0,W,H);else{cx.fillStyle=bg;cx.fillRect(0,0,W,H);}cx.drawImage(b,0,0,W,H);};
+    const FLV=floatExpOn(),FSC=+S.exp.vidScale||1;let FT0=performance.now();
+    const draw=b=>{if(TR)cx.clearRect(0,0,W,H);else{cx.fillStyle=bg;cx.fillRect(0,0,W,H);}cx.drawImage(b,0,FLV?floatDy(Math.max(0,(performance.now()-FT0)/1000),FSC):0,W,H);};
     if(!TR){cx.fillStyle=bg;cx.fillRect(0,0,W,H);}
     const stream=cv.captureStream(30);
     let dest=null,fbuf=null;
@@ -3757,7 +3868,7 @@ async function exportVideo(){
     const T=[0];plan.forEach((f,i)=>T.push(T[i]+f.delay/1000));const total=T[plan.length];
     rec.start(250);
     const iv=setInterval(()=>draw(cur),33);
-    const lead=.4,off=(S.exp.sfxOff||0)/1000,V0=performance.now()+lead*1000;
+    const lead=.4,off=(S.exp.sfxOff||0)/1000,V0=performance.now()+lead*1000;FT0=V0;
     if(ok){
       const A0=actx.currentTime+lead;
       plan.forEach((f,i)=>{if(f.snd&&wantSfx(S,f.snd))sfxPlay(dest,S.exp.sfxVol/100,Math.max(actx.currentTime,A0+T[i]+off),sfxBufFor(f));if(sxNeed(f))sxPlay(f.sx,dest,sxV(),Math.max(actx.currentTime,A0+T[i]+off));if(popWant(f))popPlay(dest,S.exp.pop.vol/100,Math.max(actx.currentTime,A0+T[i]+off),popBufFor(f),f);});
@@ -4166,6 +4277,11 @@ async function capture(st,scale,bg){
   return c;
 }
 const bgVal=v=>v==='transparent'?null:v;
+// 둥실 효과 (미리보기와 같은 7초 주기 · 10px 진폭). 저장 때는 찍힌 폰 이미지를 시간에 맞춰 위아래로 옮겨요
+const FLOAT_P=7,FLOAT_A=10;
+const floatExpOn=()=>!!(S.device&&S.device.floatExp);
+const floatDy=(t,sc)=>-(FLOAT_A/2)*(1-Math.cos(2*Math.PI*t/FLOAT_P))*(sc||1);
+function floatShift(data,W,H,dy,bg){const t=document.createElement('canvas');t.width=W;t.height=H;t.getContext('2d').putImageData(new ImageData(data,W,H),0,0);const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');if(bg){x.fillStyle=bg;x.fillRect(0,0,W,H);}x.drawImage(t,0,Math.round(dy));return x.getImageData(0,0,W,H).data;}
 // 긴 스크롤 화면을 한 장으로 찍기 위해 잠깐 펼치기 (끝나면 되돌릴 수 있게 기록)
 function expandForScrollCapture(scr,screen){
   const undo=[];
@@ -4473,16 +4589,18 @@ async function exportGIF(){
     const pal=buildPalette([...cache.values()].map(f=>f.data),255);
     const ref=cache.get(keys[0]),W=ref.w,H=ref.h;
     const enc=new GifEnc(W,H,pal);
-    for(let i=0;i<n;i++){
-      busy(`프레임 캡처 중… ${i+1}/${n}`,.1+.85*(i/n));
-      let f=cache.has(i)?cache.get(i):await grab(i);
+    const FLG=floatExpOn(),LOOP=FLG&&n===1,NN=LOOP?28:n;let tAcc=0;
+    for(let i=0;i<NN;i++){
+      busy(`프레임 캡처 중… ${i+1}/${NN}`,.1+.85*(i/NN));
+      let f=LOOP?cache.get(keys[0]):(cache.has(i)?cache.get(i):await grab(i));
       if(f.w!==W||f.h!==H){const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');const t=document.createElement('canvas');t.width=f.w;t.height=f.h;t.getContext('2d').putImageData(new ImageData(f.data,f.w,f.h),0,0);x.drawImage(t,0,0);f={data:x.getImageData(0,0,W,H).data};}
-      enc.add(f.data,frames[i].delay);cache.delete(i);await tick();
+      if(FLG)f={data:floatShift(f.data,W,H,floatDy(tAcc,sc),bg)};
+      const dl=LOOP?250:frames[i].delay;enc.add(f.data,dl);tAcc+=dl/1000;if(!LOOP)cache.delete(i);await tick();
     }
     busy('GIF 만드는 중…',.98);await tick();
     const blob=enc.finish();
     download(blob,`phone_${name}_${stamp()}.gif`);
-    toast(n>1?`GIF 저장 완료 · ${n}프레임 · ${blob.size<1048576?Math.round(blob.size/1024)+'KB':(blob.size/1048576).toFixed(1)+'MB'}`:'움직일 요소가 없어 정지 GIF로 저장했어요');
+    toast(n>1||LOOP?`GIF 저장 완료 · ${NN}프레임 · ${blob.size<1048576?Math.round(blob.size/1024)+'KB':(blob.size/1048576).toFixed(1)+'MB'}`:'움직일 요소가 없어 정지 GIF로 저장했어요');
   }catch(err){console.error(err);toast('GIF 저장에 실패했어요');}
   finally{busyOff();}
 }
@@ -4943,6 +5061,18 @@ function scrollTopNow(instant){const b=instant?'auto':'smooth';const pn=$('.pane
 renderEditor();renderPreview();
 IDB.get(KEY).then(raw=>{if(!raw){try{if(localStorage.getItem('chat-video-rnd'))return;rndFill(true).then(n=>{if(n)localStorage.setItem('chat-video-rnd','1');});}catch(e){}return;}try{S=merge(defaults(),JSON.parse(raw));fixupState();ui.gsel=-1;renderEditor();renderPreview();}catch(e){console.warn('저장본 읽기 실패',e);}}).catch(e=>console.warn('IndexedDB 사용 불가',e));
 if(document.fonts)document.fonts.ready.then(fit);
+/* v8 : 둥실 효과 온오프 (설정 > 기기) */
+(function(){const _rp=renderPreview;const sync=()=>{const d=S.device||{};document.body.classList.toggle('nofloat',d.float===false);document.body.classList.toggle('i26',d.ios26!==false);};renderPreview=function(){sync();return _rp.apply(this,arguments);};sync();})();
+/* v8 : 마우스를 따라 폰이 살짝 기울어져요 (미리보기 전용 · 저장에는 영향 없음) */
+(function(){
+  const v=document.getElementById('view'),p=document.getElementById('preview');
+  if(!v||!p||!matchMedia('(pointer:fine) and (prefers-reduced-motion:no-preference)').matches)return;
+  let raf=0,rx=0,ry=0;
+  const apply=()=>{raf=0;p.style.setProperty('--rx',rx.toFixed(2)+'deg');p.style.setProperty('--ry',ry.toFixed(2)+'deg');};
+  const go=()=>{if(!raf)raf=requestAnimationFrame(apply);};
+  v.addEventListener('pointermove',e=>{const r=v.getBoundingClientRect();ry=((e.clientX-r.left)/r.width-.5)*10;rx=-((e.clientY-r.top)/r.height-.5)*6;go();});
+  v.addEventListener('pointerleave',()=>{rx=ry=0;go();});
+})();
 </script>
 </body>
 </html>
