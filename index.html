@@ -1173,6 +1173,11 @@ body.dr-on #drawer{transform:none}
 .popn .nt-call .cv-av{background-image:linear-gradient(#a3a7b1,#70747e)}
 .popn .nt-call .cv-b{box-shadow:inset 0 .5px 0 rgba(255,255,255,.35)}
 .popn.bk .nt{background-image:none!important}
+.dgh{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;width:22px;height:28px;display:grid;place-items:center;color:var(--mute);font-size:15px;letter-spacing:-3px;flex:none;border-radius:6px}
+.dgh:hover{color:var(--ink);background:rgba(0,0,0,.05)}
+.item.dragging{opacity:.5;outline:1.5px dashed var(--ink)}
+.dline{height:3px;background:#1d9bf0;border-radius:2px;margin:3px 0}
+body.dragging-list,body.dragging-list *{cursor:grabbing!important;user-select:none!important}
 </style>
 </head>
 <body>
@@ -1789,7 +1794,7 @@ function screenTl(s){
     const av=t.av&&t.av.url?bgImg(t.av):newsAv(t)||TWP(dk);
     const list=(Array.isArray(t.imgs)?t.imgs:[t.img]).filter(x=>x&&x.url).slice(0,4),n=list.length;
     const im=n?`<div class="tl-im n${n}">${list.map((m,j)=>`<div class="tl-ci">${bgImg(m,(n===2||(n===3&&j===0))?8/9:16/9)}</div>`).join('')}</div>`:'';
-    let an='';if(T._tlt!=null&&T._tlt<1&&i===nT-1){const e=1-Math.pow(1-T._tlt,3);an=` style="opacity:${Math.min(1,e*1.4).toFixed(2)};transform:translateY(${(rise?-(1-e)*14:(1-e)*28).toFixed(1)}px)"`;}
+    let an='';if(T._tlt!=null&&T._tlt<1&&i>=nT-(T._tlg||1)){const e=1-Math.pow(1-T._tlt,3);an=` style="opacity:${Math.min(1,e*1.4).toFixed(2)};transform:translateY(${(rise?-(1-e)*14:(1-e)*28).toFixed(1)}px)"`;}
     const rt='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11V9a3 3 0 0 1 3-3h11M15 3l3 3-3 3M20 13v2a3 3 0 0 1-3 3H6M9 21l-3-3 3-3"/></svg>';
     const rth=t.rtBy?`<div class="tl-rt">${rt}${esc(t.rtBy)}님이 리트윗함</div>`:'';
     const rp=t.replyTo&&String(t.replyTo).trim()?`<div class="tl-rp"><span class="tl-rpt">${esc(String(t.replyTo).trim().replace(/^@?/,'@'))}</span>님에게 보내는 답글</div>`:'';
@@ -2705,7 +2710,8 @@ const tog=(p,l)=>`<label class="tog"><span>${l}</span><input type="checkbox" dat
 const rng=(p,min,max,step,l,unit='')=>`<div class="rg"><span>${l}</span><input type="range" min="${min}" max="${max}" step="${step}" value="${g(p)}" data-bind="${p}" data-unit="${unit}"><b>${g(p)}${unit}</b></div>`;
 const sws=(p,list)=>`<div class="sws">${list.map(([v,css,t])=>`<button type="button" class="sw ${g(p)==v?'on':''}" style="background:${css}" title="${t}" data-act="set" data-path="${p}" data-val="${v}" ${typeof v==='number'?'data-num':''}></button>`).join('')}</div>`;
 const randBtn=k=>`<button class="mini" data-act="rand" data-val="${k}">↻ 랜덤</button>`;
-const mv=(p,i,n)=>`<div class="ibs"><button class="ib" data-act="move" data-path="${p}" data-i="${i}" data-d="-1" ${i===0?'disabled style="opacity:.35"':''} title="위로">↑</button><button class="ib" data-act="move" data-path="${p}" data-i="${i}" data-d="1" ${i===n-1?'disabled style="opacity:.35"':''} title="아래로">↓</button><button class="ib" data-act="dup" data-path="${p}" data-i="${i}" title="복제 (바로 아래에 복사)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button><button class="ib x" data-act="del" data-path="${p}" data-i="${i}" title="삭제">✕</button></div>`;
+const mvEnd=(p,i,n)=>`<button class="ib" data-act="moveEnd" data-path="${p}" data-i="${i}" data-d="top" ${i===0?'disabled style="opacity:.35"':''} title="맨 위로"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14M12 20V9M6 14l6-6 6 6"/></svg></button><button class="ib" data-act="moveEnd" data-path="${p}" data-i="${i}" data-d="bottom" ${i===n-1?'disabled style="opacity:.35"':''} title="맨 아래로"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20h14M12 4v11M6 10l6 6 6-6"/></svg></button>`;
+const mv=(p,i,n,ex)=>`<div class="ibs">${ex?mvEnd(p,i,n):''}<button class="ib" data-act="move" data-path="${p}" data-i="${i}" data-d="-1" ${i===0?'disabled style="opacity:.35"':''} title="위로">↑</button><button class="ib" data-act="move" data-path="${p}" data-i="${i}" data-d="1" ${i===n-1?'disabled style="opacity:.35"':''} title="아래로">↓</button><button class="ib" data-act="dup" data-path="${p}" data-i="${i}" title="복제 (바로 아래에 복사)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg></button><button class="ib x" data-act="del" data-path="${p}" data-i="${i}" title="삭제">✕</button></div>`;
 // 사진 확대/이동 미니 창 HTML
 function navHTML(p,bare){
   const im=g(p),ar=im.ar||1,z=Math.round(im.z||100);
@@ -3549,7 +3555,7 @@ function E_tl(){
     ${T.scrollMode!=='add'?'<div class="hint" style="margin:-4px 0 8px">디스패치처럼 전체 트윗이 이미 떠 있고, 사람이 손가락으로 훅 내렸다 멈췄다 하듯 스크롤돼요. 트윗이 화면보다 길게(여러 개) 있어야 움직여요.</div>':''}
     ${tog('exp.tlPress','GIF · 영상: 하트 · 리트윗 누르는 애니메이션')}
     <div class="hint" style="margin-top:6px">GIF · 영상 · ▶ 미리보기에서는 트윗이 올라올 때마다 화면이 함께 스크롤돼요. 지금 <b>${T.tab?'팔로잉':'추천'}</b> 탭의 트윗을 편집 중이에요.</div>`)
-  +card(T.tab?'팔로잉 탭 트윗':'추천 탭 트윗',ts.map((t,i)=>`<div class="item"><div class="item-h"><span class="badge">트윗 ${i+1}</span>${mv('tl.'+key,i,ts.length)}</div>
+  +card(T.tab?'팔로잉 탭 트윗':'추천 탭 트윗',ts.map((t,i)=>`<div class="item" data-dp="tl.${key}" data-di="${i}"><div class="item-h"><span class="badge">트윗 ${i+1}</span><span class="dgh" title="잡고 끌어서 순서 바꾸기">⋮⋮</span>${mv('tl.'+key,i,ts.length,true)}</div>
     ${imgField(`${b}${i}.av`,'이 트윗의 프로필 사진 (위치 조절 가능)')}${(t.av&&t.av.url&&ts.length>1)?`<button class="mini" style="margin:-4px 0 10px" data-act="tlAvAll" data-val="${i}">이 프사를 모든 트윗에 적용</button>`:''}
     <div class="g2">${fld('이름',txt(`${b}${i}.name`,'이름'))}${fld('아이디',txt(`${b}${i}.handle`,'@username'))}</div>
     ${area(`${b}${i}.text`,'트윗 내용 (#해시태그 · @멘션은 파랗게)')}
@@ -3945,12 +3951,20 @@ function buildFrames(s){
     case'call':{for(let i=0;i<20;i++)push(c=>{c._ct=i*.12;},120/sp);break;}
     case'tl':{const key=s.tl.tab?'tweetsF':'tweets',n=(s.tl[key]||[]).length,pr=s.exp.tlPress!==false,tsp=Math.max(.25,+s.tl.speed||1);   // tsp: 타임라인 전용 배속
       if(s.tl.scrollMode==='down'||s.tl.scrollMode==='up'){scrollPlan(s,s.tl.scrollMode==='up').forEach(f=>F.push({s:f.s,delay:f.delay}));break;}
+      const rise=s.tl.rise!==false;
+      // 답글 체인(스레드로 이어 붙인 트윗)은 하나로 묶어서 한 번에 올라와요: k번째와 k+1번째가 이어져 있으면 k에서는 멈추지 않고 넘어가요
+      const linked=k=>k<n&&!!(rise?s.tl[key][k-1].thread:s.tl[key][k].thread);
+      let g0=0;
       for(let k=1;k<=n;k++){
-        const tw=s.tl[key][k-1],kd=pr?[tw.liked?'like':'',(tw.rted&&!tw.priv)?'rt':''].filter(Boolean):[];
-        const cut=c=>{c.tl[key]=c.tl[key].slice(0,k);c.tl._sc=1;};
-        const st=(c,j)=>{const q=c.tl[key][k-1];q.liked=!!tw.liked&&(!kd.includes('like')||kd.indexOf('like')<=j);q.rted=!!tw.rted&&(!kd.includes('rt')||kd.indexOf('rt')<=j);};
+        if(linked(k))continue;
+        const idx=[];for(let j=g0;j<k;j++)idx.push(j);g0=k;
+        const steps=[];idx.forEach(j=>{const tw=s.tl[key][j];(pr?[tw.liked?'like':'',(tw.rted&&!tw.priv)?'rt':''].filter(Boolean):[]).forEach(x=>steps.push({j,x}));});
+        const cut=c=>{c.tl[key]=c.tl[key].slice(0,k);c.tl._sc=1;c.tl._tlg=idx.length;};
+        const st=(c,m)=>{idx.forEach(j=>{const q=c.tl[key][j],tw=s.tl[key][j];
+          const hl=steps.findIndex(z=>z.j===j&&z.x==='like'),hr=steps.findIndex(z=>z.j===j&&z.x==='rt');
+          q.liked=!!tw.liked&&(hl<0||hl<=m);q.rted=!!tw.rted&&(hr<0||hr<=m);});};
         const i0=F.length;for(const t of [.25,.5,.8])push(c=>{cut(c);c.tl._tlt=t;st(c,-1);},50/(sp*tsp));F[i0].snd='right';   // 트윗이 올라오는 순간 메시지와 같은 효과음
-        if(kd.length){push(c=>{cut(c);st(c,-1);},D*.6/tsp);kd.forEach((x,j)=>{for(const t of [.3,.75])push(c=>{cut(c);st(c,j);c.tl._pop={k:k-1,kind:x,t};},70/(sp*tsp));});}
+        if(steps.length){push(c=>{cut(c);st(c,-1);},D*.6/tsp);steps.forEach((z,m)=>{for(const t of [.3,.75])push(c=>{cut(c);st(c,m);c.tl._pop={k:z.j,kind:z.x,t};},70/(sp*tsp));});}
         push(c=>{cut(c);},k===n?hold:D/tsp);
       }break;}
     case'news':{const NS=48;push(c=>{c.news._sc=0;},700/sp);for(let i=1;i<=NS;i++){const e=(1-Math.cos(Math.PI*i/NS))/2;push(c=>{c.news._sc=e;},i===NS?hold:110/sp);}break;}
@@ -4482,6 +4496,36 @@ const E_rnd=()=>card('랜덤 샘플 사진',`<button class="btn line" style="wid
 ui.itemFold=ui.itemFold||{};
 // 글자를 클립보드에 복사 (안 되면 임시 입력창으로 대체)
 async function copyText(t){try{await navigator.clipboard.writeText(t);}catch(e){const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;left:-999px;top:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(_){}ta.remove();}toast('복사했어요');}
+// 목록 항목 맨 위 · 맨 아래로 보내기
+Object.assign(ACT,{moveEnd:el=>{const a=g(el.dataset.path),i=+el.dataset.i;if(!Array.isArray(a)||!(i>=0&&i<a.length))return;
+  const to=el.dataset.d==='top'?0:a.length-1;if(to===i)return;const [x]=a.splice(i,1);a.splice(to,0,x);renderEditor();commit();}});
+// 끌어서 순서 바꾸기 (마우스 · 터치 모두): 손잡이(⋮⋮)를 잡고 끌면 항목이 접히고 파란 선이 들어갈 자리를 보여줘요
+document.addEventListener('pointerdown',e=>{
+  const h=e.target.closest&&e.target.closest('.dgh');if(!h)return;
+  const it=h.closest('.item[data-dp]');if(!it)return;
+  e.preventDefault();
+  const path=it.dataset.dp,from=+it.dataset.di,box=it.parentElement;
+  const items=[...box.querySelectorAll(':scope>.item[data-dp="'+path+'"]')];
+  const was=items.map(x=>x.classList.contains('folded'));
+  items.forEach(x=>x.classList.add('folded'));it.classList.add('dragging');document.body.classList.add('dragging-list');
+  const line=document.createElement('div');line.className='dline';
+  let t=from,lastY=e.clientY;
+  const sc=(()=>{let n=box;while(n&&n!==document.body){const o=getComputedStyle(n).overflowY;if((o==='auto'||o==='scroll')&&n.scrollHeight>n.clientHeight)return n;n=n.parentElement;}return document.scrollingElement;})();
+  const place=()=>{t=0;items.forEach((x,ix)=>{const r=x.getBoundingClientRect();if(lastY>r.top+r.height/2)t=ix+1;});
+    const ref=items[t]||null;if(ref)box.insertBefore(line,ref);else items[items.length-1].after(line);};
+  place();
+  const tick=setInterval(()=>{const r=sc===document.scrollingElement?{top:0,bottom:innerHeight}:sc.getBoundingClientRect();
+    if(lastY<r.top+50)sc.scrollTop-=14;else if(lastY>r.bottom-50)sc.scrollTop+=14;place();},30);
+  const mv2=ev=>{lastY=ev.clientY;place();};
+  const up=()=>{
+    clearInterval(tick);document.removeEventListener('pointermove',mv2);document.removeEventListener('pointerup',up);document.removeEventListener('pointercancel',up);
+    line.remove();it.classList.remove('dragging');document.body.classList.remove('dragging-list');
+    const dest=t>from?t-1:t;
+    if(dest!==from){const a=g(path);if(Array.isArray(a)){const [x]=a.splice(from,1);a.splice(dest,0,x);renderEditor();commit();return;}}
+    items.forEach((x,ix)=>{if(!was[ix])x.classList.remove('folded');});
+  };
+  document.addEventListener('pointermove',mv2);document.addEventListener('pointerup',up);document.addEventListener('pointercancel',up);
+});
 // 섹션 모두 접기 / 펼치기 버튼줄
 function foldBar(){
   const cs=[...document.querySelectorAll('#pbody .card.fold')].filter(c=>c.parentNode.id==='pbody');
