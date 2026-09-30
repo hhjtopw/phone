@@ -1147,6 +1147,32 @@ body.dr-on #drawer{transform:none}
 .popn .cv-s{font-size:14.5px;line-height:1.3;margin-top:1px;letter-spacing:-.24px;color:rgba(60,60,67,.6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .popn .nt.dark .cv-s{color:rgba(235,235,245,.6)}
 .popn .cv-b{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+/* 겹쳐 쌓일 때 뒤쪽 카드: 실제 아이폰처럼 내용은 숨기고 얇은 띠만 보이게, 그림자도 가볍게 */
+.popn.bk .nt>*{opacity:0}
+.popn.bk .nt{box-shadow:0 3px 8px rgba(0,0,0,.14),inset 0 0 0 .5px rgba(0,0,0,.06)!important}
+.popn.bk .nt.dark{box-shadow:0 3px 8px rgba(0,0,0,.35),inset 0 0 0 .5px rgba(255,255,255,.08)!important}
+
+/* ═════ 팝업 알림 · 전화 배너 디테일 (아이폰 iOS 16~18 배너 기준) ═════ */
+.popn .nt{position:relative;border-radius:24px}
+.popn .nt.light{box-shadow:0 8px 26px rgba(0,0,0,.16),0 0 0 .5px rgba(0,0,0,.07)!important}
+.popn .grab{position:absolute;left:50%;bottom:3.5px;width:36px;height:4px;margin-left:-18px;border-radius:2px;background:rgba(60,60,67,.28)}
+.popn .nt.dark .grab{background:rgba(235,235,245,.3)}
+.popn .nt-ic{border-radius:8.6px;overflow:hidden}
+.popn .nt-h b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.popn .nt-call{border-radius:30px;padding:12px 14px 12px 12px;gap:12px;color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.42),inset 0 0 0 .5px rgba(255,255,255,.16)!important}
+.popn .nt-call .cv-n{color:#fff}
+.popn .nt-call .cv-s{color:rgba(235,235,245,.6)}
+.popn .nt-call .cv-b{width:44px;height:44px}
+.popn .nt-call .cv-av{width:46px;height:46px;background:linear-gradient(#9fa3ad,#6e727c)}
+.popn .nt-call .grab{display:none}
+/* ═════ iOS 26 리퀴드 글래스 느낌: 더 둥근 모서리 · 위쪽 빛 반사 · 유리 테두리 ═════ */
+.popn .nt{border-radius:28px;padding:13px 16px 14px 13px}
+.popn .nt.light{background-image:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0) 55%)!important;box-shadow:0 10px 30px rgba(0,0,0,.15),inset 0 .5px 0 rgba(255,255,255,.95),inset 0 0 0 .5px rgba(0,0,0,.06)!important}
+.popn .nt.dark{background-image:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 55%)!important;box-shadow:0 12px 32px rgba(0,0,0,.5),inset 0 .5px 0 rgba(255,255,255,.28),inset 0 0 0 .5px rgba(255,255,255,.10)!important}
+.popn .nt-call{border-radius:34px;padding:12px 14px 12px 12px}
+.popn .nt-call .cv-av{background-image:linear-gradient(#a3a7b1,#70747e)}
+.popn .nt-call .cv-b{box-shadow:inset 0 .5px 0 rgba(255,255,255,.35)}
+.popn.bk .nt{background-image:none!important}
 </style>
 </head>
 <body>
@@ -1301,7 +1327,7 @@ function defaults(){
     live:{anim:true,hearts:true,img:null,avatar:null,name:'username',viewers:'1.2천',cmts:'user1|안녕하세요!\nuser2|와 대박\nuser3|ㅋㅋㅋㅋ 진짜',hint:'댓글 달기...'},
     sres:{ai:true,aiText:'전화 앱의 최근 통화 탭에서 삭제할 기록을 왼쪽으로 밀어 삭제하거나, 편집을 눌러 여러 기록을 한 번에 지울 수 있어요.\n삭제한 기록은 되돌리기 어렵기 때문에 필요한 번호는 미리 저장해 두는 것이 좋아요.',paa:true,paaList:'아이폰 통화 기록은 얼마나 저장되나요?\n삭제한 통화 기록을 복구할 수 있나요?\n통화 기록 전체를 한 번에 지우는 방법은?\niCloud에도 통화 기록이 남나요?',rel:true,relList:'아이폰 통화 기록 복구\n아이폰 통화 기록 확인\n아이폰 통화 기록 백업\n아이폰 최근 통화 삭제 안됨\n아이폰 통화 기록 icloud\n통화 기록 전체 삭제',style:'google',q:'아이폰 최근 통화 기록 삭제',tab:'전체',items:[{id:uid(),dt:'2일 전',img:null,t:'아이폰 최근 통화 기록 삭제하는 방법',u:'support.apple.com › ko-kr',d:'전화 앱에서 최근 통화 탭을 열고 삭제할 기록을 왼쪽으로 밀어 삭제할 수 있어요.'},{id:uid(),dt:'2일 전',img:null,t:'최근 통화 기록 복구 가능할까? - 블로그',u:'blog.example.com',d:'삭제한 통화 기록을 다시 확인하는 방법과 주의할 점을 정리했습니다.'},{id:uid(),dt:'2일 전',img:null,t:'통화 기록 완전 삭제 후 확인하는 법',u:'community.example.com',d:'설정에서 통화 기록과 관련된 항목을 확인하고 정리하는 순서를 안내합니다.'},{id:uid(),dt:'2일 전',img:null,t:'아이폰 통화 기록 백업과 복원 정리',u:'tech.example.com',d:'백업본에서 통화 기록을 되살릴 수 있는지 조건별로 살펴봤어요.'},{id:uid(),dt:'2일 전',img:null,t:'자주 묻는 질문 - 통화 기록',u:'help.example.com',d:'통화 기록이 사라졌을 때 자주 묻는 질문을 모았습니다.'},{id:uid(),dt:'2일 전',img:null,t:'통화 기록이 안 지워질 때 해결 방법',u:'faq.example.com',d:'삭제가 되지 않을 때 확인해야 할 설정과 재시작 방법을 알려드려요.'},{id:uid(),dt:'2일 전',img:null,t:'iCloud 통화 기록 동기화 끄는 방법',u:'guide.example.com',d:'다른 기기에 통화 기록이 남지 않도록 동기화를 끄는 순서입니다.'},{id:uid(),dt:'2일 전',img:null,t:'통화 기록 관련 자주 하는 실수 5가지',u:'tips.example.com',d:'많은 분들이 놓치는 부분을 사례와 함께 정리했습니다.'}]},
     story:{texts:[],stickers:[],slots:[{id:uid(),img:null},{id:uid(),img:null},{id:uid(),img:null}],avatar:null,name:'username',time:'3시간',cur:1,prog:40,imgSec:3,text:'',textStyle:'plain',textY:50,textX:50,textSize:100,textRot:0,hint:'메시지 보내기...'},
-    tl:{rise:true,scrollMode:'add',mode:'light',tab:0,fab:true,me:null,tweetsF:[
+    tl:{rise:true,speed:1,scrollMode:'add',mode:'light',tab:0,fab:true,me:null,tweetsF:[
       {id:uid(),name:'팔로우 중인 계정',handle:'@following',ver:false,text:'팔로잉 탭에 뜨는 트윗이에요 @username',time:'10분',replies:'4',rts:'2',likes:'57',views:'1,204',av:null,imgs:[null,null,null,null],priv:true,liked:false,rted:false},
       {id:uid(),name:'친구',handle:'@friend',ver:false,text:'오늘 모임 다들 올 거지?',time:'34분',replies:'12',rts:'',likes:'98',views:'2,310',av:null,imgs:[null,null,null,null],priv:false,liked:true,rted:false},
       {id:uid(),name:'뉴스',handle:'@news',ver:true,text:'속보: 오늘 오후부터 전국에 비가 내리겠습니다 #날씨',time:'1시간',replies:'240',rts:'1.8천',likes:'4.2천',views:'21만',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false}],
@@ -2505,7 +2531,7 @@ function ovApply(root,st){
       d.className='popn';
       d.style.cssText=`position:absolute;left:0;right:0;margin:0 auto;top:${top}px;width:calc(100% - 20px);max-width:${flat?380:999}px;z-index:${50+q.i};pointer-events:none;transform-origin:50% 0;transform:translateY(${(-(1-v)*(top+96)).toFixed(1)}px) scale(${(.94+.06*Math.min(v,1)).toFixed(3)});opacity:${Math.min(1,v*2.2).toFixed(2)}`;
       if(it.app==='incall'){d.innerHTML=callBannerHtml(it,dk);}else
-      d.innerHTML=`<div class="nt ${dk?'dark':'light'}" style="background:${dk?'rgba(50,50,54,.94)':'rgba(247,247,249,.94)'};box-shadow:0 10px 30px rgba(0,0,0,.24),0 0 0 .5px rgba(0,0,0,.1)"><div class="nt-ic" style="background:${a.bg}">${a.ic()}</div><div class="nt-tx"><div class="nt-h"><b>${esc(it.title||a.n)}</b><span>${esc(it.time||'')}</span></div>${it.body?`<div class="nt-b">${esc(it.body)}</div>`:''}</div></div>`;
+      d.innerHTML=`<div class="nt ${dk?'dark':'light'}" style="background:${dk?'rgba(50,50,54,.94)':'rgba(247,247,249,.94)'};box-shadow:0 10px 30px rgba(0,0,0,.24),0 0 0 .5px rgba(0,0,0,.1)"><div class="nt-ic" style="background:${a.bg}">${a.ic()}</div><div class="nt-tx"><div class="nt-h"><b>${esc(it.title||a.n)}</b><span>${esc(it.time||'')}</span></div>${it.body?`<div class="nt-b">${esc(it.body)}</div>`:''}</div><i class="grab"></i></div>`;
       scr.appendChild(d);els.push({d,q});
     }
     if(P.mode==='overlap'&&els.length){   // 겹쳐서: 새 알림이 맨 앞, 이전 알림은 뒤에서 살짝 작게 겹쳐 보여요 (아이폰 알림 묶음처럼)
@@ -2517,8 +2543,8 @@ function ovApply(root,st){
         if(idx>0){
           const hb=e.d.offsetHeight,T=D*10+(hf-hb*(1-.05*D))*Math.min(1,D);
           e.d.style.transform=`translateY(${T.toFixed(1)}px) scale(${(1-.05*D).toFixed(3)})`;
-          const nt=e.d.firstElementChild;
-          if(nt)nt.style.background=dk?`rgba(${44-Math.round(12*Dc)},${44-Math.round(12*Dc)},${46-Math.round(12*Dc)},.97)`:`rgba(${255-Math.round(24*Dc)},${255-Math.round(24*Dc)},${255-Math.round(20*Dc)},.97)`;
+          const nt=e.d.firstElementChild;e.d.classList.add('bk');
+          const bdk=dk||IT[e.q.i].app==='incall';if(nt)nt.style.background=bdk?`rgba(${44-Math.round(12*Dc)},${44-Math.round(12*Dc)},${46-Math.round(12*Dc)},.97)`:`rgba(${255-Math.round(24*Dc)},${255-Math.round(24*Dc)},${255-Math.round(20*Dc)},.97)`;
           e.d.style.opacity=(Math.min(1,e.q.v*2.2)*Math.max(0,Math.min(1,3-dep))).toFixed(2);
         }
         dep+=v;
@@ -2929,7 +2955,7 @@ async function sfxInit(){
 }
 /* 추가 효과음: recv=상대 메시지 수신음, shutter=카메라 셔터, shot=스크린샷 (파일은 SOUND_FILES 참고) */
 const sxBuf={};
-const SX_KEYS=['recv','shutter','shot','vib'],sxTried=new Set();
+const SX_KEYS=['shutter','shot','vib'],sxTried=new Set();
 // 효과음 파일들을 미리 읽어 두기
 async function sxLoad(){
   for(const k of SX_KEYS){
@@ -2941,7 +2967,7 @@ async function sxLoad(){
 }
 const sxNeed=f=>!!(f&&f.sx&&S.exp.sxOn!==false);
 const sxV=()=>(S.exp.sxVol??100)/100;
-const sfxBufFor=f=>(f.snd==='left'&&S.exp.rcv!==false&&sxBuf.recv)||sfxBuf;
+const sfxBufFor=f=>sfxBuf;   // 상대 메시지도 내 메시지와 같은 알림음
 // 효과음 하나 재생
 function sxPlay(k,dest,vol,when){
   const b=sxBuf[k];if(!actx||!b)return;
@@ -2981,8 +3007,8 @@ function callBannerHtml(it,dk){
   const av=isNum
     ?'<svg width="30" height="30" viewBox="0 0 24 24" fill="#fff" opacity=".92"><circle cx="12" cy="8.6" r="4.1"/><path d="M4.2 21c0-4.3 3.5-7.4 7.8-7.4s7.8 3.100 7.800 7.400z"/></svg>'
     :`<span style="font-size:23px;font-weight:500;line-height:1;color:#fff">${esc([...nm][0])}</span>`;
-  const bg=dk?'rgba(50,50,54,.94)':'rgba(247,247,249,.94)';   // 일반 팝업 알림과 같은 배경색
-  return `<div class="nt ${dk?'dark':'light'} nt-call" style="background:${bg}"><div class="cv-av">${av}</div><div class="cv-tx"><div class="cv-n">${esc(nm)}</div><div class="cv-s">${esc(sub)}</div></div><div class="cv-b" style="background:#ff3b30">${I.phone('#fff',22,135)}</div><div class="cv-b" style="background:#34c759">${I.phone('#fff',22)}</div></div>`;
+  // 실제 아이폰의 전화 수신 배너는 라이트/다크 모드와 상관없이 항상 어두운 유리 재질에 흰 글씨예요
+  return `<div class="nt dark nt-call" style="background:rgba(40,40,43,.95)"><div class="cv-av">${av}</div><div class="cv-tx"><div class="cv-n">${esc(nm)}</div><div class="cv-s">${esc(sub)}</div></div><div class="cv-b" style="background:#ff453a">${I.phone('#fff',22,135)}</div><div class="cv-b" style="background:#30d158">${I.phone('#fff',22)}</div></div>`;
 }
 // 팝업 소리 고르기: 전화 수신(incall) 팝업은 진동음, 그 외는 기본 알림음 (진동음 파일이 없으면 기본 알림음)
 const popBufFor=f=>(f&&f.popVib&&sxBuf.vib)||popBuf;
@@ -3494,7 +3520,7 @@ function E_video(){
     ${fld('스크린샷 셔터 효과 (영상 맨 끝)',seg('exp.shutter',[['none','없음'],['flash','번쩍']]))}${S.exp.shutter==='flash'?tog('exp.shutterSnd','번쩍일 때 스크린샷 소리 넣기'):''}
     ${fld('강조 효과 (마지막 장면에서)',seg('exp.fx',[['none','없음'],['zoom','줌인'],['shake','흔들림']]))}${S.exp.fx==='zoom'?rng('exp.fxY',0,100,5,'확대 중심 세로 위치','%'):''}
     ${S.screen==='face'?fld('영상통화 프레임',seg('exp.faceFps',[[10,'10fps'],[15,'15fps'],[24,'24fps'],[30,'30fps']]))+tog('exp.vidAudio','넣은 영상의 소리 포함'):''}${S.screen==='call'?fld('전화 애니메이션 길이',seg('exp.callSec',[[3,'3초'],[5,'5초'],[8,'8초']])):''}${tog('exp.smooth','부드러운 스크롤 애니메이션')}${typOpts()}
-    ${fld('효과음',seg('exp.sfx',[['off','끄기'],['me','내 메시지'],['all','모든 메시지']]))}${S.exp.sfx==='all'?tog('exp.rcv','상대 메시지는 수신음으로 (내 메시지와 다른 소리)'):''}${tog('exp.sxOn','카메라 셔터음 · 스크린샷음 넣기')}${S.exp.sxOn!==false?rng('exp.sxVol',0,100,5,'셔터·스크린샷 볼륨','%')+'<div class="hint" style="margin:-4px 0 8px">수신음·셔터·스크린샷 소리는 <b>'+esc(SOUND_DIR)+'</b> 폴더의 <b>'+esc(SOUND_FILES.recv)+'</b> · <b>'+esc(SOUND_FILES.shutter)+'</b> · <b>'+esc(SOUND_FILES.shot)+'</b> 파일을 불러와요. 이름을 바꾸려면 코드의 SOUND_FILES만 고치면 돼요.</div>'+soundPickBtn():''}
+    ${fld('효과음',seg('exp.sfx',[['off','끄기'],['me','내 메시지'],['all','모든 메시지']]))}${tog('exp.sxOn','카메라 셔터음 · 스크린샷음 넣기')}${S.exp.sxOn!==false?rng('exp.sxVol',0,100,5,'셔터·스크린샷 볼륨','%')+'<div class="hint" style="margin:-4px 0 8px">수신음·셔터·스크린샷 소리는 <b>'+esc(SOUND_DIR)+'</b> 폴더의 <b>'+esc(SOUND_FILES.recv)+'</b> · <b>'+esc(SOUND_FILES.shutter)+'</b> · <b>'+esc(SOUND_FILES.shot)+'</b> 파일을 불러와요. 이름을 바꾸려면 코드의 SOUND_FILES만 고치면 돼요.</div>'+soundPickBtn():''}
     ${rng('exp.sfxVol',0,100,5,'볼륨','%')}${rng('exp.sfxOff',-300,300,10,'효과음 싱크 보정','ms')}<div class="sep"></div>
     <div class="g2"><button class="btn ghost" data-act="play">▶ 미리보기</button><button class="btn" data-act="vid">영상 저장</button></div>`);
 }
@@ -3507,7 +3533,7 @@ function E_tl(){
   return card('타임라인',`${fld('상단 탭 (탭마다 트윗이 따로예요)',seg('tl.tab',[[0,'추천'],[1,'팔로잉']]))}
     ${fld('화면',seg('tl.mode',[['light','화이트'],['dark','다크']]))}
     ${imgField('tl.me','내 프로필 사진 (상단 왼쪽 아이콘 · 위치·크기는 고정)')}${tog('tl.sync','이름이 같으면 프로필 사진 · 아이디 자동 통일')}${tog('tl.fab','글쓰기 버튼')}${tog('tl.rise','최신 트윗이 맨 위 · 아래에서부터 쌓이며 올라오기 (트윗 1이 가장 아래, 마지막 트윗이 맨 위)')}
-    ${fld('GIF · 영상 스크롤 방식',seg('tl.scrollMode',[['add','트윗이 하나씩 올라옴'],['down','사람이 아래로 스크롤'],['up','맨 아래에서 위로']]))}
+    ${fld('GIF · 영상 스크롤 방식',seg('tl.scrollMode',[['add','트윗이 하나씩 올라옴'],['down','사람이 아래로 스크롤'],['up','맨 아래에서 위로']]))}${T.scrollMode==='add'?rng('tl.speed',0.25,4,0.25,'트윗 올라오는 속도','배')+'<div class="hint" style="margin:-4px 0 8px">1배가 기본이에요. 숫자가 클수록 트윗이 빠르게 연달아 올라오고, 작을수록 천천히 올라와요. (▶ 미리보기 · GIF · 영상에 적용)</div>':''}
     ${T.scrollMode!=='add'?'<div class="hint" style="margin:-4px 0 8px">디스패치처럼 전체 트윗이 이미 떠 있고, 사람이 손가락으로 훅 내렸다 멈췄다 하듯 스크롤돼요. 트윗이 화면보다 길게(여러 개) 있어야 움직여요.</div>':''}
     ${tog('exp.tlPress','GIF · 영상: 하트 · 리트윗 누르는 애니메이션')}
     <div class="hint" style="margin-top:6px">GIF · 영상 · ▶ 미리보기에서는 트윗이 올라올 때마다 화면이 함께 스크롤돼요. 지금 <b>${T.tab?'팔로잉':'추천'}</b> 탭의 트윗을 편집 중이에요.</div>`)
@@ -3890,15 +3916,15 @@ function buildFrames(s){
       for(let i=0;i<4;i++){const t=sec+i,str=`${pad(Math.floor(t/60)%100)}:${pad(t%60)}`;push(c=>{c.face.status=s.face.status.slice(0,m.index)+str+s.face.status.slice(m.index+m[0].length);},1000/sp);}
       break;}
     case'call':{for(let i=0;i<20;i++)push(c=>{c._ct=i*.12;},120/sp);break;}
-    case'tl':{const key=s.tl.tab?'tweetsF':'tweets',n=(s.tl[key]||[]).length,pr=s.exp.tlPress!==false;
+    case'tl':{const key=s.tl.tab?'tweetsF':'tweets',n=(s.tl[key]||[]).length,pr=s.exp.tlPress!==false,tsp=Math.max(.25,+s.tl.speed||1);   // tsp: 타임라인 전용 배속
       if(s.tl.scrollMode==='down'||s.tl.scrollMode==='up'){scrollPlan(s,s.tl.scrollMode==='up').forEach(f=>F.push({s:f.s,delay:f.delay}));break;}
       for(let k=1;k<=n;k++){
         const tw=s.tl[key][k-1],kd=pr?[tw.liked?'like':'',(tw.rted&&!tw.priv)?'rt':''].filter(Boolean):[];
         const cut=c=>{c.tl[key]=c.tl[key].slice(0,k);c.tl._sc=1;};
         const st=(c,j)=>{const q=c.tl[key][k-1];q.liked=!!tw.liked&&(!kd.includes('like')||kd.indexOf('like')<=j);q.rted=!!tw.rted&&(!kd.includes('rt')||kd.indexOf('rt')<=j);};
-        for(const t of [.25,.5,.8])push(c=>{cut(c);c.tl._tlt=t;st(c,-1);},50/sp);
-        if(kd.length){push(c=>{cut(c);st(c,-1);},D*.6);kd.forEach((x,j)=>{for(const t of [.3,.75])push(c=>{cut(c);st(c,j);c.tl._pop={k:k-1,kind:x,t};},70/sp);});}
-        push(c=>{cut(c);},k===n?hold:D);
+        for(const t of [.25,.5,.8])push(c=>{cut(c);c.tl._tlt=t;st(c,-1);},50/(sp*tsp));
+        if(kd.length){push(c=>{cut(c);st(c,-1);},D*.6/tsp);kd.forEach((x,j)=>{for(const t of [.3,.75])push(c=>{cut(c);st(c,j);c.tl._pop={k:k-1,kind:x,t};},70/(sp*tsp));});}
+        push(c=>{cut(c);},k===n?hold:D/tsp);
       }break;}
     case'news':{const NS=48;push(c=>{c.news._sc=0;},700/sp);for(let i=1;i<=NS;i++){const e=(1-Math.cos(Math.PI*i/NS))/2;push(c=>{c.news._sc=e;},i===NS?hold:110/sp);}break;}
     case'dial':{
