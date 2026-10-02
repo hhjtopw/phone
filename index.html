@@ -503,14 +503,14 @@ body.bgoff #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 50%
 body.v3d #view{touch-action:none;cursor:grab}body.v3d #view:active{cursor:grabbing}
 body.v3d #preview{transform:none!important;perspective:1700px;transition:--rx .6s cubic-bezier(.22,1,.36,1),--ry .6s cubic-bezier(.22,1,.36,1)}
 body.v3d .stage{padding:0!important}body.v3d .stage .dev{box-shadow:none!important}
-.p3rig{position:relative;transform-style:preserve-3d;will-change:transform}
+.p3rig{position:relative;-webkit-transform-style:preserve-3d;transform-style:preserve-3d;will-change:transform}
 .p3rig.anim{transition:transform .65s cubic-bezier(.22,1,.36,1)}
 .p3s{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:var(--r,60px);background:var(--band,#2b2b2e)}
 .p3s::after{content:'';position:absolute;inset:0;border-radius:inherit;background:rgba(0,0,0,var(--sh,0))}
-.p3b{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:var(--r,60px);background:linear-gradient(160deg,#34343a,#111113 70%);backface-visibility:hidden;box-shadow:inset 0 0 0 3px rgba(255,255,255,.08)}
+.p3b{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:var(--r,60px);background:linear-gradient(160deg,#34343a,#111113 70%);-webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:inset 0 0 0 3px rgba(255,255,255,.08)}
 .p3c{position:absolute;left:20px;top:20px;width:108px;height:108px;border-radius:32px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.14)}
 .p3c b{position:absolute;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3d414b,#07080a 62%);box-shadow:0 0 0 4px #4b4d56,inset 0 0 0 2px #15161b}
-.p3gl{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:var(--r,60px);pointer-events:none;transform:translateZ(1px);background:linear-gradient(112deg,rgba(255,255,255,0) 22%,rgba(255,255,255,.17) 40%,rgba(255,255,255,0) 56%);background-size:260% 100%;background-position:calc(50% - var(--ryn,0)*70%) 0}
+.p3gl{position:absolute;left:0;top:0;right:0;bottom:0;border-radius:var(--r,60px);pointer-events:none;transform:translateZ(2px);background:linear-gradient(112deg,rgba(255,255,255,0) 22%,rgba(255,255,255,.17) 40%,rgba(255,255,255,0) 56%);background-size:260% 100%;background-position:calc(50% - var(--ryn,0)*70%) 0}
 /* 3D 말풍선: 화면 위에 떠 있는 입체 · 폰을 돌리면 시차(떠 있는 높이)만큼 움직이고 그림자가 반대로 늘어나요 */
 .scr.bfx-d3 :is(.kt-b,.ig-b,.ln-b,.tg-b,.tw-b),.scr.bfx-d3 .im-b{
   transform:translate(calc(var(--bpx,0)*16px),calc(var(--bpy,0)*16px));
@@ -1416,6 +1416,14 @@ body.v3d #v3bar{touch-action:manipulation}
 .scr[class*="bfx-"] .im-row.last .im-b:not(.typ):before{top:0;height:auto;background-image:inherit;background-size:auto;background-position:0 0;clip-path:none;-webkit-clip-path:none;
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 18'%3E%3Cpath d='M0 0H12V8A10 10 0 0 0 19 17.54V18H16A16 14 0 0 1 0 4Z'/%3E%3C/svg%3E") no-repeat 0 100%/19px 18px;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 18'%3E%3Cpath d='M0 0H12V8A10 10 0 0 0 19 17.54V18H16A16 14 0 0 1 0 4Z'/%3E%3C/svg%3E") no-repeat 0 100%/19px 18px}
+
+/* ═════ v4 patch · 모바일 3D 안정화 ═════ */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body.v3d #view{overscroll-behavior:contain;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+/* 돌리는 동안엔 화면 안의 반복 애니메이션을 잠깐 멈춰서 다시 그리는 양을 줄여요 */
+body.v3d.v3drag #preview .scr,body.v3d.v3drag #preview .scr *{animation-play-state:paused!important}
+/* 저장용 복제본에서도 말풍선 글자가 안쪽으로 밀리지 않게 */
+.scr :is(.kt-b,.im-b,.ig-b,.ln-b,.tg-b,.tw-b){text-indent:0;text-align:left}
 </style>
 </head>
 <body>
@@ -3185,26 +3193,31 @@ const p3rotOn=()=>!!(ui.v3d&&!ui.v3closing&&R3().anim&&R3().anim!=='none');
 function p3pose(t){const r=R3(),d=p3delta(r.anim,+r.dur||4,t);return{rx:ui.v3.rx+d.rx,ry:ui.v3.ry+d.ry};}
 function p3vars(rig){
   const v=ui.v3,ad=v.ad||{rx:0,ry:0},rx=v.rx+ad.rx,ry=v.ry+ad.ry,R=Math.PI/180,cl=(x,a,b)=>Math.max(a,Math.min(b,x));
-  rig.style.setProperty('--bpx',cl(Math.tan(ry*R),-1.2,1.2).toFixed(3));
-  rig.style.setProperty('--bpy',cl(-Math.tan(rx*R),-1.2,1.2).toFixed(3));
-  rig.style.setProperty('--ryn',cl(ry/90,-1,1).toFixed(3));
+  /* --bpx/--bpy 는 '3D 말풍선' 효과일 때만 필요해요. 이 값이 바뀌면 화면 안 모든 요소의 스타일이 다시 계산돼서, 필요 없을 땐 건드리지 않아요 (모바일 버벅임 방지) */
+  if(rig._d3){rig.style.setProperty('--bpx',cl(Math.tan(ry*R),-1.2,1.2).toFixed(3));rig.style.setProperty('--bpy',cl(-Math.tan(rx*R),-1.2,1.2).toFixed(3));}
+  const gl=rig._gl||(rig._gl=rig.querySelector(':scope>.p3gl'));   // 광택 값은 광택 판에만 (rig 에 걸면 안쪽 전부가 영향을 받아요)
+  if(gl)gl.style.setProperty('--ryn',cl(ry/90,-1,1).toFixed(3));
   rig.style.transform=`rotateX(calc(${rx}deg + var(--rx,0deg)*.8)) rotateY(calc(${ry}deg + var(--ry,0deg)*.8)) scale(${v.z})`;   // 2D 와 같은 둥실(translate) + 마우스 따라 살짝 기울기
 }
+/* 드래그·핀치·휠 입력은 프레임당 한 번만 반영 (터치는 이벤트가 프레임보다 훨씬 많이 들어와요) */
+let p3q=0;
+function p3req(){if(p3q)return;p3q=requestAnimationFrame(()=>{p3q=0;const g=$('#preview .p3rig');if(g){g.classList.remove('anim');p3vars(g);}});}
+const p3coarse=()=>window.innerWidth<=900||(window.matchMedia&&matchMedia('(pointer:coarse)').matches);
 /* 틀(두께 판 · 뒷면)은 한 번만 만들어 두고, 화면이 바뀔 때는 안쪽 무대만 갈아 끼워요 (재생 중에도 깜빡이거나 버벅이지 않게) */
 function wrap3d(){
   const pv=$('#preview'),st=pv.firstElementChild;if(!st||st.classList.contains('p3rig'))return;
-  const dev=st.querySelector('.dev')||st.querySelector('.scr')||st,W=dev.offsetWidth,H=dev.offsetHeight,N=14;
+  const dev=st.querySelector('.dev')||st.querySelector('.scr')||st,W=dev.offsetWidth,H=dev.offsetHeight,DEP=14,N=p3coarse()?7:14,SP=DEP/N;   // 모바일은 판을 7장(2px 간격)으로 — 1px 간격 14장은 GPU 깊이 오차로 줄무늬가 깜빡였어요
   const thin=!!st.querySelector('.scr.bgoff');   // 배경 끄기(말풍선만)일 때는 폰 몸체 없이 말풍선만 3D 로 떠요
   const rad=getComputedStyle(dev).borderTopLeftRadius||'60px',band=dev.style.background||'#2b2b2e';
-  const sig=[W,H,rad,band,thin?1:0].join('|');
+  const sig=[W,H,rad,band,thin?1:0,N].join('|');
   let rig=ui.v3rig;
   if(!rig||rig.dataset.sig!==sig){
     rig=document.createElement('div');rig.className='p3rig';rig.dataset.sig=sig;
     rig.style.cssText=`width:${W}px;height:${H}px;--r:${rad};--band:${band}`;
     let h='';
     if(!thin){
-      for(let i=1;i<=N;i++)h+=`<i class="p3s" style="transform:translateZ(${-i}px);--sh:${(.4*i/N).toFixed(3)}"></i>`;
-      h+=`<div class="p3b" style="transform:translateZ(${-N-1}px) rotateY(180deg)"><div class="p3c"><b style="left:10px;top:10px"></b><b style="left:10px;top:54px"></b><b style="left:54px;top:32px"></b></div></div>`;
+      for(let i=1;i<=N;i++)h+=`<i class="p3s" style="transform:translateZ(${(-i*SP).toFixed(2)}px);--sh:${(.4*i/N).toFixed(3)}"></i>`;
+      h+=`<div class="p3b" style="transform:translateZ(${-DEP-1}px) rotateY(180deg)"><div class="p3c"><b style="left:10px;top:10px"></b><b style="left:10px;top:54px"></b><b style="left:54px;top:32px"></b></div></div>`;
       h+='<i class="p3gl"></i>';
     }
     rig.innerHTML=h;ui.v3rig=rig;
@@ -3212,6 +3225,7 @@ function wrap3d(){
   const old=rig.querySelector(':scope>.p3st');if(old)old.remove();
   st.classList.add('p3st');st.style.position='absolute';st.style.left='0';st.style.top='0';
   const gl=rig.querySelector(':scope>.p3gl');gl?rig.insertBefore(st,gl):rig.appendChild(st);
+  rig._d3=!!st.querySelector('.scr.bfx-d3');rig._gl=gl||null;
   pv.replaceChildren(rig);
   if(ui.v3in){ui.v3in=false;rig.classList.remove('anim');rig.style.transform='none';rig.style.setProperty('--bpx','0');rig.style.setProperty('--bpy','0');
     requestAnimationFrame(()=>requestAnimationFrame(()=>{rig.classList.add('anim');p3vars(rig);}));}
@@ -3260,14 +3274,16 @@ function p3set(on){
 }
 document.addEventListener('pointerdown',e=>{
   if(!ui.v3d||(e.pointerType==='mouse'&&e.button!==0))return;const v=e.target.closest&&e.target.closest('#view');if(!v||e.target.closest('#v3bar'))return;
-  window._orb={x:e.clientX,y:e.clientY};
+  if(_pts.size>=2)return;   // 두 손가락(확대)일 때는 회전하지 않아요 — 같이 돌아가면서 화면이 튀었어요
+  window._orb={x:e.clientX,y:e.clientY};document.body.classList.add('v3drag');
 });
 document.addEventListener('pointermove',e=>{
   const o=window._orb;if(!o||!ui.v3d)return;const dx=e.clientX-o.x,dy=e.clientY-o.y;o.x=e.clientX;o.y=e.clientY;
   ui.v3.ry=((ui.v3.ry+dx*.5+180)%360)-180;ui.v3.rx=Math.max(-80,Math.min(80,ui.v3.rx-dy*.4));
-  const rig=$('#preview .p3rig');if(rig){rig.classList.remove('anim');p3vars(rig);}
+  p3req();
 });
-document.addEventListener('pointerup',()=>{window._orb=null;});document.addEventListener('pointercancel',()=>{window._orb=null;});window.addEventListener('blur',()=>{window._orb=null;});
+const p3end=()=>{window._orb=null;document.body.classList.remove('v3drag');};
+document.addEventListener('pointerup',p3end);document.addEventListener('pointercancel',p3end);window.addEventListener('blur',p3end);
 const _pts=new Map();let _pd=0;
 document.addEventListener('pointerdown',e=>{
   if(!ui.v3d||e.pointerType==='mouse')return;const t=e.target;if(!t.closest||!t.closest('#view')||t.closest('#v3bar'))return;
@@ -3277,14 +3293,15 @@ document.addEventListener('pointerdown',e=>{
 document.addEventListener('pointermove',e=>{
   if(!_pts.has(e.pointerId))return;_pts.set(e.pointerId,[e.clientX,e.clientY]);
   if(_pts.size===2&&ui.v3d){const a=[..._pts.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);window._orb=null;
-    if(_pd>0&&d>0){ui.v3.z=Math.max(.5,Math.min(2.2,ui.v3.z*d/_pd));const rig=$('#preview .p3rig');if(rig){rig.classList.remove('anim');p3vars(rig);}}
+    document.body.classList.add('v3drag');
+    if(_pd>0&&d>0){ui.v3.z=Math.max(.5,Math.min(2.2,ui.v3.z*d/_pd));p3req();}
     _pd=d;}
 },true);
-const _pu=e=>{_pts.delete(e.pointerId);if(_pts.size<2)_pd=0;};
+const _pu=e=>{_pts.delete(e.pointerId);if(_pts.size<2)_pd=0;if(!_pts.size&&!window._orb)document.body.classList.remove('v3drag');};
 document.addEventListener('pointerup',_pu,true);document.addEventListener('pointercancel',_pu,true);
 document.addEventListener('wheel',e=>{
   if(!ui.v3d||!(e.target.closest&&e.target.closest('#view')))return;e.preventDefault();
-  ui.v3.z=Math.max(.5,Math.min(2.2,ui.v3.z*Math.exp(-e.deltaY*.0012)));const rig=$('#preview .p3rig');if(rig){rig.classList.remove('anim');p3vars(rig);}
+  ui.v3.z=Math.max(.5,Math.min(2.2,ui.v3.z*Math.exp(-e.deltaY*.0012)));p3req();
 },{passive:false});
 document.addEventListener('dblclick',e=>{if(!ui.v3d||!(e.target.closest&&e.target.closest('#view')))return;Object.assign(ui.v3,{rx:0,ry:0,z:1});const rig=$('#preview .p3rig');if(rig){rig.classList.add('anim');p3vars(rig);}});
 // 미리보기 다시 그리기
@@ -4694,10 +4711,36 @@ function p3export(st,pose){
 // 회전 한 주기를 촘촘히 훑어서, 어느 각도에서도 폰이 잘리지 않는 영역 구하기
 function p3cropSet(){const r=R3(),d=+r.dur||4,a=[];for(let i=0;i<48;i++)a.push(p3pose(d*i/48));return a;}
 /* ═════════════ Capture ═════════════ */
+/* 저장용 복제본에서 말풍선 글자가 안쪽으로 밀려 보이는 문제 방지.
+   말풍선 크기(--bs)는 calc(px × 배율) 이라 글자 크기·여백이 소수점으로 나와요. 이 값을 지금 보이는 실제 px 로 못 박고,
+   들여쓰기·정렬 값도 0 / left 로 고정해서 복제본에서 다시 계산되며 어긋나지 않게 해요. */
+const BUB_SEL='.kt-b,.im-b,.ig-b,.ln-b,.tg-b,.tw-b';
+/* 글꼴 고정: 화면에서는 -apple-system(아이폰 기본 글꼴)으로 그려지는데, 저장용 복제본(SVG 안)은 시스템 글꼴을 못 쓰고
+   Inter · Noto Sans KR 로 바뀌어요. 두 글꼴은 글자가 서는 높이가 달라서, 말풍선 글자가 커질수록(150~160%) 아래로 내려가 보였어요.
+   저장할 때는 실제로 같이 담기는 웹폰트만 쓰도록 맞춰서 위치가 어긋나지 않게 해요. */
+const TXT_SEL=BUB_SEL+',.im-nm,.im-date,.im-read,.im-field,.im-field *';
+function pinFont(cs){
+  if(!FC.fam)return '';
+  const ok=cs.fontFamily.split(',').map(t=>t.replace(/["']/g,'').trim()).filter(n=>n&&FC.fam.has(n.toLowerCase()));
+  return ok.length?ok.map(n=>/\s/.test(n)?'"'+n+'"':n).join(',')+',sans-serif':'';
+}
+function bubbleGuard(root){
+  if(!root||!root.querySelectorAll)return;
+  try{fcFaces();}catch(e){}
+  root.querySelectorAll(TXT_SEL).forEach(t=>{const f=pinFont(getComputedStyle(t));if(f)t.style.fontFamily=f;});
+  root.querySelectorAll(BUB_SEL).forEach(b=>{
+    const cs=getComputedStyle(b),x=b.style;
+    x.textIndent='0';x.textAlign='left';
+    x.fontSize=cs.fontSize;x.lineHeight=cs.lineHeight;x.letterSpacing=cs.letterSpacing;
+    x.paddingTop=cs.paddingTop;x.paddingRight=cs.paddingRight;x.paddingBottom=cs.paddingBottom;x.paddingLeft=cs.paddingLeft;
+    x.maxWidth=cs.maxWidth;
+  });
+}
 async function capture(st,scale,bg,pose){
   try{await document.fonts.ready;}catch(e){}
   const host=$('#off');host.innerHTML=stageHTML(st,{exp:true});
   let el=host.firstElementChild;void el.offsetHeight;try{await document.fonts.ready;}catch(e){}applySlide(el,st);
+  bubbleGuard(el);
   if(ui.v3d&&!ui.v3closing){try{const bx=p3export(el,pose);if(bx){host.appendChild(bx);el=bx;}}catch(e){console.warn('3D 저장 준비 실패 → 2D 로 저장',e);}}
   await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
   let c=null;
@@ -4707,7 +4750,7 @@ async function capture(st,scale,bg,pose){
   }catch(e){console.warn('modern-screenshot 실패, html2canvas로 대체',e);c=null;}
   if(!c){
     if(typeof html2canvas==='undefined'){host.innerHTML='';throw new Error('capture library not loaded');}
-    c=await html2canvas(el,{scale,backgroundColor:bg,logging:false,useCORS:true});
+    c=await html2canvas(el,{scale,backgroundColor:bg,logging:false,useCORS:true,onclone:d=>{d.querySelectorAll(BUB_SEL).forEach(b=>{b.style.textIndent='0';b.style.textAlign='left';});}});
   }
   host.innerHTML='';
   return c;
