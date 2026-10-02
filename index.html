@@ -7573,6 +7573,154 @@ body.exporting .scr::after{
 }
 </style>
 
+
+<style id="imessage-v8-fixed">
+/* iMessage v8: 실제 iOS Messages에 가까운 말풍선/헤더로 최종 보정 */
+.scr .im-head{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  min-height:72px;
+  padding:4px 12px 8px!important;
+  background:rgba(246,246,248,.96)!important;
+  border-bottom:1px solid rgba(60,60,67,.12)!important;
+  backdrop-filter:blur(18px) saturate(1.8);
+  -webkit-backdrop-filter:blur(18px) saturate(1.8);
+}
+.scr .im-head:before{display:none!important}
+.scr .im-back,
+.scr .im-vid{
+  width:44px!important;
+  height:44px!important;
+  min-width:44px!important;
+  margin-top:7px!important;
+  padding:0!important;
+  border-radius:22px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.scr .im-back{color:#007aff;font-size:18px}
+.scr .im-back span{
+  position:static!important;
+  margin-left:2px!important;
+  padding:0!important;
+  min-width:0!important;
+  background:transparent!important;
+  color:#007aff!important;
+  font-size:17px!important;
+  font-weight:400!important;
+}
+.scr .im-vid svg{width:22px!important;height:22px!important}
+.scr .im-who{margin-top:2px!important}
+.scr .im-av{
+  width:48px!important;
+  height:48px!important;
+  box-shadow:0 1px 5px rgba(0,0,0,.16)!important;
+}
+.scr .im-nm{
+  margin-top:3px!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  color:#111!important;
+}
+
+/* 메시지 영역 */
+.scr .im-inner{
+  padding:10px 12px 12px!important;
+}
+.scr .im-row{
+  margin-top:2px!important;
+  align-items:flex-end;
+}
+.scr .im-b{
+  position:relative;
+  max-width:270px!important;
+  padding:7px 12px!important;
+  border-radius:18px!important;
+  font-size:16px!important;
+  line-height:1.28!important;
+  letter-spacing:-.15px!important;
+  box-shadow:none!important;
+  filter:none!important;
+  background-image:none!important;
+}
+.scr .im-row.l .im-b{
+  background:#e9e9eb!important;
+  color:#000!important;
+}
+.scr .im-row.r .im-b{
+  background:#0a84ff!important;
+  color:#fff!important;
+  background-image:none!important;
+}
+.scr .im-row.l.last .im-b,
+.scr .im-row.r.last .im-b{
+  border-radius:18px!important;
+}
+
+/* 기존 가짜 꼬리 제거 후, 작은 iOS식 곡선 꼬리 */
+.scr .im-row.last .im-b:before,
+.scr .im-row.last .im-b:after{
+  content:none!important;
+  display:none!important;
+}
+
+/* 마지막 말풍선에만 아주 작은 둥근 꼬리 */
+.scr .im-row.l.last .im-b{
+  border-bottom-left-radius:5px!important;
+}
+.scr .im-row.r.last .im-b{
+  border-bottom-right-radius:5px!important;
+}
+
+/* 읽음 표시 */
+.scr .im-read{
+  margin-top:3px!important;
+  padding-right:3px!important;
+  font-size:11px!important;
+  color:#8e8e93!important;
+}
+
+/* 입력창 */
+.scr .im-in{
+  padding:7px 12px 30px!important;
+  gap:8px!important;
+  background:rgba(255,255,255,.97)!important;
+  border-top:1px solid rgba(60,60,67,.08);
+}
+.scr .im-plus{
+  width:34px!important;
+  height:34px!important;
+  background:#e9e9eb!important;
+  box-shadow:none!important;
+}
+.scr .im-field{
+  height:36px!important;
+  border:1px solid #c7c7cc!important;
+  border-radius:18px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+  font-size:15px!important;
+  color:#8e8e93!important;
+}
+
+/* 모바일 화면에서는 헤더/말풍선 크기를 조금 더 자연스럽게 */
+@media(max-width:600px){
+  .scr .im-head{min-height:68px!important;padding-bottom:6px!important}
+  .scr .im-av{width:44px!important;height:44px!important}
+  .scr .im-b{max-width:76%!important;font-size:15.5px!important;padding:7px 11px!important}
+  .scr .im-inner{padding:8px 10px 10px!important}
+  .scr .im-in{padding-bottom:27px!important}
+}
+</style>
+
 </body>
 </html>
 
