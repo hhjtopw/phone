@@ -1410,6 +1410,12 @@ body.v3d #v3bar{touch-action:manipulation}
 .im-row.last .im-b.typ:after{content:"";position:absolute;bottom:-5px;width:6px;height:6px;border-radius:50%;background-color:inherit;background-image:none;pointer-events:none}
 .im-row.l.last .im-b.typ:after{left:-8px}
 .im-row.r.last .im-b.typ:after{right:-8px}
+/* 3D + 입체(3D 말풍선) 효과에서 filter 때문에 '입력 중' 꼬리의 작은 동그라미 왼쪽이 잘리던 문제 → 말풍선을 별도 레이어로 분리 */
+.scr.bfx-d3 .im-b.typ{transform:translateZ(0)}
+/* 입체 · 3D 말풍선: 꼬리 박스를 말풍선 전체 높이로 늘려 본체와 똑같은 그라데이션을 입히고, 아래쪽 꼬리 모양만 mask 로 남겨요 (줄 수가 늘어도 색이 이어짐) */
+.scr[class*="bfx-"] .im-row.last .im-b:not(.typ):before{top:0;height:auto;background-image:inherit;background-size:auto;background-position:0 0;clip-path:none;-webkit-clip-path:none;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 18'%3E%3Cpath d='M0 0H12V8A10 10 0 0 0 19 17.54V18H16A16 14 0 0 1 0 4Z'/%3E%3C/svg%3E") no-repeat 0 100%/19px 18px;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 18'%3E%3Cpath d='M0 0H12V8A10 10 0 0 0 19 17.54V18H16A16 14 0 0 1 0 4Z'/%3E%3C/svg%3E") no-repeat 0 100%/19px 18px}
 </style>
 </head>
 <body>
