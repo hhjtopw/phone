@@ -3598,7 +3598,7 @@ function E_export(){
   const pf=e.gifScale<=1.5&&e.vidScale<=1&&e.scale<=2&&e.typeChars===false?'fast':(e.gifScale>=3&&e.vidScale>=2&&e.scale>=3?'hq':(e.gifScale===2&&e.vidScale===1.5&&e.scale===3&&e.typeChars!==false?'mid':''));
   const optCard=`<section class="card"><div class="ct"><span>내보내기 최적화</span></div><div class="g2" style="grid-template-columns:repeat(3,1fr)"><button class="btn ${pf==='fast'?'':'line'}" data-act="expPreset" data-val="fast">빠르게</button><button class="btn ${pf==='mid'?'':'line'}" data-act="expPreset" data-val="mid">균형</button><button class="btn ${pf==='hq'?'':'line'}" data-act="expPreset" data-val="hq">고화질</button></div><button class="btn ghost" data-act="expInfo" style="width:100%;margin-top:8px">현재 설정으로 프레임 수 확인</button><div class="hint" style="margin-top:8px">저장이 오래 걸리거나 용량이 큰 이유는 대부분 <b>프레임 수</b>와 <b>해상도</b>예요. <b>빠르게</b>는 해상도를 낮추고 내 메시지 글자를 한 글자씩 치지 않고 몇 단계로만 보여줘서 프레임을 줄여요. GIF는 <b>화질 최고</b>와 <b>빠른 속도</b>의 차이가 용량에 가장 크게 나타나고, 긴 대화라면 영상(MP4)이 GIF보다 훨씬 가벼워요.</div></section>`;
   const r3Card=`<section class="card"><div class="ct"><span>3D 회전 연출</span></div>${fld('회전 모양',seg('exp.r3.anim',[['none','없음'],['spin','한 바퀴'],['ease','부드럽게'],['sway','좌우'],['nod','끄덕'],['orbit','8자']]))}${fld('한 바퀴 시간',seg('exp.r3.dur',[[2,'2초'],[4,'4초'],[6,'6초'],[10,'10초']]))}${fld('저장 부드러움',seg('exp.r3.fps',[[10,'가볍게 10fps'],[15,'보통 15fps'],[30,'부드럽게 30fps']]))}<div class="hint" style="margin-top:2px">위쪽 <b>2D / 3D</b> 에서 3D 를 켜면 미리보기에서 돌아가고, <b>GIF · 영상 저장에도 같은 회전</b>이 들어가요. PNG 는 멈춘 현재 각도로 저장돼요. 부드러움이 높을수록 저장 시간이 길어지고 GIF 는 용량이 많이 커져요 (긴 영상은 MP4 를 권장). 영상이 한 바퀴 시간보다 짧으면 한 바퀴가 끝날 때까지 늘어나고, GIF 는 끊김 없이 반복되도록 한 바퀴 단위로 맞춰져요.</div></section>`;
-  return optCard+r3Card+`<section class="card"><div class="ct"><span>투명 배경</span></div><button class="btn ${allTr?'ghost':'line'}" data-act="allTransparent" style="width:100%">${allTr?'✓ PNG · GIF · 영상 모두 투명':'PNG · GIF · 영상 배경 한 번에 투명으로'}</button><div class="hint" style="margin-top:6px">영상은 WebM(알파)으로 저장돼요. GIF는 투명이 1비트라서 가장자리가 거칠 수 있어요. 깔끔한 투명이 필요하면 PNG나 PNG 시퀀스를 쓰세요.</div></section>`+fcard('png','이미지 (PNG)',`${fld('해상도',seg('exp.scale',[[2,'2x'],[3,'3x'],[4,'4x (최고화질)']]))}
+  return optCard+r3Card+`<section class="card"><div class="ct"><span>투명 배경</span></div><button class="btn ${allTr?'ghost':'line'}" data-act="allTransparent" style="width:100%">${allTr?'✓ PNG · GIF · 영상 모두 투명':'PNG · GIF · 영상 배경 한 번에 투명으로'}</button><div class="hint" style="margin-top:6px">영상은 <b>MOV (ProRes 4444)</b> 또는 WebM(알파)으로 저장돼요 (편집 앱용은 MOV 추천). GIF는 투명이 1비트라서 가장자리가 거칠 수 있어요. 깔끔한 투명이 필요하면 PNG나 PNG 시퀀스를 쓰세요.</div></section>`+fcard('png','이미지 (PNG)',`${fld('해상도',seg('exp.scale',[[2,'2x'],[3,'3x'],[4,'4x (최고화질)']]))}
     ${fld('배경',seg('exp.bg',[['transparent','투명'],['#ffffff','흰색'],['#f3f3f5','회색'],['#000000','검정']]))}
     ${tog('exp.shadow','기기 그림자')}<div class="sep"></div>
     <div class="g2"><button class="btn ghost" data-act="copy">클립보드 복사</button><button class="btn" data-act="png">PNG 저장</button></div>
@@ -4070,6 +4070,238 @@ async function preloadFonts(){
     const t=[...new Set(s)].join('');
     const stt=(S.story.texts||[]).map(x=>x.text||'').join('');await Promise.all([...['400','500','600','700'].map(w=>document.fonts.load(`${w} 16px "Noto Sans KR"`,t)),...(stt?['600 28px Oswald','400 36px Yellowtail','700 26px "Courier Prime"','italic 800 29px Montserrat'].map(f=>document.fonts.load(f,stt)):[])]);await document.fonts.ready;}catch(e){}
 }
+/* ═════════════ ProRes 4444 (알파 포함) MOV 인코더 — 외부 라이브러리 없이 직접 구현 ═════════════
+   브라우저는 ProRes 를 만들 수 없어서 비트스트림(SMPTE RDD 36)을 직접 써요.
+   · 프레임마다 독립(intra) 인코딩 · 4:4:4 · 알파 16bit 무손실 · 슬라이스 단위 */
+const PR_SCAN=new Uint8Array([0,1,8,9,2,3,10,11,16,17,24,25,18,19,26,27,4,5,12,20,13,6,7,14,21,28,29,22,15,23,30,31,32,33,40,48,41,34,35,42,49,56,57,50,43,36,37,44,51,58,59,52,45,38,39,46,53,60,61,54,47,55,62,63]);
+const PR_RUN_CB=[0x06,0x06,0x05,0x05,0x04,0x29,0x29,0x29,0x29,0x28,0x28,0x28,0x28,0x28,0x28,0x4C];
+const PR_LEV_CB=[0x04,0x0A,0x05,0x06,0x04,0x28,0x28,0x28,0x28,0x4C];
+const PR_DC_CB=[0x04,0x28,0x4D,0x70];
+const PR_DCT=(()=>{const a=new Float64Array(64);for(let u=0;u<8;u++)for(let x=0;x<8;x++)a[u*8+x]=(u?.5:Math.SQRT1_2*.5)*Math.cos((2*x+1)*u*Math.PI/16);return a;})();
+class PRBits{
+  constructor(n){this.b=new Uint8Array(n||4096);this.n=0;this.acc=0;this.cnt=0;}
+  grow(){const t=new Uint8Array(this.b.length*2);t.set(this.b);this.b=t;}
+  put(n,v){   // v 의 아래쪽 n 비트 (n ≤ 32)
+    while(n>0){
+      const k=n>16?16:n,part=(v>>>(n-k))&((1<<k)-1);
+      this.acc=(this.acc<<k)|part;this.cnt+=k;n-=k;
+      while(this.cnt>=8){if(this.n>=this.b.length)this.grow();this.b[this.n++]=(this.acc>>>(this.cnt-8))&255;this.cnt-=8;}
+      this.acc&=(1<<this.cnt)-1;
+    }
+  }
+  flush(){if(this.cnt){this.put(8-this.cnt,0);}return this.b.subarray(0,this.n);}
+}
+function prCode(w,cb,val){
+  const sw=(cb&3)+1,rice=cb>>5,ex=(cb>>2)&7,sv=sw<<rice;
+  if(val>=sv){val-=sv-(1<<ex);const e=31-Math.clz32(val);w.put(e-ex+sw,0);w.put(e+1,val);}
+  else{const e=val>>rice;if(e)w.put(e,0);w.put(1,1);if(rice)w.put(rice,val);}
+}
+// 한 슬라이스의 한 평면(Y/Cb/Cr): 8x8 DCT → 양자화 → DC · AC 엔트로피 코딩
+function prPlane(pl,stride,x0,mbs,y0,Q,w,blk,tmp,cm){
+  const nb=mbs*4;
+  for(let m=0;m<mbs;m++){
+    for(let k=0;k<4;k++){
+      const bx=x0+m*16+(cm?k>>1:k&1)*8,by=y0+(cm?k&1:k>>1)*8,bi=(m*4+k)*64;   // 블록 순서: 밝기는 왼위→오른위→왼아래→오른아래, 색(Cb·Cr)은 왼위→왼아래→오른위→오른아래
+      // 행 변환
+      for(let r=0;r<8;r++){const o=(by+r)*stride+bx;
+        for(let u=0;u<8;u++){let s=0;const ao=u*8;for(let x=0;x<8;x++)s+=PR_DCT[ao+x]*(pl[o+x]-512);tmp[r*8+u]=s;}}
+      // 열 변환 (×4: 비트스트림의 계수 단위)
+      for(let u=0;u<8;u++)for(let v=0;v<8;v++){let s=0;const ao=v*8;for(let r=0;r<8;r++)s+=PR_DCT[ao+r]*tmp[r*8+u];
+        const c=s*4/Q;blk[bi+v*8+u]=c<0?-Math.floor(-c+.5):Math.floor(c+.5);}
+    }
+  }
+  // DC
+  let prev=blk[0];prCode(w,0xB8,prev>=0?prev*2:-prev*2-1);
+  let sign=0,cbk=3;
+  for(let i=1;i<nb;i++){
+    const dc=blk[i*64],d=dc-prev;const ns=d<0?-1:0;const dd=(d^sign)-sign;const code=dd>=0?dd*2:-dd*2-1;
+    prCode(w,PR_DC_CB[cbk],code);cbk=Math.min((code+(code&1))>>1,3);sign=ns;prev=dc;
+  }
+  // AC
+  let run=0,runCb=PR_RUN_CB[4],levCb=PR_LEV_CB[2];const maxc=nb*64;
+  for(let i=1;i<64;i++){const sc=PR_SCAN[i];
+    for(let idx=sc;idx<maxc;idx+=64){
+      const lv=blk[idx];
+      if(lv){const a=lv<0?-lv:lv;prCode(w,runCb,run);prCode(w,levCb,a-1);w.put(1,lv<0?1:0);runCb=PR_RUN_CB[Math.min(run,15)];levCb=PR_LEV_CB[Math.min(a,9)];run=0;}
+      else run++;
+    }
+  }
+}
+function prAlphaRun(w,run){if(run){w.put(1,0);if(run<16)w.put(4,run);else w.put(15,run);}else w.put(1,1);}
+function prAlphaDiff(w,cur,prev){
+  let d=(cur-prev)&0xFFFF;if(d>=65536-64)d-=65536;
+  if(d<-64||d>64||!d){w.put(1,1);w.put(16,d&0xFFFF);}
+  else{w.put(1,0);w.put(6,Math.abs(d)-1);w.put(1,d<0?1:0);}
+}
+function prAlpha(al,stride,x0,mbs,y0,w){
+  const cols=mbs*16,total=cols*16;let prev=0xFFFF,run=0,first=true;
+  for(let i=0;i<total;i++){
+    const cur=al[(y0+(i/cols|0))*stride+x0+(i%cols)];
+    if(first){prAlphaDiff(w,cur,prev);prev=cur;first=false;}
+    else if(cur!==prev){prAlphaRun(w,run);prAlphaDiff(w,cur,prev);prev=cur;run=0;}
+    else run++;
+  }
+  prAlphaRun(w,run);
+}
+// RGBA(8bit, 알파 분리) → ProRes 4444 프레임 한 장 (Uint8Array). qidx: 화질(작을수록 고화질)
+function proresFrame(rgba,W,H,qidx){
+  qidx=qidx||2;
+  const mbW=(W+15)>>4,mbH=(H+15)>>4,PW=mbW*16,PH=mbH*16;
+  const Y=new Uint16Array(PW*PH),CB=new Uint16Array(PW*PH),CR=new Uint16Array(PW*PH),AL=new Uint16Array(PW*PH);
+  // 투명 픽셀의 색은 가까운 불투명 픽셀 색으로 채워서 (가장자리 번짐 줄이기)
+  const rr=new Uint8Array(W*H),gg=new Uint8Array(W*H),bb=new Uint8Array(W*H),has=new Uint8Array(W*H);
+  for(let y=0;y<H;y++){let lr=0,lg=0,lb=0,lh=0;const row=y*W;
+    for(let x=0;x<W;x++){const p=(row+x)*4;
+      if(rgba[p+3]>0){lr=rgba[p];lg=rgba[p+1];lb=rgba[p+2];lh=1;rr[row+x]=lr;gg[row+x]=lg;bb[row+x]=lb;has[row+x]=1;}
+      else if(lh){rr[row+x]=lr;gg[row+x]=lg;bb[row+x]=lb;has[row+x]=2;}
+    }
+    lh=0;
+    for(let x=W-1;x>=0;x--){if(has[row+x]===1){lr=rr[row+x];lg=gg[row+x];lb=bb[row+x];lh=1;}else if(!has[row+x]&&lh){rr[row+x]=lr;gg[row+x]=lg;bb[row+x]=lb;has[row+x]=2;}}
+  }
+  for(let y=1;y<H;y++){const row=y*W;for(let x=0;x<W;x++)if(!has[row+x]&&has[row-W+x]){rr[row+x]=rr[row-W+x];gg[row+x]=gg[row-W+x];bb[row+x]=bb[row-W+x];has[row+x]=2;}}
+  for(let y=H-2;y>=0;y--){const row=y*W;for(let x=0;x<W;x++)if(!has[row+x]&&has[row+W+x]){rr[row+x]=rr[row+W+x];gg[row+x]=gg[row+W+x];bb[row+x]=bb[row+W+x];has[row+x]=2;}}
+  for(let y=0;y<PH;y++){const sy=Math.min(y,H-1);
+    for(let x=0;x<PW;x++){const sx=Math.min(x,W-1),i=sy*W+sx,o=y*PW+x;
+      const r=rr[i]/255,g=gg[i]/255,b=bb[i]/255,yy=.2126*r+.7152*g+.0722*b;
+      Y[o]=Math.round(64+876*yy);CB[o]=Math.round(512+896*(b-yy)/1.8556);CR[o]=Math.round(512+896*(r-yy)/1.5748);
+      AL[o]=rgba[i*4+3]*257;
+    }}
+  // 슬라이스 목록: 한 줄을 8·4·2·1 매크로블록 단위로 나눠요
+  const sl=[];for(let my=0;my<mbH;my++){let mx=0;while(mx<mbW){let n=8;while(mbW-mx<n)n>>=1;sl.push([mx,my,n]);mx+=n;}}
+  const blk=new Int16Array(8*4*64),tmp=new Float64Array(64),outs=[];let total=0;
+  for(const [mx,my,n] of sl){
+    let q=qidx,res;
+    for(;;){
+      const Q=4*(q>128?(q-96)*4:q);
+      const wy=new PRBits(8192),wu=new PRBits(8192),wv=new PRBits(8192),wa=new PRBits(2048);
+      prPlane(Y,PW,mx*16,n,my*16,Q,wy,blk,tmp);prPlane(CB,PW,mx*16,n,my*16,Q,wu,blk,tmp,1);prPlane(CR,PW,mx*16,n,my*16,Q,wv,blk,tmp,1);
+      prAlpha(AL,PW,mx*16,n,my*16,wa);
+      const y=wy.flush(),u=wu.flush(),v=wv.flush(),a=wa.flush();
+      const sz=8+y.length+u.length+v.length+a.length;
+      if((y.length>65535||u.length>65535||v.length>65535||sz>65535)&&q<224){q=q<128?Math.min(128,q*2):q+8;continue;}
+      const s=new Uint8Array(sz),dv=new DataView(s.buffer);
+      s[0]=8<<3;s[1]=q;dv.setUint16(2,y.length);dv.setUint16(4,u.length);dv.setUint16(6,v.length);
+      s.set(y,8);s.set(u,8+y.length);s.set(v,8+y.length+u.length);s.set(a,8+y.length+u.length+v.length);
+      res=s;break;
+    }
+    outs.push(res);total+=res.length;
+  }
+  const HDR=148,picHdr=8,idx=sl.length*2,picSize=picHdr+idx+total,fsz=8+HDR+picSize;
+  const f=new Uint8Array(fsz),d=new DataView(f.buffer);let o=0;
+  d.setUint32(0,fsz);f.set([0x69,0x63,0x70,0x66],4);o=8;                // 'icpf'
+  d.setUint16(o,HDR);d.setUint16(o+2,0);f.set([0x6a,0x73,0x50,0x72],o+4);  // 버전 · 제작자 'jsPr'
+  d.setUint16(o+8,W);d.setUint16(o+10,H);
+  f[o+12]=3<<6;f[o+13]=0;f[o+14]=1;f[o+15]=1;f[o+16]=1;f[o+17]=2;f[o+18]=0;f[o+19]=3;   // 4:4:4 · 순차 · BT.709 · 알파 16bit · 양자화표 2개 포함
+  f.fill(4,o+20,o+20+128);o+=HDR;
+  f[o]=picHdr<<3;d.setUint32(o+1,picSize);d.setUint16(o+5,sl.length);f[o+7]=3<<4;o+=picHdr;
+  for(const s of outs){d.setUint16(o,s.length);o+=2;}
+  for(const s of outs){f.set(s,o);o+=s.length;}
+  return f;
+}
+/* ── MOV(QuickTime) 묶기 ── */
+function mvBox(t,...parts){let n=8;for(const p of parts)n+=p.length;const b=new Uint8Array(n),d=new DataView(b.buffer);d.setUint32(0,n);for(let i=0;i<4;i++)b[4+i]=t.charCodeAt(i);let o=8;for(const p of parts){b.set(p,o);o+=p.length;}return b;}
+function mvU(...v){const b=new Uint8Array(v.length*4),d=new DataView(b.buffer);v.forEach((x,i)=>d.setUint32(i*4,x>>>0));return b;}
+function mvH(...v){const b=new Uint8Array(v.length*2),d=new DataView(b.buffer);v.forEach((x,i)=>d.setUint16(i*2,x));return b;}
+function mvStr(s){return Uint8Array.from([...s].map(c=>c.charCodeAt(0)));}
+const MV_MATRIX=mvU(0x10000,0,0,0,0x10000,0,0,0,0x40000000);
+/* frames: 인코딩된 프레임(Uint8Array) 배열 · seq: 재생 순서(frames 인덱스, 프레임마다 하나) · pcm: Int16Array(L R 번갈아) 또는 null */
+function movBlob({frames,seq,W,H,fps,pcm,rate}){
+  const ftyp=mvBox('ftyp',mvStr('qt  '),mvU(0x20200800),mvStr('qt  '));
+  const base=ftyp.length+8;let off=base;const foff=[];
+  for(const f of frames){foff.push(off);off+=f.length;}
+  let pcmOff=0;const pcmBytes=pcm?pcm.length*2:0;
+  if(pcm){pcmOff=off;off+=pcmBytes;}
+  const mdatSize=off-base+8;if(mdatSize>0xFFFFFFF0)throw new Error('파일이 4GB 를 넘어요');
+  const TS=fps*1000,DUR=1000,N=seq.length,vdur=N*DUR,MT=1000,mdur=Math.round(N/fps*MT);
+  const stsz=new Uint8Array(12+N*4),sd=new DataView(stsz.buffer);sd.setUint32(8,N);
+  const stco=new Uint8Array(8+N*4),cd=new DataView(stco.buffer);cd.setUint32(4,N);
+  seq.forEach((k,i)=>{sd.setUint32(12+i*4,frames[k].length);cd.setUint32(8+i*4,foff[k]);});
+  const stsd=(()=>{
+    const e=new Uint8Array(86),d=new DataView(e.buffer);
+    d.setUint32(0,86);e.set(mvStr('ap4h'),4);d.setUint16(14,1);
+    d.setUint32(16,0);d.setUint32(20,0x6a735072);d.setUint32(24,0);d.setUint32(28,1024);
+    d.setUint16(32,W);d.setUint16(34,H);d.setUint32(36,0x480000);d.setUint32(40,0x480000);d.setUint32(44,0);d.setUint16(48,1);
+    const nm='Apple ProRes 4444';e[50]=nm.length;e.set(mvStr(nm),51);d.setUint16(82,32);d.setInt16(84,-1);
+    const fiel=mvBox('fiel',Uint8Array.from([1,0])),colr=mvBox('colr',mvStr('nclc'),mvH(1,1,1));
+    const all=new Uint8Array(86+fiel.length+colr.length);all.set(e);all.set(fiel,86);all.set(colr,86+fiel.length);new DataView(all.buffer).setUint32(0,all.length);
+    return mvBox('stsd',mvU(0,1),all);
+  })();
+  const dinf=mvBox('dinf',mvBox('dref',mvU(0,1),mvBox('url ',mvU(1))));
+  const vtrak=mvBox('trak',
+    mvBox('tkhd',mvU(0x0F,0,0,1,0,mdur,0,0),mvH(0,0,0,0),MV_MATRIX,mvU(W<<16,H<<16)),
+    mvBox('mdia',mvBox('mdhd',mvU(0,0,0,TS,vdur),mvH(0x55c4,0)),
+      mvBox('hdlr',mvU(0,0),mvStr('vide'),mvU(0,0,0),Uint8Array.from([0])),
+      mvBox('minf',mvBox('vmhd',mvU(1),mvH(0,0,0,0)),dinf,
+        mvBox('stbl',stsd,mvBox('stts',mvU(0,1,N,DUR)),mvBox('stsc',mvU(0,1,1,1,1)),mvBox('stsz',stsz),mvBox('stco',stco)))));
+  let atrak=new Uint8Array(0);
+  if(pcm){
+    const fr=pcm.length>>1,CH=rate;   // 1초마다 청크
+    const nch=Math.ceil(fr/CH),lastN=fr-(nch-1)*CH;
+    const ae=new Uint8Array(36),ad=new DataView(ae.buffer);ad.setUint32(0,36);ae.set(mvStr('sowt'),4);ad.setUint16(14,1);ad.setUint16(24,2);ad.setUint16(26,16);ad.setUint32(32,rate<<16);
+    const co=new Uint8Array(8+nch*4),cod=new DataView(co.buffer);cod.setUint32(4,nch);for(let i=0;i<nch;i++)cod.setUint32(8+i*4,pcmOff+i*CH*4);
+    const sc=nch===1?mvU(0,1,1,fr,1):(lastN!==CH?mvU(0,2,1,CH,1,nch,lastN,1):mvU(0,1,1,CH,1));
+    atrak=mvBox('trak',
+      mvBox('tkhd',mvU(0x0F,0,0,2,0,mdur,0,0),mvH(0,0,0x0100,0),MV_MATRIX,mvU(0,0)),
+      mvBox('mdia',mvBox('mdhd',mvU(0,0,0,rate,fr),mvH(0x55c4,0)),
+        mvBox('hdlr',mvU(0,0),mvStr('soun'),mvU(0,0,0),Uint8Array.from([0])),
+        mvBox('minf',mvBox('smhd',mvU(0),mvH(0,0)),dinf,
+          mvBox('stbl',mvBox('stsd',mvU(0,1),ae),mvBox('stts',mvU(0,1,fr,1)),mvBox('stsc',sc),mvBox('stsz',mvU(0,4,fr)),mvBox('stco',co)))));
+  }
+  const moov=mvBox('moov',mvBox('mvhd',mvU(0,0,0,MT,mdur,0x10000),mvH(0x100,0),mvU(0,0),MV_MATRIX,mvU(0,0,0,0,0,0,pcm?3:2)),vtrak,atrak);
+  const mh=new Uint8Array(8);new DataView(mh.buffer).setUint32(0,mdatSize);mh.set(mvStr('mdat'),4);
+  const parts=[ftyp,mh,...frames];
+  if(pcm){const le=new Uint8Array(pcm.buffer,pcm.byteOffset,pcmBytes);parts.push(le);}
+  parts.push(moov);
+  return new Blob(parts,{type:'video/quicktime'});
+}
+
+/* ── MOV (ProRes 4444) 저장: 프레임을 한 장씩 ProRes 로 인코딩해서 QuickTime(.mov)으로 묶어요. 알파(투명) 그대로 들어가요 ── */
+async function renderMixAudio({plan,T,total,faceVid}){
+  const ok=true;
+  {
+        const oc=new OfflineAudioContext(2,Math.ceil(total*48000),48000),g=S.exp.sfxVol/100,off=(S.exp.sfxOff||0)/1000;
+        plan.forEach((f,i)=>{const bf=(f.snd&&wantSfx(S,f.snd))?sfxBufFor(f):null;if(bf){const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=bf;gn.gain.value=g;b.connect(gn);gn.connect(oc.destination);b.start(Math.max(0,T[i]+off));}});
+        plan.forEach((f,i)=>{if(sxNeed(f)&&sxBuf[f.sx]){const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=sxBuf[f.sx];gn.gain.value=sxV();b.connect(gn);gn.connect(oc.destination);b.start(Math.max(0,T[i]+off));}});
+        plan.forEach((f,i)=>{if(popBuf&&popWant(f)){const b=oc.createBufferSource(),gn=oc.createGain(),pv=S.exp.pop.vol/100,pw=Math.max(0,T[i]+off);b.buffer=popBufFor(f);gn.gain.value=pv;b.connect(gn);gn.connect(oc.destination);b.start(pw,sndOnset(b.buffer));popLimit(b,gn,pv,pw,f);}});
+        if(faceVid){try{const fb=await actx.decodeAudioData(await VID.other.file.arrayBuffer());const b=oc.createBufferSource();b.buffer=fb;b.loop=true;b.connect(oc.destination);b.start(0);}catch(e){console.warn('영상 소리 디코딩 실패',e);}}
+        if((S.screen==='call'||S.screen==='dial')&&RING){try{const rb=await actx.decodeAudioData(await (await fetch(RING.url)).arrayBuffer());const b=oc.createBufferSource(),gn=oc.createGain();b.buffer=rb;b.loop=true;gn.gain.value=.9;b.connect(gn);gn.connect(oc.destination);b.start(0);const D=S.dial;if(S.screen==='dial'&&D.result&&D.result!=='none')b.stop(Math.max(1,+D.ringSec||3));}catch(e){console.warn('벨소리 오류',e);}}
+        if(typeOn()){try{const sp=typeSpan(plan);if(sp){const tb=await x_typeBuf(),b=oc.createBufferSource(),gn=oc.createGain();b.buffer=tb;b.loop=true;b.loopStart=tb._off;gn.gain.value=.85;b.connect(gn);gn.connect(oc.destination);b.start(sp.t0,tb._off);b.stop(sp.t1);}}catch(e){console.warn('타이핑 소리 오류',e);}}
+        return await oc.startRendering();
+  }
+}
+async function encodeProRes({plan,vis,store,bg,TR,ok,faceVid,qidx}){
+  const FPS=30,f0=store.get((vis?vis[0]:plan[0]).key),W=f0.w,H=f0.h;
+  const T=[0];plan.forEach((f,i)=>T.push(T[i]+f.delay/1000));
+  const VS=vis||plan.map((f,i)=>({key:f.key,t:T[i]}));
+  const total=T[plan.length],N=Math.max(1,Math.round(total*FPS));
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;const cx=cv.getContext('2d',{alpha:true,willReadFrequently:true});
+  const FLV=floatExpOn(),FSC=+S.exp.vidScale||1;
+  const enc=[],seq=[],cache=new Map();let pi=-1,cb=null;
+  for(let n=0;n<N;n++){
+    const t=n/FPS;let q=Math.max(pi,0);while(q<VS.length-1&&VS[q+1].t<=t+1e-6)q++;
+    const id=FLV?'f'+n:q;let k=cache.get(id);
+    if(k===undefined){
+      if(q!==pi||!cb){pi=q;if(cb)cb.close();cb=await createImageBitmap(store.get(VS[q].key).blob);}
+      cx.clearRect(0,0,W,H);if(!TR){cx.fillStyle=bg;cx.fillRect(0,0,W,H);}
+      cx.drawImage(cb,0,FLV?floatDy(t,FSC):0,W,H);
+      enc.push(proresFrame(cx.getImageData(0,0,W,H).data,W,H,qidx));k=enc.length-1;cache.set(id,k);
+      busy(`ProRes 인코딩 중… ${n+1}/${N}`,.78+.17*(n/N));await tick();
+    }
+    seq.push(k);
+  }
+  if(cb)cb.close();
+  let pcm=null;
+  if(ok){
+    busy('소리 합치는 중…',.96);
+    try{
+      const ab=await renderMixAudio({plan,T,total,faceVid});
+      if(ab){const L=ab.getChannelData(0),R=ab.numberOfChannels>1?ab.getChannelData(1):L,m=Math.min(L.length,Math.ceil(total*48000));pcm=new Int16Array(m*2);
+        for(let i=0;i<m;i++){const l=Math.max(-1,Math.min(1,L[i])),r=Math.max(-1,Math.min(1,R[i]));pcm[2*i]=l<0?l*32768:l*32767;pcm[2*i+1]=r<0?r*32768:r*32767;}}
+    }catch(e){console.warn('MOV 소리 렌더 실패 → 소리 없이 저장',e);pcm=null;}
+  }
+  busy('MOV 묶는 중…',.98);
+  return{blob:movBlob({frames:enc,seq,W,H,fps:FPS,pcm,rate:48000}),n:enc.length,N};
+}
 /* 정확한 길이의 영상 인코딩 — 실시간 녹화(MediaRecorder) 대신 프레임 단위로 WebCodecs 인코딩 */
 async function encodeExact({plan,vis,store,bg,TR,fmt,ok,faceVid}){
   try{
@@ -4117,11 +4349,11 @@ async function encodeExact({plan,vis,store,bg,TR,fmt,ok,faceVid}){
 }
 // 영상 저장 (MP4/WebM)
 async function exportVideo(){
-  if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream){toast('이 브라우저는 영상 저장을 지원하지 않아요 (크롬·엣지 권장)');return;}
+  if((S.exp.vidFmt||'mp4')!=='mov'&&(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream)){toast('이 브라우저는 영상 저장을 지원하지 않아요 (크롬·엣지 권장)');return;}
   playing=false;
   const faceVid=S.screen==='face'&&VID.other&&VID.other.file&&S.exp.vidAudio;
   const ok=(S.exp.sfx!=='off'||faceVid||popOn()||lkOn()||typeOn()||((S.screen==='call'||S.screen==='dial')&&RING)||videoPlan().some(sxNeed))?await sfxInit():false;
-  const PO=popOnly(S),VB=PO?'transparent':S.exp.vidBg,fmt=(PO&&(S.exp.vidFmt||'mp4')==='mp4')?'webm':(S.exp.vidFmt||'mp4'),plan=videoPlan(),sc=S.exp.vidScale,KEY=S.exp.keyColor||'#00ff00',CK=(VB==='transparent'&&fmt==='mp4'),bg=(CK||VB==='key')?KEY:VB,TR=bg==='transparent',PNGSEQ=fmt==='png';
+  const PO=popOnly(S),VB=PO?'transparent':S.exp.vidBg,fmt=(PO&&(S.exp.vidFmt||'mp4')==='mp4')?'webm':(S.exp.vidFmt||'mp4'),plan=videoPlan(),sc=S.exp.vidScale,KEY=S.exp.keyColor||'#00ff00',CK=(VB==='transparent'&&fmt==='mp4'),bg=(CK||VB==='key')?KEY:VB,TR=bg==='transparent',PNGSEQ=fmt==='png',MOV=fmt==='mov';
   if(PO&&(S.exp.vidFmt||'mp4')==='mp4')toast('팝업만 내보내기는 투명이 필요해서 WebM으로 저장해요');
   const ROT=p3rotOn(),RF=ROT?(+R3().fps||15):0,RD=ROT?(+R3().dur||4):0;
   const CUSTOM=S.exp.vidDurOn==1&&+S.exp.vidDur>0;
@@ -4143,7 +4375,7 @@ async function exportVideo(){
     for(let i=0;i<uniq.length;i++){
       busy(`프레임 렌더링 중… ${i+1}/${uniq.length}`,.02+.7*(i/uniq.length));
       const c=await capture(await stOf(uniq[i].f),sc,TR?null:bg,uniq[i].pose);
-      store.set(uniq[i].key,{w:c.width,h:c.height,blob:await new Promise(r=>(TR||PNGSEQ)?c.toBlob(r,'image/png'):c.toBlob(r,'image/jpeg',.94))});
+      store.set(uniq[i].key,{w:c.width,h:c.height,blob:await new Promise(r=>(TR||PNGSEQ||MOV)?c.toBlob(r,'image/png'):c.toBlob(r,'image/jpeg',.94))});
       await tick();
     }
     p3crops=null;
@@ -4157,6 +4389,12 @@ async function exportVideo(){
       await download(zipStore(ents),`chat_frames_${stamp()}.zip`);
       toast(`PNG 시퀀스 저장 완료 — ${N}프레임 · ${FPS}fps${TR?' · 투명':''}`);
       return;
+    }
+    if(MOV){
+      busy('ProRes 4444 인코딩 준비 중…',.76);
+      const r=await encodeProRes({plan,vis,store,bg,TR,ok,faceVid,qidx:2});
+      await download(r.blob,`chat_video_${stamp()}.mov`);
+      toast(`MOV (ProRes 4444) 저장 완료${TR?' · 투명(알파)':''} — ${(r.blob.size/1048576).toFixed(1)}MB`);return;
     }
     if(window.VideoEncoder){
       busy('영상 인코딩 준비 중…',.76);
@@ -4267,8 +4505,8 @@ function E_video(){
     ${fld('화질',seg('exp.vidScale',[[1,'보통'],[1.5,'선명'],[2,'최고']]))}
     ${fld('배경색',seg('exp.vidBg',[['#ffffff','흰색'],['#000000','검정'],['key','크로마키'],['transparent','투명']]))}
     ${(S.exp.vidBg==='key'||(S.exp.vidBg==='transparent'&&S.exp.vidFmt==='mp4'))?fld('크로마키 색',sws('exp.keyColor',[['#00ff00','#00ff00','초록'],['#0000ff','#0000ff','파랑'],['#ff00ff','#ff00ff','마젠타']]))+'<div class="hint" style="margin:-6px 0 10px">말풍선이 초록 · 민트 계열(LINE · 문자 · 카톡 민트)이면 파랑이나 마젠타를 고르세요. 안 그러면 말풍선까지 같이 지워져요.</div>':''}
-    ${fld('저장 형식',seg('exp.vidFmt',[['mp4','MP4'],['webm','WebM'],['png','PNG 시퀀스 (zip)']]))}
-    <div class="hint" style="margin:-4px 0 10px">${S.exp.vidFmt==='png'?'프레임마다 PNG를 30fps로 묶어 zip으로 저장해요. 배경을 \'투명\'으로 두면 진짜 투명이에요 (소리는 안 들어가요). 프리미어 · 애프터이펙트 · 다빈치에서 \'이미지 시퀀스\'로 불러오세요.':S.exp.vidBg==='transparent'?(S.exp.vidFmt==='webm'?'<b>WebM(VP9 알파)</b>로 투명하게 저장돼요. <b>크롬 · 엣지</b>로 열면 투명이 보이지만, 대부분의 동영상 플레이어와 편집 앱(프리미어 · 애프터이펙트 · 다빈치 · VLC 등)은 WebM 알파를 못 읽어서 검정이나 흰 배경으로 보일 수 있어요. 편집용이면 <b>PNG 시퀀스(zip)</b>가 확실해요.':'MP4는 투명을 저장할 수 없어서 <b>크로마키 색 배경</b>으로 저장해요. 편집 앱의 크로마키(색상 키)로 그 색을 지우세요. 진짜 투명은 PNG 시퀀스를 쓰세요.'):'투명이 필요하면 배경색을 \'투명\'으로 고르세요.'}</div>
+    ${fld('저장 형식',seg('exp.vidFmt',[['mp4','MP4'],['webm','WebM'],['mov','MOV (ProRes 4444)'],['png','PNG 시퀀스 (zip)']]))}
+    <div class="hint" style="margin:-4px 0 10px">${S.exp.vidFmt==='mov'?'<b>ProRes 4444 (.mov)</b> 로 저장돼요. 배경을 \'투명\'으로 두면 <b>알파 채널이 들어간 진짜 투명</b>이에요. 프리미어 · 애프터이펙트 · 다빈치 · 파이널컷 · 퀵타임에서 그대로 열려요. 파일 용량은 MP4/WebM 보다 훨씬 커요 (소리는 PCM 으로 들어가요).':S.exp.vidFmt==='png'?'프레임마다 PNG를 30fps로 묶어 zip으로 저장해요. 배경을 \'투명\'으로 두면 진짜 투명이에요 (소리는 안 들어가요). 프리미어 · 애프터이펙트 · 다빈치에서 \'이미지 시퀀스\'로 불러오세요.':S.exp.vidBg==='transparent'?(S.exp.vidFmt==='webm'?'<b>WebM(VP9 알파)</b>로 투명하게 저장돼요. <b>크롬 · 엣지</b>로 열면 투명이 보이지만, 대부분의 동영상 플레이어와 편집 앱(프리미어 · 애프터이펙트 · 다빈치 · VLC 등)은 WebM 알파를 못 읽어서 검정이나 흰 배경으로 보일 수 있어요. 편집용이면 <b>PNG 시퀀스(zip)</b>가 확실해요.':'MP4는 투명을 저장할 수 없어서 <b>크로마키 색 배경</b>으로 저장해요. 편집 앱의 크로마키(색상 키)로 그 색을 지우세요. 진짜 투명은 PNG 시퀀스를 쓰세요.'):'투명이 필요하면 배경색을 \'투명\'으로 고르세요.'}</div>
     
     ${fld('화면 이어붙이기',seg('exp.vidMode',[['single','지금 화면만'],['seq','여러 화면 이어붙이기']]))}
     ${S.exp.vidMode==='seq'?`<div class="fld"><span class="lb">순서 — 누른 순서대로 이어져요</span><div class="gseq">${SCREENS.map(([k,l])=>{const n=(S.exp.vidSeq||[]).indexOf(k);return`<button type="button" class="${n>=0?'on':''}" data-act="vidToggle" data-val="${k}"><i>${n>=0?n+1:''}</i>${l}</button>`;}).join('')}</div></div>`:''}
@@ -4735,6 +4973,35 @@ function bubbleGuard(root){
     x.paddingTop=cs.paddingTop;x.paddingRight=cs.paddingRight;x.paddingBottom=cs.paddingBottom;x.paddingLeft=cs.paddingLeft;
     x.maxWidth=cs.maxWidth;
   });
+  // 2) 크기 · 줄바꿈 고정 — 지금 화면에서 실제로 잡힌 말풍선 폭 · 높이 · 줄바꿈 위치를 그대로 못 박아요.
+  //    (저장용 복제본은 글자 폭이 아주 조금만 달라도 마지막 단어가 다음 줄로 넘어가서, 150~160% 에서 글자가 아래로 내려가 보였어요)
+  const bs=[...root.querySelectorAll(BUB_SEL)],meta=bs.map(b=>{
+    const r=b.getBoundingClientRect();let w=r.width,h=r.height;
+    if(Math.abs(w-b.offsetWidth)>2)w=b.offsetWidth;if(Math.abs(h-b.offsetHeight)>2)h=b.offsetHeight;
+    return{w,h,t:bubLines(b)};
+  });
+  bs.forEach((b,i)=>{
+    const m=meta[i],x=b.style;if(!(m.w>0&&m.h>0))return;
+    x.boxSizing='border-box';x.flex='none';x.width=m.w+'px';x.height=m.h+'px';x.maxWidth='none';
+    if(m.t!==null){b.textContent=m.t;x.whiteSpace='pre';x.wordBreak='normal';}
+  });
+}
+// 말풍선 글자를 지금 보이는 줄 그대로 \n 으로 나눠서 돌려줘요 (글자만 있는 말풍선만)
+function bubLines(b){
+  try{
+    if(b.childNodes.length!==1||b.firstChild.nodeType!==3)return null;
+    const tn=b.firstChild,s=tn.nodeValue;if(!s||!s.trim())return null;
+    const rg=document.createRange();let out='',top=null,i=0;
+    for(const ch of s){
+      const n=ch.length;
+      if(ch==='\n'){out+=ch;top=null;i+=n;continue;}
+      rg.setStart(tn,i);rg.setEnd(tn,i+n);
+      const rc=rg.getClientRects();
+      if(rc.length&&rc[0].width>.01){const y=rc[0].top;if(top===null)top=y;else if(Math.abs(y-top)>3){out+='\n';top=y;}}
+      out+=ch;i+=n;
+    }
+    return out;
+  }catch(e){return null;}
 }
 async function capture(st,scale,bg,pose){
   try{await document.fonts.ready;}catch(e){}
