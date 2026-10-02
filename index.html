@@ -4270,21 +4270,26 @@ async function renderMixAudio({plan,T,total,faceVid}){
   }
 }
 async function encodeProRes({plan,vis,store,bg,TR,ok,faceVid,qidx}){
-  const FPS=30,f0=store.get((vis?vis[0]:plan[0]).key),W=f0.w,H=f0.h;
+  const FPS=30,{W,H}=frameBox(store,false);
   const T=[0];plan.forEach((f,i)=>T.push(T[i]+f.delay/1000));
   const VS=vis||plan.map((f,i)=>({key:f.key,t:T[i]}));
   const total=T[plan.length],N=Math.max(1,Math.round(total*FPS));
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;const cx=cv.getContext('2d',{alpha:true,willReadFrequently:true});
   const FLV=floatExpOn(),FSC=+S.exp.vidScale||1;
-  const enc=[],seq=[],cache=new Map();let pi=-1,cb=null;
+  const enc=[],seq=[],cache=new Map();let pi=-1,cb=null,bytes=0,warned=false;const UN=FLV?N:VS.length,HARD=3.8e9;
   for(let n=0;n<N;n++){
     const t=n/FPS;let q=Math.max(pi,0);while(q<VS.length-1&&VS[q+1].t<=t+1e-6)q++;
     const id=FLV?'f'+n:q;let k=cache.get(id);
     if(k===undefined){
       if(q!==pi||!cb){pi=q;if(cb)cb.close();cb=await createImageBitmap(store.get(VS[q].key).blob);}
       cx.clearRect(0,0,W,H);if(!TR){cx.fillStyle=bg;cx.fillRect(0,0,W,H);}
-      cx.drawImage(cb,0,FLV?floatDy(t,FSC):0,W,H);
+      drawFit(cx,cb,W,H,FLV?floatDy(t,FSC):0);
       enc.push(proresFrame(cx.getImageData(0,0,W,H).data,W,H,qidx));k=enc.length-1;cache.set(id,k);
+      bytes+=enc[k].length;
+      if(bytes>HARD)throw Object.assign(new Error('MOV too big'),{userMsg:'MOV가 4GB를 넘어요. 영상 길이를 줄이거나 화질을 낮추거나 PNG 시퀀스로 저장해 주세요'});
+      if(enc.length===6){const est=bytes/6*UN;
+        if(est>HARD)throw Object.assign(new Error('MOV too big (est)'),{userMsg:'예상 용량이 '+(est/1e9).toFixed(1)+'GB라 저장할 수 없어요. 영상 길이를 줄이거나 화질을 낮추거나 PNG 시퀀스를 쓰세요'});
+        if(est>1.2e9&&!warned){warned=true;toast('용량이 커요 (예상 '+(est/1e9).toFixed(1)+'GB). 메모리가 부족하면 길이나 화질을 줄여 보세요',5000);}}
       busy(`ProRes 인코딩 중… ${n+1}/${N}`,.78+.17*(n/N));await tick();
     }
     seq.push(k);
@@ -4306,7 +4311,7 @@ async function encodeProRes({plan,vis,store,bg,TR,ok,faceVid,qidx}){
 async function encodeExact({plan,vis,store,bg,TR,fmt,ok,faceVid}){
   try{
     const M=await import('https://cdn.jsdelivr.net/npm/mediabunny@1.60.0/+esm');
-    const FPS=30,f0=store.get((vis?vis[0]:plan[0]).key),W=f0.w&~1,H=f0.h&~1,webm=TR||fmt==='webm',vc=webm?'vp9':'avc';
+    const FPS=30,{W,H}=frameBox(store,true),webm=TR||fmt==='webm',vc=webm?'vp9':'avc';
     if(!await M.canEncodeVideo(vc,{width:W,height:H,bitrate:8e6}))return null;
     const T=[0];plan.forEach((f,i)=>T.push(T[i]+f.delay/1000));
     const VS=vis||plan.map((f,i)=>({key:f.key,t:T[i]}));
@@ -4338,7 +4343,7 @@ async function encodeExact({plan,vis,store,bg,TR,fmt,ok,faceVid}){
       const t=n/FPS;let q=Math.max(pi,0);while(q<VS.length-1&&VS[q+1].t<=t+1e-6)q++;
       let dirty=false;
       if(q!==pi){pi=q;if(cb)cb.close();cb=await createImageBitmap(store.get(VS[q].key).blob);dirty=true;}
-      if(dirty||FLV){if(TR)cx.clearRect(0,0,W,H);else{cx.fillStyle=bg;cx.fillRect(0,0,W,H);}cx.drawImage(cb,0,FLV?floatDy(t,FSC):0,W,H);}
+      if(dirty||FLV){if(TR)cx.clearRect(0,0,W,H);else{cx.fillStyle=bg;cx.fillRect(0,0,W,H);}drawFit(cx,cb,W,H,FLV?floatDy(t,FSC):0);}
       await vs.add(t,1/FPS);
       if(n%10===0){busy(`영상 인코딩 중… ${n}/${N}`,.78+.2*(n/N));await tick();}
     }
@@ -4348,7 +4353,27 @@ async function encodeExact({plan,vis,store,bg,TR,fmt,ok,faceVid}){
   }catch(e){console.warn('정밀 인코딩 실패 → 기존 방식으로 대체',e);return null;}
 }
 // 영상 저장 (MP4/WebM)
+/* ── 안정성 보완 (내보내기) ─────────────────────────────────────────────
+   · 프레임마다 크기가 달라도 늘리지 않고 원래 크기 그대로 가운데에 놓아요 (UI 뒤틀림 방지)
+   · 용량 · 메모리 사전 점검 / 중복 실행 방지 / 화면 꺼짐 방지 / 3D 뒷면 경고 */
+function frameBox(store,even){let W=0,H=0;for(const v of store.values()){if(v.w>W)W=v.w;if(v.h>H)H=v.h;}if(!W||!H)throw Object.assign(new Error('빈 프레임'),{userMsg:'저장할 화면이 없어요'});return even?{W:W&~1,H:H&~1}:{W,H};}
+function drawFit(cx,b,W,H,dy){cx.drawImage(b,(W-b.width)>>1,((H-b.height)>>1)+(dy||0));}
 async function exportVideo(){
+  if(window._expBusy){toast('이미 저장 중이에요. 끝날 때까지 기다려 주세요');return;}
+  try{   // 3D 화면이 뒷면(±90° 초과)이면 글자가 좌우 반전돼서 저장돼요 → 한 번 더 누르면 그대로 저장
+    if(ui.v3d&&!ui.v3closing&&ui.v3&&!p3rotOn()&&Math.abs(+ui.v3.ry||0)>90){
+      const now=Date.now();
+      if(!window._v3warn||now-window._v3warn>8000){window._v3warn=now;toast('3D 화면이 뒷면(좌우 반전)이에요. \'정면\'을 누르거나, 이대로 저장하려면 한 번 더 누르세요',6000);return;}
+    }
+  }catch(e){}
+  window._expBusy=true;let lock=null;
+  const bu=e=>{e.preventDefault();e.returnValue='';};
+  window.addEventListener('beforeunload',bu);
+  try{if(navigator.wakeLock&&navigator.wakeLock.request)lock=await navigator.wakeLock.request('screen');}catch(e){}
+  try{await _exportVideo0();}
+  finally{window._expBusy=false;window.removeEventListener('beforeunload',bu);try{if(lock)await lock.release();}catch(e){}}
+}
+async function _exportVideo0(){
   if((S.exp.vidFmt||'mp4')!=='mov'&&(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream)){toast('이 브라우저는 영상 저장을 지원하지 않아요 (크롬·엣지 권장)');return;}
   playing=false;
   const faceVid=S.screen==='face'&&VID.other&&VID.other.file&&S.exp.vidAudio;
@@ -4402,11 +4427,11 @@ async function exportVideo(){
       if(r){await download(r.blob,`chat_video_${stamp()}.${r.mp4?'mp4':'webm'}`);
         toast(TR?'투명 영상 저장 완료 (WebM)':CK?'MP4 저장 완료 — 크로마키 배경, 편집 앱에서 키 색을 지우세요':`영상 저장 완료 (${r.mp4?'MP4':'WebM'})`);return;}
     }
-    const f0=store.get(vis[0].key),W=f0.w&~1,H=f0.h&~1;
+    const {W,H}=frameBox(store,true);
     const cv=document.createElement('canvas');cv.width=W;cv.height=H;
     const cx=cv.getContext('2d',{alpha:true});
     const FLV=floatExpOn(),FSC=+S.exp.vidScale||1;let FT0=performance.now();
-    const draw=b=>{if(TR)cx.clearRect(0,0,W,H);else{cx.fillStyle=bg;cx.fillRect(0,0,W,H);}cx.drawImage(b,0,FLV?floatDy(Math.max(0,(performance.now()-FT0)/1000),FSC):0,W,H);};
+    const draw=b=>{if(TR)cx.clearRect(0,0,W,H);else{cx.fillStyle=bg;cx.fillRect(0,0,W,H);}drawFit(cx,b,W,H,FLV?floatDy(Math.max(0,(performance.now()-FT0)/1000),FSC):0);};
     if(!TR){cx.fillStyle=bg;cx.fillRect(0,0,W,H);}
     const stream=cv.captureStream(30);
     let dest=null,fbuf=null;
@@ -4446,7 +4471,7 @@ async function exportVideo(){
     busy('저장 중…',.99);
     await download(new Blob(chunks,{type:isMp4?'video/mp4':'video/webm'}),`chat_video_${stamp()}.${isMp4?'mp4':'webm'}`);
     toast(TR?'저장 완료 — 이 환경은 투명(알파)이 빠졌을 수 있어요. 안 되면 PNG 시퀀스(zip)로 저장하세요':CK?'MP4 저장 완료 — 크로마키 배경, 편집 앱에서 키 색을 지우세요':`영상 저장 완료 (${isMp4?'MP4':'WebM'})`);
-  }catch(err){p3crops=null;console.error(err);toast('영상 저장에 실패했어요');}
+  }catch(err){p3crops=null;console.error(err);toast(err&&err.userMsg?err.userMsg:(err instanceof RangeError?'메모리가 부족해요. 영상 길이나 화질을 줄이거나 PNG 시퀀스로 저장해 보세요':'영상 저장에 실패했어요'),err&&(err.userMsg||err instanceof RangeError)?6000:0);}
   finally{busyOff();renderPreview();}
 }
 // 영상 파일을 지정 칸에 넣기
@@ -4828,7 +4853,7 @@ document.addEventListener('change',async e=>{
 /* ═════════════ Busy / toast / download ═════════════ */
 let toastT=0;
 // 아래쪽 작은 안내 문구 띄우기
-function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2400);}
+function toast(m,ms){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),ms||2400);}
 // 저장 중 진행 표시 켜기
 function busy(msg,p){$('#busy').classList.add('on');$('#busyTx').textContent=msg;$('#busyBar').style.width=Math.round((p||0)*100)+'%';}
 // 저장 중 진행 표시 끄기
@@ -4840,9 +4865,12 @@ async function download(blob,name){
   try{
     if(window.claude&&window.claude.use){const d=await window.claude.use('downloads');if(d){await d.save({filename:name,data:blob});return;}}
   }catch(e){if(e&&e.code==='declined')return;}
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),180000);
 }
-const tick=()=>new Promise(r=>setTimeout(r,0));
+const _tkCh=typeof MessageChannel!=='undefined'?new MessageChannel():null,_tkQ=[];
+if(_tkCh)_tkCh.port1.onmessage=()=>{const r=_tkQ.shift();if(r)r();};
+/* 숨은 탭에서는 setTimeout 이 1초 이상으로 늦춰져서(오래 숨기면 1분에 1번) 저장이 멈춘 것처럼 돼요 → MessageChannel 로 양보 */
+const tick=()=>new Promise(r=>{if(_tkCh&&document.hidden){_tkQ.push(r);_tkCh.port2.postMessage(0);}else setTimeout(r,0);});
 
 /* ═════════════ 캡처용 글꼴 (필요한 조각만) ═════════════
    modern-screenshot 은 기본으로 페이지에 로드된 글꼴 조각을 전부(Noto Sans KR 만 수백 개 · 수십 MB) 프레임마다 다시 변환해서 넣어서
@@ -5009,7 +5037,8 @@ async function capture(st,scale,bg,pose){
   let el=host.firstElementChild;void el.offsetHeight;try{await document.fonts.ready;}catch(e){}applySlide(el,st);
   bubbleGuard(el);
   if(ui.v3d&&!ui.v3closing){try{const bx=p3export(el,pose);if(bx){host.appendChild(bx);el=bx;}}catch(e){console.warn('3D 저장 준비 실패 → 2D 로 저장',e);}}
-  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+  /* 숨은 탭에서는 requestAnimationFrame 이 아예 안 불려서 저장이 멈췄어요 → 시간 제한 안전장치 */
+  await new Promise(r=>{let d=false;const f=()=>{if(!d){d=true;r();}};requestAnimationFrame(()=>requestAnimationFrame(f));setTimeout(f,document.hidden?40:600);});
   let c=null;
   try{
     // 브라우저가 직접 글자를 배치하는 방식 → 사파리에서도 글씨가 밀리지 않음
