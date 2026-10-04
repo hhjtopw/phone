@@ -4804,9 +4804,11 @@ async function encodeCapCutProRes({plan,vis,store,bg,TR}){
       if(n%5===0){busy(`CapCut 호환 프레임 준비 중… ${n+1}/${N}`,.76+.12*n/N);await tick();}
     }
     if(cb)cb.close();
-    await ff.exec(['-y','-framerate',String(FPS),'-i','frame%06d.png','-c:v','prores_ks','-profile:v','4444','-pix_fmt','yuva444p10le','-alpha_bits','16','-vendor','apl0','-an','out.mov']);
+    // CapCut용 투명 MOV는 ProRes보다 QuickTime Animation(RGBA)을 우선 사용합니다.
+    // MOV 컨테이너 자체가 아니라 내부 코덱이 실제 호환성을 좌우합니다.
+    await ff.exec(['-y','-framerate',String(FPS),'-i','frame%06d.png','-vf','format=argb','-c:v','qtrle','-an','out.mov']);
     const movData=await ff.readFile('out.mov');
-    const out={mov:new Blob([movData],{type:'video/quicktime'}),fps:FPS};
+    const out={mov:new Blob([movData],{type:'video/quicktime'}),fps:FPS,codec:'qtrle'};
     if(TR){
       // 모바일에서 ProRes 알파가 안 읽히는 경우를 위한 H.264 크로마키 호환본입니다.
       const key=S.exp.keyColor||'#00ff00',hex=key.replace('#','');
@@ -4972,9 +4974,9 @@ async function _exportVideo0(){
       // FFmpeg 로딩이 막히는 환경에서는 기존 인코더로 자동 폴백합니다.
       const standard=await encodeCapCutProRes({plan,vis,store,bg,TR});
       if(standard){
-        const id=stamp();await download(standard.mov,`chat_video_${id}_alpha_pc.mov`);
-        if(TR&&standard.mp4){await download(standard.mp4,`chat_video_${id}_capcut_mobile.mp4`);toast(`호환 출력 완료 · PC 투명 MOV + 모바일 크로마키 MP4`,5000);}
-        else toast(`MOV (ProRes 4444) 저장 완료${TR?' · 투명(알파)':''} — ${(standard.mov.size/1048576).toFixed(1)}MB`);
+        const id=stamp();await download(standard.mov,`chat_video_${id}_alpha_capcut.mov`);
+        if(TR&&standard.mp4){await download(standard.mp4,`chat_video_${id}_capcut_mobile.mp4`);toast(`호환 출력 완료 · 투명 MOV + 모바일 크로마키 MP4`,5000);}
+        else toast(`MOV (QuickTime Animation RGBA) 저장 완료${TR?' · 투명(알파)':''} — ${(standard.mov.size/1048576).toFixed(1)}MB`);
         return;
       }
       const r=await encodeProRes({plan,vis,store,bg,TR,ok,faceVid,qidx:2});
