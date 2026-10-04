@@ -18,7 +18,7 @@
 <title>휴대폰 영상 메이커</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Oswald:wght@500;600&family=Yellowtail&family=Courier+Prime:wght@400;700&family=Montserrat:ital,wght@1,800&family=Inter:wght@500;600;700&display=swap">
+<link rel="stylesheet" crossorigin="anonymous" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Oswald:wght@500;600&family=Yellowtail&family=Courier+Prime:wght@400;700&family=Montserrat:ital,wght@1,800&family=Inter:wght@500;600;700&display=swap">
 <script defer src="https://cdn.jsdelivr.net/npm/modern-screenshot@4.7.0/dist/index.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
@@ -798,7 +798,7 @@ body.popOnly #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 5
 .im-row.last .im-b:after{content:none}
 .im-row.last .im-b:before{content:"";position:absolute;bottom:0;width:19px;height:18px;background-color:inherit;background-image:none;pointer-events:none;
   clip-path:path("M0 0H12V8A10 10 0 0 1 19 17.54V18H16A16 14 0 0 1 0 4Z")}
-.im-row.r.last .im-b:before{right:-7px;transform:scaleX(-1)}
+.im-row.r.last .im-b:before{right:-7px;transform:none}
 .im-row.l.last .im-b:before{left:-7px;transform:scaleX(-1)}
 /* 말풍선 꾸미기(그림자 · 입체) : box-shadow 는 꼬리를 못 따라가서 drop-shadow 로 바꾸고, 꼬리에도 같은 그라데이션 색을 입혀요 */
 .scr.bfx-soft .im-b{box-shadow:none;filter:drop-shadow(0 .5px 1px rgba(0,0,0,.16)) drop-shadow(0 3px 7px rgba(0,0,0,.11))}
@@ -858,6 +858,37 @@ body.popOnly #view{background:repeating-conic-gradient(#e4e4e8 0 25%,#f5f5f8 0 5
 .nw-shr i{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800}
 .nw-p{font-size:16px;line-height:1.85;color:#1c1c1c}
 .nw-cap{font-size:12.5px;color:#888;padding:8px 16px 0}
+/* 네이버 뉴스 기사: 글자 줄은 flex 대신 float/block (내보내기에서 안 밀리게) */
+.nn-head{height:52px;flex:none;background:#fff;padding:0 16px;border-bottom:1px solid #ececec;overflow:hidden}
+.nn-logo{display:block;float:left;height:52px;line-height:52px;white-space:nowrap}
+.nn-logo b{font-family:'Arial Black','Helvetica Neue',Arial,sans-serif;font-weight:900;font-size:22px;letter-spacing:-.04em;color:#03c75a}
+.nn-logo span{font-size:16px;font-weight:700;color:#111;letter-spacing:-.04em;margin-left:7px}
+.nn-hic{float:right;display:flex;gap:16px;align-items:center;height:52px}
+.nn-list{flex:1;min-height:0;overflow:hidden;background:#fff;color:#111}
+.nn-inner{padding:16px 16px 36px}
+.nn-pr{height:30px;margin:0 0 14px;overflow:hidden;letter-spacing:0;text-indent:0}
+.nn-pl{position:relative;display:block;float:left;width:26px;height:26px;margin:2px 8px 0 0;border-radius:50%;overflow:hidden;background:#e9ebee;text-align:center;line-height:26px;font-size:12px;font-weight:800;color:#555}
+.nn-sb{display:block;float:right;height:26px;margin-top:2px;padding:0 11px;border-radius:13px;border:1px solid #d5d8dc;box-sizing:border-box;line-height:24px;font-size:12.5px;font-weight:600;color:#333;white-space:nowrap}
+.nn-pn{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:30px;font-size:14.5px;font-weight:700;letter-spacing:-.03em;color:#111}
+.nn-t{font-size:22px;line-height:1.38;font-weight:800;letter-spacing:-.045em;color:#111;margin:0 0 14px}
+.nn-meta{letter-spacing:0;text-indent:0}
+.nn-dt{display:block;font-size:12.5px;line-height:1.7;color:#8a8f96;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nn-dt span{display:inline-block;margin-right:6px;color:#b0b4ba}
+.nn-by{margin-top:2px}
+.nn-bar{height:40px;margin:12px 0 18px;border-top:1px solid #eceff1;border-bottom:1px solid #eceff1;overflow:hidden;letter-spacing:0;text-indent:0}
+.nn-bar svg{float:right;margin:10px 0 0 16px}
+.nn-bar .nn-tx{display:block;float:right;line-height:40px;font-size:15px;font-weight:600;color:#555;margin-left:16px}
+.nn-p{font-size:16.5px;line-height:1.8;color:#222;margin:0 0 20px;letter-spacing:-.02em}
+.nn-ph{margin:0 0 20px}
+.nn-pi{position:relative;overflow:hidden;background:#e6e6ea}
+.nn-cap{font-size:12.5px;line-height:1.5;color:#8a8f96;padding-top:8px}
+.nn-cp{font-size:12px;line-height:1.6;color:#999;border-top:1px solid #eceff1;margin-top:8px;padding-top:14px}
+.nn-rx{height:52px;margin-top:16px;border-top:1px solid #eceff1;border-bottom:1px solid #eceff1;overflow:hidden;line-height:52px;font-size:14px;color:#333;letter-spacing:0;text-indent:0;white-space:nowrap}
+.nn-rx span{display:block;float:left}.nn-rx .nn-rr{float:right}
+.nn-rx svg{display:inline-block!important;vertical-align:middle;margin:-3px 6px 0 0}
+.nn-rx b{font-weight:600;margin-right:4px}
+.scr.noTop .nn-head,.scr.bgoff .nn-head{display:none!important}
+.scr.bgoff .nn-list{background:transparent!important}
 /* ═════ v4 · iOS 26 lock screen ═════ */
 .lk-lock{margin:6px 0 4px;opacity:.9}
 .lk-date{font-size:19px;font-weight:600;letter-spacing:-.1px;opacity:.9}
@@ -1454,7 +1485,7 @@ body.v3d #v3bar{touch-action:manipulation}
 /* 꼬리: 업로드한 파일(index__37_)의 꼬리와 같은 모양 — before(색 블록 19×18, 왼쪽 아래 16/14 곡률) − after(마스크, 왼쪽 아래 곡률 10)를 한 장의 path 로 만들었어요. 흰 마스크가 없어서 투명 배경 · 3D 에서도 그대로예요 */
 .im-row.last .im-b:before{width:19px;height:18px;
   -webkit-clip-path:path("M0 0H12V8A10 10 0 0 0 19 17.54V18H16A16 14 0 0 1 0 4Z");clip-path:path("M0 0H12V8A10 10 0 0 0 19 17.54V18H16A16 14 0 0 1 0 4Z")}
-.im-row.r.last .im-b:before{right:-7px;transform:scaleX(-1)}
+.im-row.r.last .im-b:before{right:-7px;transform:none}
 .im-row.l.last .im-b:before{left:-7px;transform:scaleX(-1)}
 /* 입력 중 말풍선 동그라미: 같은 파일 값 (큰 11px · 작은 6px) */
 .im-row.last .im-b.typ:before{clip-path:none;-webkit-clip-path:none;transform:none;width:11px;height:11px;border-radius:50%;bottom:-1px}
@@ -1467,6 +1498,11 @@ body.v3d #v3bar{touch-action:manipulation}
 .scr.bfx-d3 .im-b.typ{transform:translateZ(0)}
 /* 입체 · 3D 말풍선: 꼬리 박스를 말풍선 전체 높이로 늘려 본체와 똑같은 그라데이션을 입히고, 아래쪽 꼬리 모양만 mask 로 남겨요 (줄 수가 늘어도 색이 이어짐) */
 .scr[class*="bfx-"] .im-row.last .im-b:not(.typ):before{top:0;height:auto;background-image:inherit;background-size:auto;background-position:0 0;clip-path:none;-webkit-clip-path:none;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 18'%3E%3Cpath d='M0 0H12V8A10 10 0 0 0 19 17.54V18H16A16 14 0 0 1 0 4Z'/%3E%3C/svg%3E") no-repeat 0 100%/19px 18px;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 18'%3E%3Cpath d='M0 0H12V8A10 10 0 0 0 19 17.54V18H16A16 14 0 0 1 0 4Z'/%3E%3C/svg%3E") no-repeat 0 100%/19px 18px}
+
+/* 보낸 말풍선(파란색)은 배경이 그라데이션(background-color 없음)이라 효과 '끔' 일 때 꼬리가 투명해져서 안 보였어요 → 효과 켠 모드와 같은 방식(말풍선 색을 그대로 물려받고 꼬리 모양만 mask)으로 */
+.scr:not([class*="bfx-"]) .im-row.r.last .im-b:not(.typ):before{top:0;height:auto;background-image:inherit;background-size:auto;background-position:0 0;clip-path:none;-webkit-clip-path:none;
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 18'%3E%3Cpath d='M0 0H12V8A10 10 0 0 0 19 17.54V18H16A16 14 0 0 1 0 4Z'/%3E%3C/svg%3E") no-repeat 0 100%/19px 18px;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 19 18'%3E%3Cpath d='M0 0H12V8A10 10 0 0 0 19 17.54V18H16A16 14 0 0 1 0 4Z'/%3E%3C/svg%3E") no-repeat 0 100%/19px 18px}
 
@@ -1747,7 +1783,7 @@ UI.tw='<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path
 UI.tg='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21 4L3 11l6 2.2L11 20l3-4.2L18.5 19z"/><path d="M9 13.2L21 4"/></svg>';
 UI.tl='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>';
 UI.news='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 16.5h5"/></svg>';
-UI.dial=UI.call;UI.recents=UI.call;UI.profile=UI.chat;UI.search=UI.gallery;UI.story=UI.ig;UI.live=UI.ig;UI.sres=UI.search;UI.namu='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6.5"/><path d="M12 15.5V21M12 18l-3-3M12 14.5l3-3"/></svg>';UI.camera='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 5L7.5 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2.5L15 5z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+UI.dial=UI.call;UI.nnews=UI.news;UI.recents=UI.call;UI.profile=UI.chat;UI.search=UI.gallery;UI.story=UI.ig;UI.live=UI.ig;UI.sres=UI.search;UI.namu='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="6.5"/><path d="M12 15.5V21M12 18l-3-3M12 14.5l3-3"/></svg>';UI.camera='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 5L7.5 7H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2.5L15 5z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 UI.comm='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12.5h5"/></svg>';UI.kin=UI.comm;
 UI.nc='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="7" rx="2"/><rect x="4" y="12" width="7" height="9" rx="2"/><rect x="13" y="12" width="7" height="9" rx="2"/></svg>';UI.music='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l11-2v12"/><circle cx="6.500" cy="18" r="2.500"/><circle cx="17.500" cy="16" r="2.500"/></svg>';
 UI.igprof=UI.ig;UI.igact='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.3 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></svg>';
@@ -1756,8 +1792,8 @@ UI.post='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="cur
 UI.reelv=UI.reels='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M3.5 9h17M9 3.5l3 5.5M15 3.5l3 5.5"/><path d="M10.5 12.5l4 2.3-4 2.3z"/></svg>';
 const DSP_LOGO='Image/Dispatch.svg';
 /* ═════════════ Data tables ═════════════ */
-const SCREENS=[['live','인스타 라이브'],['sres','검색 결과'],['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램'],['tw','트위터 DM'],['tl','X 타임라인'],['news','디스패치'],['namu','나무위키'],['comm','커뮤니티 글'],['kin','네이버 지식iN'],['dial','전화 걸기'],['story','인스타 스토리'],['post','인스타 게시물'],['reels','릴스 댓글'],['igprof','인스타 프로필'],['igact','인스타 활동'],['reelv','릴스 본화면'],['yt','유튜브 댓글'],['recents','최근 통화'],['profile','카톡 프로필'],['search','검색창 타이핑'],['camera','카메라'],['nc','알림·제어센터'],['music','음악 재생']];
-const SCREEN_GROUPS=[['메신저',['chat','sms','line','tg','tw','profile']],['인스타',['ig','story','live','post','reels','reelv','igprof','igact']],['전화',['dial','recents','call','face']],['SNS와 뉴스',['tl','yt','news','comm','kin']],['기기 화면',['lock','nc','gallery','camera','search','sres','music']],['기타',['namu']]];
+const SCREENS=[['live','인스타 라이브'],['sres','검색 결과'],['lock','잠금화면'],['chat','카카오톡'],['sms','메시지'],['face','영상통화'],['call','전화 수신'],['gallery','갤러리'],['ig','인스타 DM'],['line','LINE'],['tg','텔레그램'],['tw','트위터 DM'],['tl','X 타임라인'],['news','디스패치'],['nnews','네이버 뉴스'],['namu','나무위키'],['comm','커뮤니티 글'],['kin','네이버 지식iN'],['dial','전화 걸기'],['story','인스타 스토리'],['post','인스타 게시물'],['reels','릴스 댓글'],['igprof','인스타 프로필'],['igact','인스타 활동'],['reelv','릴스 본화면'],['yt','유튜브 댓글'],['recents','최근 통화'],['profile','카톡 프로필'],['search','검색창 타이핑'],['camera','카메라'],['nc','알림·제어센터'],['music','음악 재생']];
+const SCREEN_GROUPS=[['메신저',['chat','sms','line','tg','tw','profile']],['인스타',['ig','story','live','post','reels','reelv','igprof','igact']],['전화',['dial','recents','call','face']],['SNS와 뉴스',['tl','yt','news','nnews','comm','kin']],['기기 화면',['lock','nc','gallery','camera','search','sres','music']],['기타',['namu']]];
 const screenLabel=k=>(SCREENS.find(x=>x[0]===k)||[k,k])[1];
 const WALLS=[
   ['linear-gradient(170deg,#4a4a50 0%,#1c1c1f 100%)','그라파이트'],
@@ -1831,10 +1867,12 @@ function defaults(){
     live:{anim:true,hearts:true,img:null,avatar:null,name:'username',viewers:'1.2천',cmts:'user1|안녕하세요!\nuser2|와 대박\nuser3|ㅋㅋㅋㅋ 진짜',hint:'댓글 달기...'},
     kin:{dark:false,input:true,cat:'컴퓨터 › 스마트폰 › 아이폰',title:'아이폰 최근 통화 기록을 한 번에 삭제하는 방법 있나요?',nick:'jeon****',cmt:'1',date:`${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}.`,views:'1,234',body:'통화 기록이 너무 많이 쌓여서 정리하고 싶어요.\n하나씩 지우려니 너무 오래 걸리는데 한 번에 지우는 방법이 있을까요?',qimg:null,tags:'아이폰\n통화기록\n전화앱',scroll:0,answers:[{id:uid(),nick:'폰박사',meta:'엘리트 · 채택 1,204',badge:'expert',pick:true,time:'2시간 전',text:'전화 앱 > 최근 통화 탭에서 우측 상단 편집을 누르신 뒤, 왼쪽 상단의 "지우기 > 모든 최근 통화 기록 지우기"를 선택하시면 한 번에 삭제됩니다.\n삭제한 기록은 복구가 어려우니 필요한 번호는 미리 저장해 두세요.',up:'20',down:'0',more:'2'},{id:uid(),nick:'아이폰러',meta:'초인 · 채택 320',badge:'none',pick:false,time:'1시간 전',text:'편집 버튼을 누르고 여러 개를 선택해서 지우셔도 돼요. 선택한 기록만 골라서 삭제할 수 있습니다.',up:'4',down:'0',more:'0'}]},
     comm:{site:'dc',gall:'예시 갤러리',cafe:'예시 카페',board:'자유게시판',cat:'톡톡',title:'글 제목을 입력하세요',nick:'ㅇㅇ',ip:'118.235',level:'새싹',date:`${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())} ${pad(t.h)}:${pad(t.m)}`,views:'1,234',up:'56',down:'3',input:true,dark:false,chips:true,tail:true,mobile:true,scroll:0,blocks:[{id:uid(),kind:'text',text:'본문 내용을 입력하세요.\n줄바꿈은 입력한 그대로 표시돼요.'},{id:uid(),kind:'photo',img:null,cap:''}],comments:[{id:uid(),nick:'ㅇㅇ',ip:'211.36',text:'댓글 예시입니다',time:'09.30 12:31',up:'12',down:'0',best:true,reply:false,op:false,male:false,tag:'',con:null},{id:uid(),nick:'익명',ip:'175.223',text:'대댓글 예시입니다',time:'09.30 12:34',up:'3',down:'0',best:false,reply:true,op:true,tag:'',con:null},{id:uid(),nick:'ㅇㅇ',ip:'39.7',text:'ㅇㅈ',time:'09.30 12:40',up:'0',down:'0',best:false,reply:false,op:false,male:true,tag:'',con:null}]},
+    nnews:{safari:true,url:'n.news.naver.com',press:'언론사 이름',pressLogo:null,sub:true,title:'기사 제목을 입력하세요',by:'홍길동 기자',date:`${d.getFullYear()}.${pad(d.getMonth()+1)}.${pad(d.getDate())}. ${t.h<12?'오전':'오후'} ${t.h%12||12}:${pad(t.m)}`,mod:'',cop:true,react:true,likes:'1,234',cmts:'567',scroll:0,
+      blocks:[{id:uid(),kind:'text',text:'기사 본문 첫 문단을 입력하세요. 문단은 여러 개 추가할 수 있어요.'},{id:uid(),kind:'photo',img:null,cap:'사진 설명을 입력하세요'},{id:uid(),kind:'text',text:'본문을 이어서 입력하세요.'}]},
     namu:{dark:false,title:'예시 문서',mod:'2026-09-30 14:20:07',stars:'1,234',cats:'예시 분류\n문서 예시',notice:'',view:'doc',q:'예시',sug:'예시 문서\n예시 문서/역사\n예시 문서 (동음이의)\n예시 문서 논란',hist:'128|2026-09-30 14:20:07|홍길동|+312|개요 보강\n127|2026-09-29 22:41:55|123.45.67.89|-24|오타 수정\n126|2026-09-27 09:03:12|이순신|+1,204|역사 문단 추가\n125|2026-09-20 18:55:40|익명|+58|분류 추가',talk:'문서 분량 조정 건의|홍길동|2026-09-29 20:11:03|12\n각주 출처 관련|이순신|2026-09-22 08:40:51|5\n개요 문단 서술 방식|123.45.67.89|2026-09-10 13:02:19|3',nav:'예시 틀\n관련 문서|[[예시 1]] · [[예시 2]] · [[!예시 3]]\n같이 보기|[[예시 4]]',parent:'',redir:'',pop:'0',toc:true,float:true,lic:true,info:true,infoTitle:'예시 문서',infoColor:'#00a69c',img:null,imgCap:'',infoRows:'기본 정보\n분류|예시\n최초 작성|2020년 1월 1일\n관련 문서|[[예시 2]]',fn:'첫 번째 각주 내용입니다.\n두 번째 각주 내용입니다.',sections:[{id:uid(),h:'개요',lv:1,t:"[[예시 문서]]는 이 화면에 들어가는 내용을 보여 주기 위한 문서다.[1] 굵은 글씨는 '''이렇게''' 쓴다.\n두 번째 문단은 이렇게 한 줄에 하나씩 적는다.\n> 인용문은 이렇게 앞에 꺾쇠를 붙인다."},{id:uid(),h:'역사',lv:1,t:'역사에 대한 설명이 들어간다.\n* 목록은 앞에 별표와 띄어쓰기를 붙인다.\n* 두 번째 항목이다.[2]\n  * 앞에 공백 두 칸을 넣으면 하위 목록이 된다.'},{id:uid(),h:'초기',lv:2,t:'작은 제목의 내용이다.'},{id:uid(),h:'평가',lv:1,t:'평가에 대한 내용이 들어간다.'}]},
     sres:{ai:true,aiOpen:false,aiAnim:true,aiText:'전화 앱의 최근 통화 탭에서 삭제할 기록을 왼쪽으로 밀어 삭제하거나, 편집을 눌러 여러 기록을 한 번에 지울 수 있어요.\n삭제한 기록은 되돌리기 어렵기 때문에 필요한 번호는 미리 저장해 두는 것이 좋아요.',paa:true,paaList:'아이폰 통화 기록은 얼마나 저장되나요?\n삭제한 통화 기록을 복구할 수 있나요?\n통화 기록 전체를 한 번에 지우는 방법은?\niCloud에도 통화 기록이 남나요?',rel:true,relList:'아이폰 통화 기록 복구\n아이폰 통화 기록 확인\n아이폰 통화 기록 백업\n아이폰 최근 통화 삭제 안됨\n아이폰 통화 기록 icloud\n통화 기록 전체 삭제',style:'google',q:'아이폰 최근 통화 기록 삭제',tab:'전체',items:[{id:uid(),dt:'2일 전',img:null,t:'아이폰 최근 통화 기록 삭제하는 방법',s:'Apple 지원',u:'support.apple.com › ko-kr',d:'전화 앱에서 최근 통화 탭을 열고 삭제할 기록을 왼쪽으로 밀어 삭제할 수 있어요.'},{id:uid(),dt:'2일 전',img:null,t:'최근 통화 기록 복구 가능할까? - 블로그',s:'예시 블로그',u:'blog.example.com',d:'삭제한 통화 기록을 다시 확인하는 방법과 주의할 점을 정리했습니다.'},{id:uid(),dt:'2일 전',img:null,t:'통화 기록 완전 삭제 후 확인하는 법',s:'예시 커뮤니티',u:'community.example.com',d:'설정에서 통화 기록과 관련된 항목을 확인하고 정리하는 순서를 안내합니다.'},{id:uid(),dt:'2일 전',img:null,t:'아이폰 통화 기록 백업과 복원 정리',s:'예시 테크',u:'tech.example.com',d:'백업본에서 통화 기록을 되살릴 수 있는지 조건별로 살펴봤어요.'},{id:uid(),dt:'2일 전',img:null,t:'자주 묻는 질문 - 통화 기록',s:'예시 도움말',u:'help.example.com',d:'통화 기록이 사라졌을 때 자주 묻는 질문을 모았습니다.'},{id:uid(),dt:'2일 전',img:null,t:'통화 기록이 안 지워질 때 해결 방법',s:'예시 FAQ',u:'faq.example.com',d:'삭제가 되지 않을 때 확인해야 할 설정과 재시작 방법을 알려드려요.'},{id:uid(),dt:'2일 전',img:null,t:'iCloud 통화 기록 동기화 끄는 방법',s:'예시 가이드',u:'guide.example.com',d:'다른 기기에 통화 기록이 남지 않도록 동기화를 끄는 순서입니다.'},{id:uid(),dt:'2일 전',img:null,t:'통화 기록 관련 자주 하는 실수 5가지',s:'예시 팁',u:'tips.example.com',d:'많은 분들이 놓치는 부분을 사례와 함께 정리했습니다.'}]},
     story:{texts:[],stickers:[],slots:[{id:uid(),img:null},{id:uid(),img:null},{id:uid(),img:null}],avatar:null,name:'username',time:'3시간',cur:1,prog:40,imgSec:3,text:'',textStyle:'plain',textY:50,textX:50,textSize:100,textRot:0,hint:'메시지 보내기...'},
-    tl:{rise:true,speed:1,scrollMode:'add',mode:'light',tab:0,fab:true,me:null,tweetsF:[
+    tl:{sync:true,rise:true,speed:1,scrollMode:'add',mode:'light',tab:0,fab:true,me:null,tweetsF:[
       {id:uid(),name:'팔로우 중인 계정',handle:'@following',ver:false,text:'팔로잉 탭에 뜨는 트윗이에요 @username',time:'10분',replies:'4',rts:'2',likes:'57',views:'1,204',av:null,imgs:[null,null,null,null],priv:true,liked:false,rted:false},
       {id:uid(),name:'친구',handle:'@friend',ver:false,text:'오늘 모임 다들 올 거지?',time:'34분',replies:'12',rts:'',likes:'98',views:'2,310',av:null,imgs:[null,null,null,null],priv:false,liked:true,rted:false},
       {id:uid(),name:'뉴스',handle:'@news',ver:true,text:'속보: 오늘 오후부터 전국에 비가 내리겠습니다 #날씨',time:'1시간',replies:'240',rts:'1.8천',likes:'4.2천',views:'21만',av:null,imgs:[null,null,null,null],priv:false,liked:false,rted:false}],
@@ -1857,13 +1895,13 @@ function defaults(){
       {id:uid(),av:null,name:'@friend01',time:'2일 전',text:'이거 진짜 웃겨요 ㅋㅋㅋ',likes:'124',replies:'답글 3개',pin:true,hearted:true},
       {id:uid(),av:null,name:'@daily_mood',time:'1일 전',text:'와 이 영상 알고리즘 타고 왔는데 너무 좋네요',likes:'12',replies:'',pin:false,hearted:false},
       {id:uid(),av:null,name:'@user_3',time:'5시간 전',text:'구독하고 갑니다',likes:'3',replies:'',pin:false,hearted:false}]},
-    face:{other:null,me:null,name:'이름',status:'00:00',pip:true},
+    face:{other:null,me:null,name:'이름',status:'00:00',pip:true,pipPos:'br',pipX:0,pipY:0},
     call:{name:'이름',sub:'휴대전화',photo:null,style:'full',swipe:true},
     nc:{mode:'notif',anim:true,wifi:true,bt:true,cell:true,air:false,focus:'',bright:62,vol:45,media:true},
     music:{art:null,title:'곡 제목',artist:'아티스트',total:'3:42',pos:32,playing:true,pal:0,anim:true,animSec:6},
     camera:{photo:null,thumb:null,mode:'photo',zoom:'1',flash:false,anim:true,live:true,menu:false,grid:false,level:false,face:false,night:false,macro:false,aspect:'43',timer:0,countdown:0,rec:true,recTime:'00:07',light:'자연광',ui:'26',recSec:6},
     gallery:{title:'최근 항목',cols:3,items:[],view:'grid',cur:1,scroll:false,fill:true,scrollAt:0,vtheme:'light',vdate:'오늘',vtime:'오후 3:24'},
-    exp:{chatSpeed:1,rcv:true,sxOn:true,sxVol:100,shutterSnd:true,scrollFxM:false,scrollAmt:100,scrollDirM:'up',pop:{on:false,only:false,app:'sms',title:'이름',body:'메시지 내용',time:'지금',style:'light',at:1,dur:4,snd:true,vol:100,still:true,more:[],mode:'overlap',max:3,sb:true,sbKeep:true,_m2:0},scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,typeChars:true,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',fx:'none',fxY:60,vidMode:'single',vidSeq:['lock','chat'],trans:'cut',shutter:'none',scrollFx:false,gifScreens:['lock','chat','sms'],gifAnim:true,tlPress:true,r3:{anim:'none',dur:4,fps:15}},
+    exp:{vidDurOn:0,vidDur:0,chatSpeed:1,rcv:true,sxOn:true,sxVol:100,shutterSnd:true,scrollFxM:false,scrollAmt:100,scrollDirM:'up',pop:{on:false,only:false,app:'sms',title:'이름',body:'메시지 내용',time:'지금',style:'light',at:1,dur:4,snd:true,vol:100,still:true,more:[],mode:'overlap',max:3,sb:true,sbKeep:true,_m2:0},scale:3,bg:'transparent',shadow:true,gifScale:2,gifSpeed:1.5,gifBg:'transparent',typing:true,typingMe:true,typeIn:false,typeChars:true,smooth:true,vidGap:1.2,endClear:false,sfxOff:0,faceFps:10,vidAudio:true,callSec:5,vidScale:1.5,vidBg:'#ffffff',vidFmt:'mp4',keyColor:'#00ff00',sfx:'all',sfxVol:80,gifMode:'single',fx:'none',fxY:60,vidMode:'single',vidSeq:['lock','chat'],trans:'cut',shutter:'none',scrollFx:false,gifScreens:['lock','chat','sms'],gifAnim:true,tlPress:true,r3:{anim:'none',dur:4,fps:15}},
   };
 }
 // 저장본을 기본값 위에 덮어 합쳐요 (저장본에 없는 항목은 기본값 유지)
@@ -1875,6 +1913,8 @@ function merge(base,src){
     if(b&&typeof b==='object'&&!Array.isArray(b)&&s&&typeof s==='object'&&!Array.isArray(s))base[k]=merge(b,s);
     else base[k]=s;
   }
+  // 기본값에 없는 항목(나중에 생긴 설정, 화면별 추가 값)도 버리지 않고 그대로 살려요
+  for(const k of Object.keys(src)){if(!(k in base)&&src[k]!==undefined)base[k]=src[k];}
   return base;
 }
 let S=defaults();
@@ -1980,6 +2020,7 @@ function statusColor(s){
     case'reelv':return'#fff';
     case'reels':return'#fff';
     case'news':return s.device.uiTop===false?'#000':'#fff';
+    case'nnews':return'#000';
     case'nc':return s.nc.mode==='notif'?statusColor({...s,screen:'lock'}):'#fff';
     case'music':case'face':case'call':case'dial':case'live':case'story':case'profile':case'camera':return'#fff';
     default:return'#000';
@@ -1996,6 +2037,7 @@ function homeColor(s){
     case'yt':return s.yt.dark?'rgba(255,255,255,.85)':'#111';
     case'reels':return s.reels.sheet==='dark'?'rgba(255,255,255,.85)':'#111';
     case'news':return'#111';
+    case'nnews':return'#111';
     case'namu':return s.namu.dark?'rgba(255,255,255,.85)':'#111';
     case'kin':return'rgba(255,255,255,.9)';
     case'comm':return s.comm.dark?'rgba(255,255,255,.85)':'#111';
@@ -2144,9 +2186,11 @@ function screenFace(s){
   const sb=qb<1?`opacity:${qb.toFixed(2)};transform:translateY(${((1-qb)*44).toFixed(1)}px)`:'';
   const sp=qp<1?`opacity:${qp.toFixed(2)};transform:translateY(${((1-qp)*30).toFixed(1)}px) scale(${(.86+.14*qp).toFixed(3)})`:'';
   const dot=an?(.55+.45*Math.sin(t*5)).toFixed(2):'';
+  const PP=F.pipPos||'br',PX=+F.pipX||0,PY=+F.pipY||0;
+  const pipPosCss=(PP[1]==='l'?`left:${16+PX}px!important;right:auto!important;`:`right:${16-PX}px!important;left:auto!important;`)+(PP[0]==='t'?`top:${140+PY}px!important;bottom:auto!important;`:`bottom:${150-PY}px!important;top:auto!important;`);
   const more='<svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><circle cx="5.5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="18.5" cy="12" r="1.9"/></svg>';
   const body=`<div class="fc-shade"></div><div class="fc-top${lv?' ein':''}" style="${st}"><h2>${esc(F.name)}</h2><p><span class="fc-pill"><i class="fc-dot${lv?' lv':''}"${dot?` style="opacity:${dot}"`:''}></i>${esc(F.status)}</span></p></div>
-  ${F.pip?`<div class="fc-pip${lv?' ein':''}" style="${sp}${lv?';animation-delay:.35s':''}">${F.me?.url?bgImg(F.me,104/156):`<div style="position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center">${I.person('rgba(255,255,255,.35)')}</div>`}<i class="fc-flip">${FC_FLIP}</i></div>`:''}
+  ${F.pip?`<div class="fc-pip${lv?' ein':''}" style="${pipPosCss}${sp}${lv?';animation-delay:.35s':''}">${F.me?.url?bgImg(F.me,104/156):`<div style="position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center">${I.person('rgba(255,255,255,.35)')}</div>`}<i class="fc-flip">${FC_FLIP}</i></div>`:''}
   <div class="fc-bar${lv?' ein':''}" style="${sb}${lv?';animation-delay:.1s':''}"><div class="fc-btn">${more}</div><div class="fc-btn">${I.video('#fff')}</div><div class="fc-btn">${I.mic('#fff')}</div><div class="fc-btn">${I.speaker('#fff')}</div><div class="fc-btn red">${I.phone('#fff',28,135)}</div></div>`;
   return{bg,body};
 }
@@ -2331,6 +2375,28 @@ function screenTl(s){
   <div class="tl-list${rise?' rise':''}" style="${V}"><div class="tl-inner">${rows}</div></div>
   <div class="tl-in" style="${V}">${ic('<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',24,2.2)}${ic('<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5l5 5"/>',24)}${ic(P.grok,25,0,'currentColor')}${ic('<path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15zM10 21h4"/>',24)}${ic('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',24)}</div>
   ${T.fab?`<div class="tl-fab">${ic('<path d="M12 5v14M5 12h14"/>',24,2.4)}</div>`:''}`;
+  return{bg,body};
+}
+// 기사 화면 공통: 사파리 주소창
+function nwSafBar(url){return `<div class="nw-saf"><div class="nw-url"><span class="aa">가<b>가</b></span><span class="u"><svg width="10" height="12" viewBox="0 0 10 12"><rect x="1" y="5" width="8" height="6.500" rx="1.500" fill="#3c3c43" opacity=".6"/><path d="M2.700 5V3.500a2.300 2.300 0 0 1 4.600 0V5" fill="none" stroke="#3c3c43" stroke-width="1.200" opacity=".6"/></svg>${esc(url||'n.news.naver.com')}</span><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#3c3c43" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".7"><path d="M20 12a8 8 0 1 1-2.500-5.800M20 4v4.500h-4.500"/></svg></div><div class="nw-tools"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4L7 12l8 8"/></svg><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".35"><path d="M9 4l8 8-8 8"/></svg><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h14"/></svg><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v17l-7-4-7 4z"/></svg><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linejoin="round"><rect x="3.500" y="6.500" width="13" height="13" rx="2.500"/><path d="M7.500 3.500h11a2 2 0 0 1 2 2v11" stroke-linecap="round"/></svg></div></div>`;}
+// [화면] 네이버 뉴스 기사 (모바일)
+function screenNnews(s){
+  const N=s.nnews,e=esc,G='#03c75a';
+  const bg=`<div class="bgl" style="background:#fff"></div>`;
+  const sv=(d,c,w=22,sw=1.9)=>`<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" style="display:block">${d}</svg>`;
+  const hasLg=!!(N.pressLogo&&N.pressLogo.url),pn=String(N.press||'').trim();
+  const blocks=(N.blocks||[]).map(b=>{
+    if(b.kind==='photo'){const has=b.img&&b.img.url,ar=Math.min(1.9,Math.max(.7,(b.img&&b.img.ar)||1.5));
+      return`<div class="nn-ph"><div class="nn-pi" style="aspect-ratio:${ar}">${has?bgImg(b.img,ar):''}</div>${b.cap?`<div class="nn-cap">${e(b.cap)}</div>`:''}</div>`;}
+    return b.text?`<p class="nn-p">${e(b.text)}</p>`:'';
+  }).join('');
+  const sub=N.sub!==false?`<span class="nn-sb">+ 구독</span>`:'';
+  const dt=`<div class="nn-dt"><span>입력</span>${e(N.date)}</div>${N.mod?`<div class="nn-dt"><span>수정</span>${e(N.mod)}</div>`:''}`;
+  const tools=`<div class="nn-bar"><span class="nn-tx">가</span>${sv('<path d="M12 15V4M8 8l4-4 4 4M5 13v5a2 2 0 0 0 2 2h14"/>','#555',20)}</div>`;
+  const cop=N.cop!==false&&pn?`<div class="nn-cp">ⓒ ${e(pn)}. 무단전재 및 재배포 금지</div>`:'';
+  const rx=N.react!==false?`<div class="nn-rx"><span class="nn-rl">${sv('<path d="M7 11v9H4v-9zM7 11l4-7c1.4 0 2.300 1.100 2 2.500L12.500 9H19a2 2 0 0 1 2 2.300l-1.200 6.500a2 2 0 0 1-2 1.700H7"/>','#333',20)}<b>좋아요</b> ${e(N.likes)}</span><span class="nn-rr">${sv('<path d="M4 5h16v11H9l-5 4z"/>','#333',20)}<b>댓글</b> ${e(N.cmts)}</span></div>`:'';
+  const body=`<div class="nn-head"><span class="nn-logo"><b>NAVER</b><span>뉴스</span></span><div class="nn-hic">${sv('<circle cx="11" cy="11" r="6.500"/><path d="M16 16l4.500 4.500"/>','#111',24)}${sv('<path d="M4 7h16M4 12h16M4 17h16"/>','#111',24)}</div></div>
+  <div class="nn-list"${N.safari!==false?' style="padding-bottom:0"':''}><div class="nn-inner" style="transform:translateY(-${Math.max(0,+N.scroll||0)}px)"><div class="nn-pr"><span class="nn-pl">${hasLg?bgImg(N.pressLogo,1):e(pn.charAt(0)||'N')}</span>${sub}<span class="nn-pn">${e(pn)}</span></div><h1 class="nn-t">${e(N.title)}</h1><div class="nn-meta">${dt}${N.by?`<div class="nn-dt nn-by">${e(N.by)}</div>`:''}</div>${tools}${blocks}${cop}${rx}</div></div>${N.safari!==false?nwSafBar(N.url):''}`;
   return{bg,body};
 }
 // [화면] 디스패치 기사
@@ -3212,14 +3278,14 @@ function hlViewer(s,P){
   const x='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>';
   return`<div style="position:absolute;left:0;top:0;right:0;bottom:0;z-index:4;background:#000;overflow:hidden;transform-origin:${ox}px ${oy}px;transform:scale(${(.12+.88*e).toFixed(3)});opacity:${Math.min(1,e*2).toFixed(2)};border-radius:${((1-e)*40).toFixed(0)}px">${bgImg(h.img,SA)}<div class="bgl" style="background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,0) 22%,rgba(0,0,0,0) 76%,rgba(0,0,0,.45))"></div><div style="position:absolute;left:10px;right:10px;top:58px;display:flex;gap:4px">${bars}</div><div style="position:absolute;left:12px;right:12px;top:72px;display:flex;align-items:center;gap:9px;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.4)">${igPf(P.av,32)}<b style="font-size:14px;font-weight:600">${esc(P.name)}</b><span style="font-size:13px;opacity:.7">${esc(h.label)}</span><span style="margin-left:auto">${x}</span></div><div style="position:absolute;left:14px;right:14px;bottom:30px;height:44px;border:1px solid rgba(255,255,255,.7);border-radius:22px;display:flex;align-items:center;padding:0 16px;color:#fff;font-size:14px">메시지 보내기...</div></div>`;
 }
-const SCREEN_FN={camera:screenCamera,lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw,tl:screenTl,news:screenNews,dial:screenDial,story:screenStory,live:screenLive,sres:screenSres,namu:screenNamu,comm:screenComm,kin:screenKin,post:screenPost,reels:screenReels,igprof:screenIgProf,igact:screenIgAct,reelv:screenReelV,yt:screenYt,recents:screenRecents,profile:screenProfile,search:screenSearch,nc:screenNc,music:screenMusic};
+const SCREEN_FN={camera:screenCamera,lock:screenLock,chat:screenChat,sms:screenSms,face:screenFace,call:screenCall,gallery:screenGallery,ig:screenIg,line:screenLine,tg:screenTg,tw:screenTw,tl:screenTl,news:screenNews,nnews:screenNnews,dial:screenDial,story:screenStory,live:screenLive,sres:screenSres,namu:screenNamu,comm:screenComm,kin:screenKin,post:screenPost,reels:screenReels,igprof:screenIgProf,igact:screenIgAct,reelv:screenReelV,yt:screenYt,recents:screenRecents,profile:screenProfile,search:screenSearch,nc:screenNc,music:screenMusic};
 
 let BOX=1;
 ['chat','ig','line','tg','tw'].forEach(k=>{const f=SCREEN_FN[k];SCREEN_FN[k]=s=>{const r=f(s);if(s.chat.kb!==false&&(hasDraft(s)||s.chat.kbStill||s._kb)&&DIMS[s.device.ratio||'phone'][1]>=676){r.body=r.body.replace(/class="(kt-in|ig-in|ln-in|tg-in|tw-in)"/,'class="$1 kbp"')+smsKbd(s._kq!=null?x_eo(Math.min(1,+s._kq)):1,s._kp);}return r;};});
 // (자리만 남겨 둔 함수) 상태를 그대로 돌려줘요
 function msgFx(s){return s;}
 const MSGR_SCR=['chat','sms','ig','line','tg','tw'];
-const SCROLL_SEL={chat:['.list','.inner'],sms:['.list','.inner'],ig:['.list','.inner'],line:['.list','.inner'],tg:['.list','.inner'],tw:['.list','.inner'],tl:['.tl-list','.tl-inner'],news:['.nw-list','.nw-inner'],sres:['.tl-list','.tl-inner'],namu:['.tl-list','.tl-inner'],comm:['.tl-list','.tl-inner'],kin:['.tl-list','.tl-inner']};
+const SCROLL_SEL={chat:['.list','.inner'],sms:['.list','.inner'],ig:['.list','.inner'],line:['.list','.inner'],tg:['.list','.inner'],tw:['.list','.inner'],tl:['.tl-list','.tl-inner'],news:['.nw-list','.nw-inner'],nnews:['.nn-list','.nn-inner'],sres:['.tl-list','.tl-inner'],namu:['.tl-list','.tl-inner'],comm:['.tl-list','.tl-inner'],kin:['.tl-list','.tl-inner']};
 // 메신저 스크롤 위치를 DOM 에 적용
 function scrollApply(root,st){
   if(st._scrollT==null)return;
@@ -3868,7 +3934,7 @@ function E_sms(){
 function E_face(){
   return card('영상통화',`${fld('상대 이름',txt('face.name','이름'))}
     ${fld(`통화 시간 <span style="float:right">${randBtn('face')}</span>`,txt('face.status','00:00'))}
-    ${imgField('face.other','상대방 화면 (전체) · 사진/영상',true,'other')}<div class="sep"></div>${tog('face.pip','내 화면 (작은 창) 표시')}${S.face.pip?imgField('face.me','내 화면 (작은 창) · 사진/영상',true,'me'):''}
+    ${imgField('face.other','상대방 화면 (전체) · 사진/영상',true,'other')}<div class="sep"></div>${tog('face.pip','내 화면 (작은 창) 표시')}${S.face.pip?imgField('face.me','내 화면 (작은 창) · 사진/영상',true,'me')+fld('작은 창 위치',seg('face.pipPos',[['tl','↖ 왼쪽 위'],['tr','↗ 오른쪽 위'],['bl','↙ 왼쪽 아래'],['br','↘ 오른쪽 아래']]))+rng('face.pipX',-120,120,1,'좌우 미세 조절','px')+rng('face.pipY',-120,120,1,'상하 미세 조절','px')+`<button type="button" class="btn" data-act="pipReset" style="margin-top:4px">위치 초기화</button>`:''}
     <div class="hint" style="margin-top:8px">영상을 넣으면 프레임으로 잘라 재생돼요(최대 30초, 소리 포함 가능). 영상이 없으면 통화 시간만 1초씩 흘러가요. 저장 탭 → 영상 저장.</div>`);
 }
 // [편집 패널] 전화 수신 (기본형)
@@ -3952,7 +4018,7 @@ function E_device(){
 }
 // [편집 패널] 저장(내보내기) 설정
 function E_export(){
-  const e=S.exp,allTr=(e.bg==='transparent'&&e.gifBg==='transparent'&&e.vidBg==='transparent'), gifDesc={lock:'알림이 하나씩 도착',chat:'메시지가 하나씩 도착',sms:'메시지가 하나씩 도착',face:'통화 시간이 1초씩 증가',call:'수락 버튼이 울림',gallery:'사진이 하나씩 추가',tl:'트윗이 아래에서 올라오며 하나씩 등장',news:'기사가 위에서 아래로 스크롤',dial:({answer:'연결 중 → 상대가 받아 통화 시간이 올라가요',reject:'연결 중 → 상대가 거절해 통화가 끊겨요'})[S.dial.result]||'점이 움직이며 연결 중',recents:'통화 기록이 하나씩 쌓여요',profile:'상태 메시지와 프로필 사진이 바뀌어요',search:'검색어가 한 글자씩 입력돼요',story:'상단 진행 막대가 차올라요'}[S.screen]||'메시지가 하나씩 도착';
+  const e=S.exp,allTr=(e.bg==='transparent'&&e.gifBg==='transparent'&&e.vidBg==='transparent'), gifDesc={lock:'알림이 하나씩 도착',chat:'메시지가 하나씩 도착',sms:'메시지가 하나씩 도착',face:'통화 시간이 1초씩 증가',call:'수락 버튼이 울림',gallery:'사진이 하나씩 추가',tl:'트윗이 아래에서 올라오며 하나씩 등장',news:'기사가 위에서 아래로 스크롤',nnews:'기사가 위에서 아래로 스크롤',dial:({answer:'연결 중 → 상대가 받아 통화 시간이 올라가요',reject:'연결 중 → 상대가 거절해 통화가 끊겨요'})[S.dial.result]||'점이 움직이며 연결 중',recents:'통화 기록이 하나씩 쌓여요',profile:'상태 메시지와 프로필 사진이 바뀌어요',search:'검색어가 한 글자씩 입력돼요',story:'상단 진행 막대가 차올라요'}[S.screen]||'메시지가 하나씩 도착';
   const pf=e.gifScale<=1.5&&e.vidScale<=1&&e.scale<=2&&e.typeChars===false?'fast':(e.gifScale>=3&&e.vidScale>=2&&e.scale>=3?'hq':(e.gifScale===2&&e.vidScale===1.5&&e.scale===3&&e.typeChars!==false?'mid':''));
   const optCard=`<section class="card"><div class="ct"><span>내보내기 최적화</span></div><div class="g2" style="grid-template-columns:repeat(3,1fr)"><button class="btn ${pf==='fast'?'':'line'}" data-act="expPreset" data-val="fast">빠르게</button><button class="btn ${pf==='mid'?'':'line'}" data-act="expPreset" data-val="mid">균형</button><button class="btn ${pf==='hq'?'':'line'}" data-act="expPreset" data-val="hq">고화질</button></div><button class="btn ghost" data-act="expInfo" style="width:100%;margin-top:8px">현재 설정으로 프레임 수 확인</button><div class="hint" style="margin-top:8px">저장이 오래 걸리거나 용량이 큰 이유는 대부분 <b>프레임 수</b>와 <b>해상도</b>예요. <b>빠르게</b>는 해상도를 낮추고 내 메시지 글자를 한 글자씩 치지 않고 몇 단계로만 보여줘서 프레임을 줄여요. GIF는 <b>화질 최고</b>와 <b>빠른 속도</b>의 차이가 용량에 가장 크게 나타나고, 긴 대화라면 영상(MP4)이 GIF보다 훨씬 가벼워요.</div></section>`;
   const r3Card=`<section class="card"><div class="ct"><span>3D 회전 연출</span></div>${fld('회전 모양',seg('exp.r3.anim',[['none','없음'],['spin','한 바퀴'],['ease','부드럽게'],['sway','좌우'],['nod','끄덕'],['orbit','8자']]))}${fld('한 바퀴 시간',seg('exp.r3.dur',[[2,'2초'],[4,'4초'],[6,'6초'],[10,'10초']]))}${fld('저장 부드러움',seg('exp.r3.fps',[[10,'가볍게 10fps'],[15,'보통 15fps'],[30,'부드럽게 30fps']]))}<div class="hint" style="margin-top:2px">위쪽 <b>2D / 3D</b> 에서 3D 를 켜면 미리보기에서 돌아가고, <b>GIF · 영상 저장에도 같은 회전</b>이 들어가요. PNG 는 멈춘 현재 각도로 저장돼요. 부드러움이 높을수록 저장 시간이 길어지고 GIF 는 용량이 많이 커져요 (긴 영상은 MP4 를 권장). 영상이 한 바퀴 시간보다 짧으면 한 바퀴가 끝날 때까지 늘어나고, GIF 는 끊김 없이 반복되도록 한 바퀴 단위로 맞춰져요.</div></section>`;
@@ -4171,6 +4237,8 @@ function applySlide(root,st){
     }
     return;
   }
+  const nn=root.querySelector('.nn-inner');
+  if(nn){if(st.nnews&&st.nnews._sc!=null){const mx=Math.max(0,nn.offsetHeight-nn.parentElement.clientHeight);nn.style.transform=`translateY(${(-mx*st.nnews._sc).toFixed(1)}px)`;}return;}
   const ni=root.querySelector('.nw-inner');
   if(ni){if(st.news&&st.news._sc!=null){const mx=Math.max(0,ni.offsetHeight-ni.parentElement.clientHeight);ni.style.transform=`translateY(${(-mx*st.news._sc).toFixed(1)}px)`;}return;}
   const inner=root.querySelector('.list .inner');if(!inner)return;
@@ -4935,6 +5003,21 @@ function E_tl(){
     ${[0,1,2,3].map(j=>imgField(`${b}${i}.imgs.${j}`,`첨부 사진 ${j+1}`)).join('')}</div>`).join('')
     +`<div class="g2"><button class="btn line" data-act="add" data-path="tl.${key}" data-tpl="tweet">＋ 트윗 추가</button><button class="btn line" data-act="copyTweets">트윗 텍스트 복사</button></div>`);
 }
+// [편집 패널] 네이버 뉴스 기사
+function E_nnews(){
+  const N=S.nnews,bl=N.blocks||[];
+  return card('네이버 뉴스 기사',`${fld('언론사 이름',txt('nnews.press','언론사 이름'))}
+    ${fld('제목',area('nnews.title','기사 제목'))}${fld('기자',txt('nnews.by','홍길동 기자'))}
+    <div class="g2">${fld('입력 날짜',txt('nnews.date','2026.01.01. 오후 12:00'))}${fld('수정 날짜 (비우면 숨김)',txt('nnews.mod','2026.01.01. 오후 12:30'))}</div>
+    ${tog('nnews.sub','구독 버튼')}${tog('nnews.cop','저작권 문구 (ⓒ 언론사 · 무단전재 금지)')}${tog('nnews.react','좋아요 · 댓글 줄')}
+    ${N.react!==false?`<div class="g2">${fld('좋아요 수',txt('nnews.likes','1,234'))}${fld('댓글 수',txt('nnews.cmts','567'))}</div>`:''}
+    ${tog('nnews.safari','사파리 주소창 (화면 아래)')}${N.safari!==false?fld('주소',txt('nnews.url','n.news.naver.com')):''}
+    ${rng('nnews.scroll',0,3000,10,'스크롤','px')}<div class="hint" style="margin-top:6px">이 값은 정지 화면(PNG)용이에요. 위에서 아래로 훑는 연출은 GIF · 영상 저장 때 자동으로 재생돼요.</div>`)
+  +card('언론사 로고',`${imgField('nnews.pressLogo','로고 이미지 (동그랗게 잘려요)',false)}<div class="hint" style="margin-top:6px">비워 두면 언론사 이름의 첫 글자가 들어가요.</div>`)
+  +card('본문',bl.map((b,i)=>`<div class="item"><div class="item-h"><span class="badge">${b.kind==='photo'?'사진':'문단'} ${i+1}</span>${mv('nnews.blocks',i,bl.length)}</div>
+    ${b.kind==='photo'?imgField(`nnews.blocks.${i}.img`,'기사 사진')+fld('사진 설명',txt(`nnews.blocks.${i}.cap`,'사진 설명')):area(`nnews.blocks.${i}.text`,'본문 내용')}</div>`).join('')
+    +`<div class="g2"><button class="btn line" data-act="add" data-path="nnews.blocks" data-tpl="ntext">＋ 문단</button><button class="btn line" data-act="add" data-path="nnews.blocks" data-tpl="nphoto">＋ 사진</button></div>`);
+}
 // [편집 패널] 디스패치 기사
 function E_news(){
   const N=S.news,bl=N.blocks;
@@ -5047,7 +5130,7 @@ function renderEditor(){
   let h='';
   if(ui.tab==='screen'){
     h=`<div class="sgrps">${SCREEN_GROUPS.map(([gl,ks])=>`<div class="sgrp"><div class="sgl">${gl}</div><div class="sgb">${ks.map(k=>`<button class="pkbtn ${S.screen===k?'on':''}" data-act="screen" data-val="${k}">${UI[k]}${screenLabel(k)}</button>`).join('')}</div></div>`).join('')}</div>`
-      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램'),tw:E_tw,tl:E_tl,news:E_news,dial:E_dial,story:E_story,live:E_live,sres:E_sres,namu:E_namu,comm:E_comm,kin:E_kin,post:E_post,reels:E_reels,igprof:E_igprof,igact:E_igact,camera:E_camera,reelv:E_reelv,yt:E_yt,recents:E_recents,profile:E_profile,search:E_search,nc:E_nc,music:E_music})[S.screen]();
+      +({lock:E_lock,chat:E_chat,sms:E_sms,face:E_face,call:E_call,gallery:E_gallery,ig:()=>E_chatlike('인스타 DM'),line:()=>E_chatlike('LINE'),tg:()=>E_chatlike('텔레그램'),tw:E_tw,tl:E_tl,news:E_news,nnews:E_nnews,dial:E_dial,story:E_story,live:E_live,sres:E_sres,namu:E_namu,comm:E_comm,kin:E_kin,post:E_post,reels:E_reels,igprof:E_igprof,igact:E_igact,camera:E_camera,reelv:E_reelv,yt:E_yt,recents:E_recents,profile:E_profile,search:E_search,nc:E_nc,music:E_music})[S.screen]();
   }else if(ui.tab==='device')h=E_device();
   else if(ui.tab==='ooc')h=E_ooc();
   else if(ui.tab==='extra')h=E_extra();
@@ -5168,6 +5251,7 @@ const ACT={
     [ui.v3.rx,ui.v3.ry]=P3_PRESET[k];p3sync();const rig=$('#preview .p3rig');if(rig){rig.classList.add('anim');p3vars(rig);}},
   v3a:el=>{const r=R3(),k=el.dataset.val;if(!ui.v3d)p3set(true);r.anim=(k===r.anim&&k!=='none')?'none':k;ui.v3.at=0;ui.v3.la=r.anim;p3sync();commit();if(ui.tab==='export')renderEditor();},
   allTransparent:()=>{S.exp.bg='transparent';S.exp.gifBg='transparent';S.exp.vidBg='transparent';renderEditor();commit();toast('PNG · GIF · 영상 배경을 모두 투명으로 바꿨어요');},
+  pipReset:()=>{S.face.pipPos='br';S.face.pipX=0;S.face.pipY=0;renderEditor();commit();},
   tlAvAll:el=>{const T=S.tl,ts=T[T.tab?'tweetsF':'tweets']||[],a=(ts[+el.dataset.val]||{}).av;if(!a)return;ts.forEach(t=>{t.av={...a};});renderEditor();commit();toast('모든 트윗에 같은 프로필 사진을 적용했어요');},popTest:async()=>{const ok=await sfxInit();if(ok&&popBuf)popPlay(null,(S.exp.pop.vol||100)/100);else{soundWarned=false;soundFail(new Error('알림음 없음'));}},png:()=>exportPNG(false),copy:()=>exportPNG(true),pngscroll:()=>exportScrollPNG(),gif:()=>exportGIF(),vid:()=>exportVideo(),play:()=>playPreview(),
   quick:()=>{const t=document.getElementById('quickTx');if(!t)return;const tp=nowParts(),time=S.chat.messages.length?S.chat.messages[S.chat.messages.length-1].time:`${tp.ap} ${tp.h12}:${pad(tp.m)}`;const ms=mkMsgs(t.value,time);if(!ms.length){toast('내용을 입력해 주세요');return;}S.chat.messages=ms;renderEditor();commit();toast(`${ms.length}개 메시지를 적용했어요`);},
   saveJson:()=>download(new Blob([JSON.stringify(S)],{type:'application/json'}),`phone-project_${stamp()}.json`),
@@ -5203,7 +5287,7 @@ document.addEventListener('change',async e=>{
     }
     else if(el.dataset.storymulti!==undefined){await fillStoryBulk([...el.files]);}
     else if(el.dataset.gallery!==undefined){for(const f of el.files)S.gallery.items.push({id:uid(),img:await loadImg(f,900)});}
-    else if(el.dataset.load!==undefined){const t=await el.files[0].text();S=merge(defaults(),JSON.parse(t));storyMig(S);ui.gsel=-1;if(!(S.exp.gifScale>=1.5))S.exp.gifScale=2;if(![0.75,1,1.5,2.5].includes(S.exp.gifSpeed))S.exp.gifSpeed=1.5;toast('프로젝트를 불러왔어요');}
+    else if(el.dataset.load!==undefined){const t=await el.files[0].text();S=merge(defaults(),JSON.parse(t));fixupState();ui.gsel=-1;toast('프로젝트를 불러왔어요');}
     renderEditor();commit();
   }catch(err){console.error(err);toast('파일을 읽지 못했어요');}
 });
@@ -5248,6 +5332,10 @@ function fcFaces(){
     }else if(r.cssRules)walk(r.cssRules,base);
   }};
   for(const sh of document.styleSheets){let rs;try{rs=sh.cssRules;}catch(e){continue;}if(rs)walk(rs,sh.href||location.href);}
+  (FC.extra||[]).forEach(b=>{const g=k=>{const m=b.match(new RegExp('(?:^|[;\\s])'+k+'\\s*:\\s*([^;]+)','i'));return m?m[1].trim():'';};
+    const src=g('src'),um=src.match(/url\(\s*["']?([^"')]+?)["']?\s*\)/);if(!um)return;
+    const fm=src.match(/format\(\s*["']?([^"')]+?)["']?\s*\)/),wt=(g('font-weight')||'400').split(/\s+/).map(Number),ur=g('unicode-range');
+    out.push({family:g('font-family').replace(/["']/g,'').trim(),style:/^normal/.test(g('font-style')||'normal')?'normal':'italic',lo:wt[0]||400,hi:wt[1]||wt[0]||400,range:fcRange(ur),rawRange:ur,url:um[1],fmt:fm?fm[1]:'',idx:out.length});});
   FC.faces=out;FC.fam=new Map();
   out.forEach(f=>{const k=f.family.toLowerCase();if(!FC.fam.has(k))FC.fam.set(k,[]);FC.fam.get(k).push(f);});
   return out;
@@ -5284,16 +5372,25 @@ async function fcCss(f){
   css=`@font-face{font-family:"${f.family}";font-style:${f.style};font-weight:${f.lo===f.hi?f.lo:f.lo+' '+f.hi};src:url(${data})${f.fmt?` format("${f.fmt}")`:''};${f.rawRange?`unicode-range:${f.rawRange};`:''}}`;
   FC.css.set(f.idx,css);return css;
 }
+// 스타일시트를 브라우저가 못 읽게 막은 경우(교차 출처) → 글꼴 CSS 를 직접 받아서 @font-face 만 뽑아요
+async function fcRemote(){
+  const links=[...document.querySelectorAll('link[rel="stylesheet"]')].filter(l=>{try{l.sheet&&l.sheet.cssRules;return false;}catch(e){return true;}});
+  const ex=[];
+  for(const l of links){try{const css=await (await fetch(l.href,{cache:'force-cache'})).text();css.replace(/@font-face\s*\{([^}]*)\}/g,(m,b)=>{ex.push(b);return m;});}catch(e){}}
+  if(ex.length){FC.extra=ex;FC.faces=null;}
+}
 // 캡처 옵션: 실패하면 빈 객체 → 기존 방식(느리지만 동일한 결과)으로 대체
+// 캐시는 "이 화면에 필요한 글꼴 조각 묶음"별로 둬서, 새 글자가 나와도 빠진 글자 없이 매 프레임 재사용돼요
 async function fontOpt(el){
   if(FC.off)return{};
   try{
-    const key=String(S.screen||'capture');
-    if(FC.optCache.has(key))return FC.optCache.get(key);
+    if(!fcFaces().length&&!FC.remoteTried){FC.remoteTried=true;await fcRemote();}
     const need=[...fcNeeds(el)];
-    if(!need.length){FC.optCache.set(key,{});return{};}
+    if(!need.length)return{};
+    const key=need.map(f=>f.idx).sort((a,b)=>a-b).join(',');
+    let opt=FC.optCache.get(key);if(opt)return opt;
     const parts=await Promise.all(need.map(fcCss));
-    const opt={font:{cssText:parts.join('\n')}};
+    opt={font:{cssText:parts.join('\n')}};
     FC.optCache.set(key,opt);
     return opt;
   }catch(e){console.warn('글꼴 최적화 실패 → 기본 방식으로 저장',e);FC.off=true;return{};}
@@ -5489,6 +5586,7 @@ function buildFrames(s){
       face:{...s.face},
       tl:{...s.tl},
       news:{...s.news},
+      nnews:{...s.nnews},
       story:{...s.story},
       camera:{...s.camera},
       live:{...s.live},
@@ -5553,6 +5651,7 @@ function buildFrames(s){
         push(c=>{cut(c);},k===n?hold:D/tsp);
       }break;}
     case'news':{const NS=48;push(c=>{c.news._sc=0;},700/sp);for(let i=1;i<=NS;i++){const e=(1-Math.cos(Math.PI*i/NS))/2;push(c=>{c.news._sc=e;},i===NS?hold:110/sp);}break;}
+    case'nnews':{const NS=48;push(c=>{c.nnews._sc=0;},700/sp);for(let i=1;i<=NS;i++){const e=(1-Math.cos(Math.PI*i/NS))/2;push(c=>{c.nnews._sc=e;},i===NS?hold:110/sp);}break;}
     case'dial':{
       const res=s.dial.result||'none';
       if(res==='none'){for(let i=0;i<9;i++)push(c=>{c._ct=i*.5;},450/sp);break;}
