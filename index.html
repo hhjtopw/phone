@@ -2214,7 +2214,10 @@ function screenFace(s){
   const d2=an?`transform:translate(${(-dx).toFixed(1)}px,${(-dy).toFixed(1)}px) scale(${(2-ds).toFixed(3)})`:'';
   const aur=(hasV||SW)?'':`<i class="aur a1${lv?' lv':''}" style="${d1}"></i><i class="aur a2${lv?' lv':''}" style="${d2}"></i>`;
   const breathe=an?`transform:scale(${(1+Math.sin(t*2)*.02).toFixed(3)})`:'';
-  const bg=`<div class="bgl" style="background:linear-gradient(175deg,#4a4d55,#1b1c20)">${aur}${hasV?bgImg(big,SA):SW?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden"><svg width="300" height="300" viewBox="0 0 24 24" fill="rgba(255,255,255,.18)" style="margin-bottom:-26px"><circle cx="12" cy="8.500" r="4.200"/><path d="M3.500 22c0-5.200 4-8.200 8.500-8.200s8.500 3 8.500 8.200z"/></svg></div>`:`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center"><div class="fph">${rings}<div class="fc-ph${lv?' lvb':''}" style="${breathe}">${ini}</div></div></div>`}</div>`;
+  // 영상 내보내기에서 '투명 배경'을 선택했을 때는 영상통화의 배경판만 투명하게 만들고,
+  // 이름/통화시간/작은 화면/하단 통화 버튼 같은 프레임 UI는 그대로 남겨요.
+  const alpha=!!s._alphaFace;
+  const bg=`<div class="bgl" style="background:${alpha?'transparent':'linear-gradient(175deg,#4a4d55,#1b1c20)'}">${aur}${hasV?bgImg(big,SA):SW?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden"><svg width="300" height="300" viewBox="0 0 24 24" fill="rgba(255,255,255,.18)" style="margin-bottom:-26px"><circle cx="12" cy="8.500" r="4.200"/><path d="M3.500 22c0-5.200 4-8.200 8.500-8.200s8.500 3 8.500 8.200z"/></svg></div>`:`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center"><div class="fph">${rings}<div class="fc-ph${lv?' lvb':''}" style="${breathe}">${ini}</div></div></div>`}</div>`;
   const qt=e3(q(0,.6)),qb=e3(q(.1,.6)),qp=e3(q(.35,.6));
   const st=qt<1?`opacity:${qt.toFixed(2)};transform:translateY(${((1-qt)*-12).toFixed(1)}px)`:'';
   const sb=qb<1?`opacity:${qb.toFixed(2)};transform:translateY(${((1-qb)*44).toFixed(1)}px)`:'';
@@ -4801,14 +4804,14 @@ async function encodeCapCutProRes({plan,vis,store,bg,TR}){
       if(n%5===0){busy(`CapCut 호환 프레임 준비 중… ${n+1}/${N}`,.76+.12*n/N);await tick();}
     }
     if(cb)cb.close();
-    await ff.exec(['-y','-framerate',String(FPS),'-i','frame%06d.png','-c:v','prores_ks','-profile:v','4444','-pix_fmt','yuva444p10le','-an','out.mov']);
+    await ff.exec(['-y','-framerate',String(FPS),'-i','frame%06d.png','-c:v','prores_ks','-profile:v','4444','-pix_fmt','yuva444p10le','-alpha_bits','16','-vendor','apl0','-an','out.mov']);
     const movData=await ff.readFile('out.mov');
-    const out={mov:new Blob([movData.buffer],{type:'video/quicktime'}),fps:FPS};
+    const out={mov:new Blob([movData],{type:'video/quicktime'}),fps:FPS};
     if(TR){
       // 모바일에서 ProRes 알파가 안 읽히는 경우를 위한 H.264 크로마키 호환본입니다.
       const key=S.exp.keyColor||'#00ff00',hex=key.replace('#','');
       await ff.exec(['-y','-framerate',String(FPS),'-i','frame%06d.png','-vf',`color=c=0x${hex}:s=${W}x${H}:r=${FPS}[bg];[bg][0:v]overlay=shortest=1,format=yuv420p`,'-c:v','libx264','-preset','veryfast','-crf','18','-an','out_capcut.mp4']);
-      const mp4Data=await ff.readFile('out_capcut.mp4');out.mp4=new Blob([mp4Data.buffer],{type:'video/mp4'});out.key=key;
+      const mp4Data=await ff.readFile('out_capcut.mp4');out.mp4=new Blob([mp4Data],{type:'video/mp4'});out.key=key;
     }
     return out;
   }catch(e){console.warn('FFmpeg CapCut 인코더 실패 → 기존 인코더 사용',e);return null;}
@@ -4943,7 +4946,12 @@ async function _exportVideo0(){
     busy('글꼴 준비 중…',.01);await preloadFonts();
     for(let i=0;i<uniq.length;i++){
       busy(`프레임 렌더링 중… ${i+1}/${uniq.length}`,.02+.7*(i/uniq.length));
-      const c=await capture(await stOf(uniq[i].f),sc,TR?null:bg,uniq[i].pose);
+      let capState=await stOf(uniq[i].f);
+      // 영상통화 투명 출력은 '화면 배경'만 제거해야 합니다. 기존 device.bgOff는
+      // 상태바/헤더/홈바 등 프레임 UI까지 숨길 수 있으므로 저장 시에는 강제로 해제하고,
+      // screenFace에만 _alphaFace를 전달해 배경판만 투명하게 렌더링합니다.
+      if(TR&&capState.screen==='face')capState={...capState,_alphaFace:true,device:{...capState.device,bgOff:false}};
+      const c=await capture(capState,sc,TR?null:bg,uniq[i].pose);
       store.set(uniq[i].key,{w:c.width,h:c.height,blob:await new Promise(r=>(TR||PNGSEQ||MOV)?c.toBlob(r,'image/png'):c.toBlob(r,'image/jpeg',.94))});
       await tick();
     }
