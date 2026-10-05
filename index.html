@@ -2218,10 +2218,11 @@ function screenFace(s){
   // 이름/통화시간/작은 화면/하단 통화 버튼 같은 프레임 UI는 그대로 남겨요.
   const alpha=!!s._alphaFace;
   const bg=`<div class="bgl" style="background:${alpha?'transparent':'linear-gradient(175deg,#4a4d55,#1b1c20)'}">${aur}${hasV?bgImg(big,SA):SW?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden"><svg width="300" height="300" viewBox="0 0 24 24" fill="rgba(255,255,255,.18)" style="margin-bottom:-26px"><circle cx="12" cy="8.500" r="4.200"/><path d="M3.500 22c0-5.200 4-8.200 8.500-8.200s8.500 3 8.500 8.200z"/></svg></div>`:`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center"><div class="fph">${rings}<div class="fc-ph${lv?' lvb':''}" style="${breathe}">${ini}</div></div></div>`}</div>`;
-  const qt=e3(q(0,.6)),qb=e3(q(.1,.6)),qp=e3(q(.35,.6));
-  const st=qt<1?`opacity:${qt.toFixed(2)};transform:translateY(${((1-qt)*-12).toFixed(1)}px)`:'';
-  const sb=qb<1?`opacity:${qb.toFixed(2)};transform:translateY(${((1-qb)*44).toFixed(1)}px)`:'';
-  const sp=qp<1?`opacity:${qp.toFixed(2)};transform:translateY(${((1-qp)*30).toFixed(1)}px) scale(${(.86+.14*qp).toFixed(3)})`:'';
+  const exp=!!s._export;
+  const qt=exp?1:e3(q(0,.6)),qb=exp?1:e3(q(.1,.6)),qp=exp?1:e3(q(.35,.6));
+  const st=exp?'':(qt<1?`opacity:${qt.toFixed(2)};transform:translateY(${((1-qt)*-12).toFixed(1)}px)`:'' );
+  const sb=exp?'':(qb<1?`opacity:${qb.toFixed(2)};transform:translateY(${((1-qb)*44).toFixed(1)}px)`:'');
+  const sp=exp?'':(qp<1?`opacity:${qp.toFixed(2)};transform:translateY(${((1-qp)*30).toFixed(1)}px) scale(${(.86+.14*qp).toFixed(3)})`:'' );
   const dot=an?(.55+.45*Math.sin(t*5)).toFixed(2):'';
   const PP=F.pipPos||'br',PX=+F.pipX||0,PY=+F.pipY||0;
   const pipPosCss=(PP[1]==='l'?`left:${16+PX}px!important;right:auto!important;`:`right:${16-PX}px!important;left:auto!important;`)+(PP[0]==='t'?`top:${140+PY}px!important;bottom:auto!important;`:`bottom:${150-PY}px!important;top:auto!important;`);
@@ -4812,7 +4813,7 @@ async function encodeCapCutProRes({plan,vis,store,bg,TR}){
     if(TR){
       // 모바일에서 ProRes 알파가 안 읽히는 경우를 위한 H.264 크로마키 호환본입니다.
       const key=S.exp.keyColor||'#00ff00',hex=key.replace('#','');
-      await ff.exec(['-y','-framerate',String(FPS),'-i','frame%06d.png','-filter_complex',`color=c=0x${hex}:s=${W}x${H}:r=${FPS}[bg];[bg][0:v]overlay=shortest=1,format=yuv420p,setsar=1[out]`,'-map','[out]','-c:v','libx264','-preset','veryfast','-crf','18','-pix_fmt','yuv420p','-an','out_capcut.mp4']);
+      await ff.exec(['-y','-framerate',String(FPS),'-i','frame%06d.png','-f','lavfi','-i',`color=c=0x${hex}:s=${W}x${H}:r=${FPS}`,'-filter_complex',`[1:v][0:v]overlay=shortest=1:format=auto,format=yuv420p,setsar=1[out]`,'-map','[out]','-c:v','libx264','-preset','veryfast','-crf','18','-pix_fmt','yuv420p','-an','out_capcut.mp4']);
       const mp4Data=await ff.readFile('out_capcut.mp4');out.mp4=new Blob([mp4Data],{type:'video/mp4'});out.key=key;
     }
     return out;
@@ -4960,6 +4961,7 @@ async function _exportVideo0(){
       // 영상통화 투명 출력에서도 사용자가 켜둔 device.bgOff는 그대로 유지합니다.
       // _alphaFace는 영상통화 화면 내부의 배경판을 투명하게 만드는 용도입니다.
       if(TR&&capState.screen==='face')capState={...capState,_alphaFace:true};
+      capState={...capState,_export:true};
       const c=await capture(capState,sc,TR?null:bg,uniq[i].pose);
       store.set(uniq[i].key,{w:c.width,h:c.height,blob:await new Promise(r=>(TR||PNGSEQ||MOV)?c.toBlob(r,'image/png'):c.toBlob(r,'image/jpeg',.94))});
       await tick();
@@ -5643,7 +5645,10 @@ async function capture(st,scale,bg,pose){
   // 하단 통화 버튼 바에 노이즈/깨짐을 만들 수 있어 전용 렌더링 클래스를 붙입니다.
   if(st.screen==='face'){
     const _faceScr=el.querySelector('.scr');
-    if(_faceScr)_faceScr.classList.add('alphaface');
+    if(_faceScr){
+      _faceScr.classList.add('alphaface');
+      if(st._export)_faceScr.classList.add('exportface');
+    }
   }
   bubbleGuard(el);
   if(ui.v3d&&!ui.v3closing){try{const bx=p3export(el,pose);if(bx){host.appendChild(bx);el=bx;}}catch(e){console.warn('3D 저장 준비 실패 → 2D 로 저장',e);}}
@@ -6990,6 +6995,9 @@ img{
 
 /* 투명 영상통화 캡처 전용: 투명 캔버스 위 backdrop-filter/반투명 그림자 합성을 피합니다.
    일반 미리보기에는 적용되지 않습니다. */
+#off .scr.alphaface .fc-top,
+#off .scr.alphaface .fc-top h2,
+#off .scr.alphaface .fc-top p,
 #off .scr.alphaface .fc-bar,
 #off .scr.alphaface .fc-pill,
 #off .scr.alphaface .fc-btn,
@@ -6999,6 +7007,13 @@ img{
   -webkit-backdrop-filter:none!important;
   backdrop-filter:none!important;
   animation:none!important;
+}
+#off .scr.alphaface .fc-top,
+#off .scr.alphaface .fc-top h2,
+#off .scr.alphaface .fc-top p{
+  animation:none!important;
+  opacity:1!important;
+  transform:none!important;
 }
 #off .scr.alphaface .fc-bar{
   background:rgba(44,44,46,.94)!important;
@@ -7013,6 +7028,21 @@ img{
 #off .scr.alphaface .fc-btn.red{
   box-shadow:inset 0 1px 0 rgba(255,255,255,.38)!important;
 }
+/* 영상통화 저장용: 크로마키 포함 모든 export에서 상단 이름/상태가 등장 애니메이션에 의해 사라지지 않게 */
+#off .scr.exportface .fc-top,
+#off .scr.exportface .fc-top h2,
+#off .scr.exportface .fc-top p,
+#off .scr.exportface .fc-pill,
+#off .scr.exportface .fc-pip,
+#off .scr.exportface .fc-bar{
+  animation:none!important;
+  opacity:1!important;
+  transform:none!important;
+}
+#off .scr.exportface .fc-top,
+#off .scr.exportface .fc-top h2,
+#off .scr.exportface .fc-top p{visibility:visible!important;}
+
 /* 저장용 렌더링에서는 광택 레이어가 콘텐츠를 방해하지 않게 */
 body.exporting .scr::after{
   opacity:.7;
