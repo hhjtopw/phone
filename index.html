@@ -4466,7 +4466,7 @@ const FU=new Map();async function frameUrl(vo,t){const k=vo.url+'|'+Math.round(t
 // 영상통화 프레임 계획
 function facePlan(s){
   const fps=s.exp.faceFps||24,dO=VID.other?VID.other.dur:0,dM=VID.me?VID.me.dur:0;
-  const total=Math.min(30,Math.max(dO,dM)||3),n=Math.max(1,Math.round(total*fps));
+  const total=Math.max(dO,dM)?Math.min(30,Math.max(dO,dM)):Math.min(60,Math.max(2,+s.exp.faceSec||10)),n=Math.max(1,Math.round(total*fps));
   const m=s.face.status.match(/(\d{1,2}):(\d{2})(?!.*\d{1,2}:\d{2})/),F=[];
   for(let i=0;i<n;i++){const t=i/fps;F.push({vt:t,delay:1000/fps,key:'v'+i,base:s,sec:Math.floor(t),m});}
   return F;
@@ -5120,7 +5120,7 @@ function E_video(){
     ${S.exp.vidMode==='seq'?fld('화면 전환 효과',seg('exp.trans',[['cut','없음'],['fade','페이드'],['slide','밀어내기']])):''}
     ${fld('스크린샷 셔터 효과 (영상 맨 끝)',seg('exp.shutter',[['none','없음'],['flash','번쩍']]))}${S.exp.shutter==='flash'?tog('exp.shutterSnd','번쩍일 때 스크린샷 소리 넣기'):''}
     ${fld('강조 효과 (마지막 장면에서)',seg('exp.fx',[['none','없음'],['zoom','줌인'],['shake','흔들림']]))}${S.exp.fx==='zoom'?rng('exp.fxY',0,100,5,'확대 중심 세로 위치','%'):''}
-    ${S.screen==='face'?fld('영상통화 프레임',seg('exp.faceFps',[[10,'10fps'],[15,'15fps'],[24,'24fps'],[30,'30fps']]))+tog('exp.vidAudio','넣은 영상의 소리 포함'):''}${S.screen==='call'?fld('전화 애니메이션 길이',seg('exp.callSec',[[3,'3초'],[5,'5초'],[8,'8초']])):''}${tog('exp.smooth','부드러운 스크롤 애니메이션')}${typOpts()}
+    ${S.screen==='face'?fld('통화 시간이 흘러가는 길이',seg('exp.faceSec',[[5,'5초'],[10,'10초'],[20,'20초'],[30,'30초'],[60,'60초']]))+fld('영상통화 프레임',seg('exp.faceFps',[[10,'10fps'],[15,'15fps'],[24,'24fps'],[30,'30fps']]))+tog('exp.vidAudio','넣은 영상의 소리 포함'):''}${S.screen==='call'?fld('전화 애니메이션 길이',seg('exp.callSec',[[3,'3초'],[5,'5초'],[8,'8초']])):''}${tog('exp.smooth','부드러운 스크롤 애니메이션')}${typOpts()}
     ${fld('효과음',seg('exp.sfx',[['off','끄기'],['me','내 메시지'],['all','모든 메시지']]))}${tog('exp.sxOn','카메라 셔터음 · 스크린샷음 넣기')}${S.exp.sxOn!==false?rng('exp.sxVol',0,100,5,'셔터·스크린샷 볼륨','%')+'<div class="hint" style="margin:-4px 0 8px">수신음·셔터·스크린샷 소리는 <b>'+esc(SOUND_DIR)+'</b> 폴더의 <b>'+esc(SOUND_FILES.recv)+'</b> · <b>'+esc(SOUND_FILES.shutter)+'</b> · <b>'+esc(SOUND_FILES.shot)+'</b> 파일을 불러와요. 이름을 바꾸려면 코드의 SOUND_FILES만 고치면 돼요.</div>'+soundPickBtn():''}
     ${rng('exp.sfxVol',0,100,5,'볼륨','%')}${rng('exp.sfxOff',-300,300,10,'효과음 싱크 보정','ms')}<div class="sep"></div>
     <div class="g2"><button class="btn ghost" data-act="play">▶ 미리보기</button><button class="btn" data-act="vid">영상 저장</button></div>`);
@@ -5795,7 +5795,7 @@ function buildFrames(s){
       const m=s.face.status.match(/(\d{1,2}):(\d{2})(?!.*\d{1,2}:\d{2})/);
       if(!m){push(()=>{},hold);break;}
       let sec=+m[1]*60+ +m[2];
-      for(let i=0;i<4;i++){const t=sec+i,str=`${pad(Math.floor(t/60)%100)}:${pad(t%60)}`;push(c=>{c.face.status=s.face.status.slice(0,m.index)+str+s.face.status.slice(m.index+m[0].length);},1000/sp);}
+      for(let i=0,N=Math.max(2,Math.min(60,Math.round(+s.exp.faceSec||10))+1);i<N;i++){const t=sec+i,str=`${pad(Math.floor(t/60)%100)}:${pad(t%60)}`;push(c=>{c.face.status=s.face.status.slice(0,m.index)+str+s.face.status.slice(m.index+m[0].length);},1000/sp);}
       break;}
     case'call':{for(let i=0;i<20;i++)push(c=>{c._ct=i*.12;},120/sp);break;}
     case'tl':{const key=s.tl.tab?'tweetsF':'tweets',n=(s.tl[key]||[]).length,pr=s.exp.tlPress!==false,tsp=Math.max(.25,+s.tl.speed||1);   // tsp: 타임라인 전용 배속
