@@ -4953,7 +4953,7 @@ async function _exportVideo0(){
       // 영상통화 투명 출력은 '화면 배경'만 제거해야 합니다. 기존 device.bgOff는
       // 상태바/헤더/홈바 등 프레임 UI까지 숨길 수 있으므로 저장 시에는 강제로 해제하고,
       // screenFace에만 _alphaFace를 전달해 배경판만 투명하게 렌더링합니다.
-      if((TR||CK||VB==='key')&&capState.screen==='face'&&!popOnly(capState))capState={...capState,_alphaFace:true,device:{...capState.device,bgOff:false}};
+      if((TR||CK||VB==='key')&&capState.screen==='face'&&!popOnly(capState))capState={...capState,device:{...capState.device,bgOff:true}};   // 카톡 등 다른 화면의 투명 저장과 같은 방식: '배경 끄기'(폰 틀 없이 투명)로 저장
       const c=await capture(capState,sc,TR?null:bg,uniq[i].pose);
       store.set(uniq[i].key,{w:c.width,h:c.height,blob:await new Promise(r=>(TR||PNGSEQ||MOV)?c.toBlob(r,'image/png'):c.toBlob(r,'image/jpeg',.94))});
       await tick();
@@ -6984,6 +6984,9 @@ body.exporting .scr::after{
 </style>
 
 <style id="alpha-face-fix">
+/* 저장 화면(#off)에서는 흐림(backdrop-filter)이 그려지지 않아 깨져 보일 수 있어서 영상통화 요소는 흐림 없이 단색 반투명으로 */
+#off .fc-bar,#off .fc-pill,#off .fc-btn,#off .fc-pip{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.scr.bgoff .fc-pill,.scr.alphaface .fc-pill{background:rgba(72,72,76,.88)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
 #off .fc-top,#off .fc-bar,#off .fc-pip,#off .fc-pill,#off .fc-dot,#off .fc-ph,#off .fph-r,#off .aur{animation:none!important}
 /* 영상통화 투명 내보내기(알파 · 크로마키): 폰 틀 없이 화면 배경만 비우고, 이름 · 통화 시간 · 작은 화면 · 하단 버튼은 또렷하게 */
 .scr.alphaface{background:transparent!important;color:#fff}
