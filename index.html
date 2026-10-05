@@ -2232,10 +2232,14 @@ function screenFace(s){
   // 이름/시간/상태/하단 버튼 아이콘은 두 버전 모두 흰색으로 유지합니다.
   const uiColor='#fff';
   const more=`<svg width="26" height="26" viewBox="0 0 24 24" fill="${uiColor}"><circle cx="5.5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="18.5" cy="12" r="1.9"/></svg>`;
-  const uiStyle=`--fc-ui-color:${uiColor};${st}`;
+  // 상단(이름·시간) 프레임과 하단(버튼) 프레임이 같은 색을 쓰도록 변수로 묶어요. 밝은/어두운 옵션마다 값이 달라요.
+  const glass=dark?'rgba(30,30,34,.62)':'rgba(150,153,162,.52)';
+  const glassA=dark?'rgba(36,36,40,.94)':'rgba(128,131,140,.94)';
+  const gv=`--fc-glass:${glass};--fc-glass-a:${glassA};`;
+  const uiStyle=`--fc-ui-color:${uiColor};${gv}${st}`;
   const body=`<div class="fc-shade"></div><div class="fc-top${lv?' ein':''}" style="${uiStyle}"><h2>${esc(F.name)}</h2><p><span class="fc-pill"><i class="fc-dot${lv?' lv':''}"${dot?` style="opacity:${dot}"`:''}></i>${esc(F.status)}</span></p></div>
   ${F.pip?`<div class="fc-pip${lv?' ein':''}" style="${pipPosCss}${sp}${lv?';animation-delay:.35s':''}">${small?.url?bgImg(small,104/156):SW?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center"><div class="fc-ph" style="width:58px;height:58px;font-size:26px">${ini}</div></div>`:`<div style="position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center">${I.person('rgba(255,255,255,.35)')}</div>`}<i class="fc-flip">${FC_FLIP}</i></div>`:''}
-  <div class="fc-bar${lv?' ein':''}" style="${sb}${lv?';animation-delay:.1s':''}"><div class="fc-btn">${more}</div><div class="fc-btn">${I.video(uiColor)}</div><div class="fc-btn">${I.mic(uiColor)}</div><div class="fc-btn">${I.speaker(uiColor)}</div><div class="fc-btn red">${I.phone(uiColor,28,135)}</div></div>`;
+  <div class="fc-bar${lv?' ein':''}" style="${gv}${sb}${lv?';animation-delay:.1s':''}"><div class="fc-btn">${more}</div><div class="fc-btn">${I.video(uiColor)}</div><div class="fc-btn">${I.mic(uiColor)}</div><div class="fc-btn">${I.speaker(uiColor)}</div><div class="fc-btn red">${I.phone(uiColor,28,135)}</div></div>`;
   return{bg,body};
 }
 // [화면] 전화 수신 (기본형 — 아래에서 screenCall 이 감싸요)
@@ -7054,6 +7058,31 @@ img{
 .scr .fc-pill{opacity:1!important;}
 #off .scr .fc-pill{opacity:1!important;}
 
+
+/* 영상통화: 이름은 프레임 없이 배경 위에 그대로, 프레임은 '시간 알약'과 하단 버튼 바만 같은 색.
+   밝은/어두운 옵션은 screenFace()가 --fc-glass 로 넘겨요 */
+.scr .fc-top{
+  background:none!important;
+  background-image:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  padding:0!important;
+}
+.scr .fc-top p{opacity:1!important}
+.scr .fc-pill,
+.scr .fc-bar{
+  background-color:var(--fc-glass,rgba(30,30,34,.62))!important;
+}
+#off .scr.alphaface .fc-pill,
+#off .scr.alphaface .fc-bar{
+  background-color:var(--fc-glass-a,rgba(36,36,40,.94))!important;
+}
+#off .scr.alphaface .fc-top{
+  background:none!important;
+  box-shadow:none!important;
+}
 /* 저장용 렌더링에서는 광택 레이어가 콘텐츠를 방해하지 않게 */
 body.exporting .scr::after{
   opacity:.7;
