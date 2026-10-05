@@ -7042,6 +7042,10 @@ img{
 #off .scr.exportface .fc-top,
 #off .scr.exportface .fc-top h2,
 #off .scr.exportface .fc-top p{visibility:visible!important;}
+/* 영상통화 상단 시간/상태 표시는 미리보기에서 설정된 원래 색을 그대로 유지.
+   저장용 강제 흰색 지정은 하지 않음. */
+.scr .fc-pill{opacity:1!important;}
+#off .scr .fc-pill{opacity:1!important;}
 
 /* 저장용 렌더링에서는 광택 레이어가 콘텐츠를 방해하지 않게 */
 body.exporting .scr::after{
