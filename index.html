@@ -4461,7 +4461,7 @@ function facePlan(s){
 }
 // 영상통화 한 프레임의 상태
 async function faceState(f){
-  const s=f.base,c={...s,face:{...s.face}};
+  const s=f.base,c={...s,face:{...s.face},_ct:f.vt};
   if(VID.other&&s.face.other)c.face.other={...s.face.other,url:await frameUrl(VID.other,f.vt%(VID.other.dur||1))};
   if(VID.me&&s.face.me)c.face.me={...s.face.me,url:await frameUrl(VID.me,f.vt%(VID.me.dur||1))};
   if(f.m){const sec=+f.m[1]*60+ +f.m[2]+f.sec;c.face.status=s.face.status.slice(0,f.m.index)+pad(Math.floor(sec/60)%100)+':'+pad(sec%60)+s.face.status.slice(f.m.index+f.m[0].length);}
@@ -4741,7 +4741,7 @@ function movBlob({frames,seq,W,H,fps,pcm,rate}){
   })();
   const dinf=mvBox('dinf',mvBox('dref',mvU(0,1),mvBox('url ',mvU(1))));
   const vtrak=mvBox('trak',
-    mvBox('tkhd',mvU(0x0F,0,0,1,0,mdur,0,0),mvH(0,0,0,0),MV_MATRIX,mvU(W<<16,H<<16)),
+    mvBox('tkhd',mvU(0x07,0,0,1,0,mdur,0,0),mvH(0,0,0,0),MV_MATRIX,mvU(W<<16,H<<16)),
     mvBox('mdia',mvBox('mdhd',mvU(0,0,0,TS,vdur),mvH(0x55c4,0)),
       mvBox('hdlr',mvU(0,0),mvStr('vide'),mvU(0,0,0),Uint8Array.from([0])),
       mvBox('minf',mvBox('vmhd',mvU(1),mvH(0,0,0,0)),dinf,
@@ -4812,7 +4812,7 @@ async function encodeCapCutProRes({plan,vis,store,bg,TR}){
     if(TR){
       // 모바일에서 ProRes 알파가 안 읽히는 경우를 위한 H.264 크로마키 호환본입니다.
       const key=S.exp.keyColor||'#00ff00',hex=key.replace('#','');
-      await ff.exec(['-y','-framerate',String(FPS),'-i','frame%06d.png','-vf',`color=c=0x${hex}:s=${W}x${H}:r=${FPS}[bg];[bg][0:v]overlay=shortest=1,format=yuv420p`,'-c:v','libx264','-preset','veryfast','-crf','18','-an','out_capcut.mp4']);
+      await ff.exec(['-y','-framerate',String(FPS),'-i','frame%06d.png','-filter_complex',`color=c=0x${hex}:s=${W}x${H}:r=${FPS}[bg];[bg][0:v]overlay=shortest=1,format=yuv420p,setsar=1[out]`,'-map','[out]','-c:v','libx264','-preset','veryfast','-crf','18','-pix_fmt','yuv420p','-an','out_capcut.mp4']);
       const mp4Data=await ff.readFile('out_capcut.mp4');out.mp4=new Blob([mp4Data],{type:'video/mp4'});out.key=key;
     }
     return out;
@@ -4854,7 +4854,7 @@ async function encodeProRes({plan,vis,store,bg,TR,ok,faceVid,qidx}){
     }catch(e){console.warn('MOV 소리 렌더 실패 → 소리 없이 저장',e);pcm=null;}
   }
   busy('MOV 묶는 중…',.98);
-  return{blob:movBlob({frames:enc,seq,W,H,fps:FPS,pcm,rate:48000}),n:enc.length,N};
+  return{blob:movBlob({frames:enc,seq,W,H,fps:FPS,pcm:TR?null:pcm,rate:48000}),n:enc.length,N};
 }
 /* 정확한 길이의 영상 인코딩 — 실시간 녹화(MediaRecorder) 대신 프레임 단위로 WebCodecs 인코딩 */
 async function encodeExact({plan,vis,store,bg,TR,fmt,ok,faceVid}){
@@ -4988,7 +4988,7 @@ async function _exportVideo0(){
       }
       const r=await encodeProRes({plan,vis,store,bg,TR,ok,faceVid,qidx:2});
       await download(r.blob,`chat_video_${stamp()}_alpha_pc.mov`);
-      toast(`MOV (ProRes 4444) 저장 완료${TR?' · 투명(알파)':''} — ${(r.blob.size/1048576).toFixed(1)}MB`);return;
+      toast(`MOV (ProRes 4444) 저장 완료${TR?' · 투명(알파 · CapCut 호환용 영상 전용)':''} — ${(r.blob.size/1048576).toFixed(1)}MB`);return;
     }
     if(window.VideoEncoder){
       busy('영상 인코딩 준비 중…',.76);
