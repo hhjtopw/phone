@@ -2214,9 +2214,11 @@ function screenFace(s){
   const d2=an?`transform:translate(${(-dx).toFixed(1)}px,${(-dy).toFixed(1)}px) scale(${(2-ds).toFixed(3)})`:'';
   const aur=(hasV||SW)?'':`<i class="aur a1${lv?' lv':''}" style="${d1}"></i><i class="aur a2${lv?' lv':''}" style="${d2}"></i>`;
   const breathe=an?`transform:scale(${(1+Math.sin(t*2)*.02).toFixed(3)})`:'';
-  // 영상 내보내기에서 '투명 배경'을 선택했을 때는 영상통화의 배경판만 투명하게 만들고,
-  // 이름/통화시간/작은 화면/하단 통화 버튼 같은 프레임 UI는 그대로 남겨요.
+  // 영상통화의 색상 옵션은 프레임 배경에만 적용합니다.
+  // 이름/시간/상태/하단 버튼 아이콘은 항상 흰색입니다.
+  const dark=F.theme==='dark';
   const alpha=!!s._alphaFace;
+  const frameBg=dark?'linear-gradient(175deg,#4a4d55,#1b1c20)':'linear-gradient(175deg,#7b7f88,#44464d)';
   const bg=`<div class="bgl" style="background:${alpha?'transparent':frameBg}">${aur}${hasV?bgImg(big,SA):SW?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden"><svg width="300" height="300" viewBox="0 0 24 24" fill="rgba(255,255,255,.18)" style="margin-bottom:-26px"><circle cx="12" cy="8.500" r="4.200"/><path d="M3.500 22c0-5.200 4-8.200 8.500-8.200s8.500 3 8.500 8.200z"/></svg></div>`:`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center"><div class="fph">${rings}<div class="fc-ph${lv?' lvb':''}" style="${breathe}">${ini}</div></div></div>`}</div>`;
   const exp=!!s._export;
   const qt=exp?1:e3(q(0,.6)),qb=exp?1:e3(q(.1,.6)),qp=exp?1:e3(q(.35,.6));
@@ -2226,11 +2228,9 @@ function screenFace(s){
   const dot=an?(.55+.45*Math.sin(t*5)).toFixed(2):'';
   const PP=F.pipPos||'br',PX=+F.pipX||0,PY=+F.pipY||0;
   const pipPosCss=(PP[1]==='l'?`left:${16+PX}px!important;right:auto!important;`:`right:${16-PX}px!important;left:auto!important;`)+(PP[0]==='t'?`top:${140+PY}px!important;bottom:auto!important;`:`bottom:${150-PY}px!important;top:auto!important;`);
-  const dark=F.theme==='dark';
   // 밝은/어두운 버전은 '프레임(배경)'만 바꿉니다.
   // 이름/시간/상태/하단 버튼 아이콘은 두 버전 모두 흰색으로 유지합니다.
   const uiColor='#fff';
-  const frameBg=dark?'linear-gradient(175deg,#4a4d55,#1b1c20)':'linear-gradient(175deg,#7b7f88,#44464d)';
   const more=`<svg width="26" height="26" viewBox="0 0 24 24" fill="${uiColor}"><circle cx="5.5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="18.5" cy="12" r="1.9"/></svg>`;
   const uiStyle=`--fc-ui-color:${uiColor};${st}`;
   const body=`<div class="fc-shade"></div><div class="fc-top${lv?' ein':''}" style="${uiStyle}"><h2>${esc(F.name)}</h2><p><span class="fc-pill"><i class="fc-dot${lv?' lv':''}"${dot?` style="opacity:${dot}"`:''}></i>${esc(F.status)}</span></p></div>
