@@ -3556,7 +3556,7 @@ function stageHTML(s,opt={}){
   BOX=1+((((s.chat&&s.chat.bs)||100)/100)-1)*.4;   // 말풍선 변화의 40%만 주변에 반영
   const d=s.device, ratio=d.ratio||'phone', po=popOnly(s), off=!!d.bgOff||po, af=!!s._alphaFace&&!off, [W,H]=DIMS[ratio]||DIMS.phone; SA=W/H;
   const sc=statusColor(s);
-  const {bg,body}=SCREEN_FN[s.screen](opt.exp&&s.screen==='call'&&s._ct==null?{...s,_still:1}:s);
+  const {bg,body}=SCREEN_FN[s.screen](opt.exp&&(s.screen==='call'||s.screen==='face')&&s._ct==null?{...s,_still:1}:s);
   const hc=homeColor(s);const home=d.homeBar?`<div class="home" style="background:${hc};${/255,255,255/.test(hc)?'border:.5px solid rgba(0,0,0,.14)':''}"></div>`:'';
   const inner=`${bg}<div class="lay" style="--bs:${((s.chat&&s.chat.bs)||100)/100};--bo:${BOX.toFixed(3)}">${statusHTML(s,sc)}${body}</div>${home}`;
   const cls=(d.uiTop===false?'noTop ':'')+(d.uiBottom===false?'noBottom ':'')+(off?'bgoff ':'')+(af?'alphaface ':'')+(po?'popOnly ':'')+((CHATLIKE.includes(s.screen)&&s.chat.bfx&&s.chat.bfx!=='off')?'bfx-'+s.chat.bfx+' ':'')+(ratio==='phone'?'pm':'r-'+ratio);
@@ -4462,7 +4462,7 @@ function facePlan(s){
 }
 // 영상통화 한 프레임의 상태
 async function faceState(f){
-  const s=f.base,c={...s,face:{...s.face}};
+  const s=f.base,c={...s,face:{...s.face},_still:1};
   if(VID.other&&s.face.other)c.face.other={...s.face.other,url:await frameUrl(VID.other,f.vt%(VID.other.dur||1))};
   if(VID.me&&s.face.me)c.face.me={...s.face.me,url:await frameUrl(VID.me,f.vt%(VID.me.dur||1))};
   if(f.m){const sec=+f.m[1]*60+ +f.m[2]+f.sec;c.face.status=s.face.status.slice(0,f.m.index)+pad(Math.floor(sec/60)%100)+':'+pad(sec%60)+s.face.status.slice(f.m.index+f.m[0].length);}
@@ -5768,7 +5768,7 @@ function buildFrames(s){
       const m=s.face.status.match(/(\d{1,2}):(\d{2})(?!.*\d{1,2}:\d{2})/);
       if(!m){push(()=>{},hold);break;}
       let sec=+m[1]*60+ +m[2];
-      for(let i=0;i<4;i++){const t=sec+i,str=`${pad(Math.floor(t/60)%100)}:${pad(t%60)}`;push(c=>{c.face.status=s.face.status.slice(0,m.index)+str+s.face.status.slice(m.index+m[0].length);},1000/sp);}
+      for(let i=0;i<4;i++){const t=sec+i,str=`${pad(Math.floor(t/60)%100)}:${pad(t%60)}`;push(c=>{c._still=1;c.face.status=s.face.status.slice(0,m.index)+str+s.face.status.slice(m.index+m[0].length);},1000/sp);}
       break;}
     case'call':{for(let i=0;i<20;i++)push(c=>{c._ct=i*.12;},120/sp);break;}
     case'tl':{const key=s.tl.tab?'tweetsF':'tweets',n=(s.tl[key]||[]).length,pr=s.exp.tlPress!==false,tsp=Math.max(.25,+s.tl.speed||1);   // tsp: 타임라인 전용 배속
@@ -6984,6 +6984,7 @@ body.exporting .scr::after{
 </style>
 
 <style id="alpha-face-fix">
+#off .fc-top,#off .fc-bar,#off .fc-pip,#off .fc-pill,#off .fc-dot,#off .fc-ph,#off .fph-r,#off .aur{animation:none!important}
 /* 영상통화 투명 내보내기(알파 · 크로마키): 폰 틀 없이 화면 배경만 비우고, 이름 · 통화 시간 · 작은 화면 · 하단 버튼은 또렷하게 */
 .scr.alphaface{background:transparent!important;color:#fff}
 .scr.alphaface::after{display:none!important}
