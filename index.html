@@ -259,7 +259,7 @@ select.in{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=
 
 /* facetime */
 .fc-shade{position:absolute;left:0;right:0;top:0;height:230px;background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,0));z-index:1}
-.fc-top{text-align:center;color:#fff;margin-top:14px;position:relative;z-index:2}
+.fc-top{text-align:center;color:var(--fc-ui-color,#fff);margin-top:14px;position:relative;z-index:2}
 .fc-top h2{font-size:30px;font-weight:600;letter-spacing:-.5px}
 .fc-top p{font-size:16px;opacity:.9;margin-top:4px;font-variant-numeric:tabular-nums}
 .fc-pip{position:absolute;top:140px;right:16px;width:112px;height:168px;border-radius:18px;overflow:hidden;background:#3a3a3c;box-shadow:0 10px 24px rgba(0,0,0,.35);z-index:3}
@@ -1898,7 +1898,7 @@ function defaults(){
       {id:uid(),av:null,name:'@friend01',time:'2일 전',text:'이거 진짜 웃겨요 ㅋㅋㅋ',likes:'124',replies:'답글 3개',pin:true,hearted:true},
       {id:uid(),av:null,name:'@daily_mood',time:'1일 전',text:'와 이 영상 알고리즘 타고 왔는데 너무 좋네요',likes:'12',replies:'',pin:false,hearted:false},
       {id:uid(),av:null,name:'@user_3',time:'5시간 전',text:'구독하고 갑니다',likes:'3',replies:'',pin:false,hearted:false}]},
-    face:{other:null,me:null,name:'이름',status:'00:00',pip:true,swap:false,pipPos:'br',pipX:0,pipY:0},
+    face:{other:null,me:null,name:'이름',status:'00:00',pip:true,swap:false,pipPos:'br',pipX:0,pipY:0,theme:'light'},
     call:{name:'이름',sub:'휴대전화',photo:null,style:'full',swipe:true},
     nc:{mode:'notif',anim:true,wifi:true,bt:true,cell:true,air:false,focus:'',bright:62,vol:45,media:true},
     music:{art:null,title:'곡 제목',artist:'아티스트',total:'3:42',pos:32,playing:true,pal:0,anim:true,animSec:6},
@@ -2226,10 +2226,12 @@ function screenFace(s){
   const dot=an?(.55+.45*Math.sin(t*5)).toFixed(2):'';
   const PP=F.pipPos||'br',PX=+F.pipX||0,PY=+F.pipY||0;
   const pipPosCss=(PP[1]==='l'?`left:${16+PX}px!important;right:auto!important;`:`right:${16-PX}px!important;left:auto!important;`)+(PP[0]==='t'?`top:${140+PY}px!important;bottom:auto!important;`:`bottom:${150-PY}px!important;top:auto!important;`);
-  const more='<svg width="26" height="26" viewBox="0 0 24 24" fill="#fff"><circle cx="5.5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="18.5" cy="12" r="1.9"/></svg>';
-  const body=`<div class="fc-shade"></div><div class="fc-top${lv?' ein':''}" style="${st}"><h2>${esc(F.name)}</h2><p><span class="fc-pill"><i class="fc-dot${lv?' lv':''}"${dot?` style="opacity:${dot}"`:''}></i>${esc(F.status)}</span></p></div>
+  const dark=F.theme==='dark',uiColor=dark?'#111':'#fff';
+  const more=`<svg width="26" height="26" viewBox="0 0 24 24" fill="${uiColor}"><circle cx="5.5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="18.5" cy="12" r="1.9"/></svg>`;
+  const uiStyle=`--fc-ui-color:${uiColor};${st}`;
+  const body=`<div class="fc-shade"></div><div class="fc-top${lv?' ein':''}" style="${uiStyle}"><h2>${esc(F.name)}</h2><p><span class="fc-pill"><i class="fc-dot${lv?' lv':''}"${dot?` style="opacity:${dot}"`:''}></i>${esc(F.status)}</span></p></div>
   ${F.pip?`<div class="fc-pip${lv?' ein':''}" style="${pipPosCss}${sp}${lv?';animation-delay:.35s':''}">${small?.url?bgImg(small,104/156):SW?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center"><div class="fc-ph" style="width:58px;height:58px;font-size:26px">${ini}</div></div>`:`<div style="position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:center">${I.person('rgba(255,255,255,.35)')}</div>`}<i class="fc-flip">${FC_FLIP}</i></div>`:''}
-  <div class="fc-bar${lv?' ein':''}" style="${sb}${lv?';animation-delay:.1s':''}"><div class="fc-btn">${more}</div><div class="fc-btn">${I.video('#fff')}</div><div class="fc-btn">${I.mic('#fff')}</div><div class="fc-btn">${I.speaker('#fff')}</div><div class="fc-btn red">${I.phone('#fff',28,135)}</div></div>`;
+  <div class="fc-bar${lv?' ein':''}" style="${sb}${lv?';animation-delay:.1s':''}"><div class="fc-btn">${more}</div><div class="fc-btn">${I.video(uiColor)}</div><div class="fc-btn">${I.mic(uiColor)}</div><div class="fc-btn">${I.speaker(uiColor)}</div><div class="fc-btn red">${I.phone(uiColor,28,135)}</div></div>`;
   return{bg,body};
 }
 // [화면] 전화 수신 (기본형 — 아래에서 screenCall 이 감싸요)
@@ -4022,6 +4024,7 @@ function E_sms(){
 function E_face(){
   return card('영상통화',`${fld('상대 이름',txt('face.name','이름'))}
     ${fld(`통화 시간 <span style="float:right">${randBtn('face')}</span>`,txt('face.status','00:00'))}
+    ${fld('화면 색상',seg('face.theme',[['light','밝은 버전'],['dark','어두운 버전']]))}
     ${imgField('face.other','상대방 화면 · 사진/영상',true,'other')}${imgField('face.me','내 화면 · 사진/영상',true,'me')}<div class="sep"></div>${tog('face.pip','작은 화면 켜기 / 끄기')}${S.face.pip?tog('face.swap','작은 화면에 상대방 보이기 (큰 화면과 바꾸기)')+fld('작은 창 위치',seg('face.pipPos',[['tl','↖ 왼쪽 위'],['tr','↗ 오른쪽 위'],['bl','↙ 왼쪽 아래'],['br','↘ 오른쪽 아래']]))+rng('face.pipX',-120,120,1,'좌우 미세 조절','px')+rng('face.pipY',-120,120,1,'상하 미세 조절','px')+`<button type="button" class="btn" data-act="pipReset" style="margin-top:4px">위치 초기화</button>`:''}
     <div class="hint" style="margin-top:8px">영상을 넣으면 프레임으로 잘라 재생돼요(최대 30초, 소리 포함 가능). 영상이 없으면 통화 시간만 1초씩 흘러가요. 저장 탭 → 영상 저장.</div>`);
 }
