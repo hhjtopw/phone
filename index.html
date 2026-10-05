@@ -2219,7 +2219,7 @@ function screenFace(s){
   const dark=F.theme==='dark';
   const alpha=!!s._alphaFace;
   const frameBg=dark?'linear-gradient(175deg,#4a4d55,#1b1c20)':'linear-gradient(175deg,#7b7f88,#44464d)';
-  const bg=`<div class="bgl" style="background:${alpha?'transparent':frameBg}">${aur}${hasV?bgImg(big,SA):SW?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden"><svg width="300" height="300" viewBox="0 0 24 24" fill="rgba(255,255,255,.18)" style="margin-bottom:-26px"><circle cx="12" cy="8.500" r="4.200"/><path d="M3.500 22c0-5.200 4-8.200 8.500-8.200s8.500 3 8.500 8.200z"/></svg></div>`:`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center"><div class="fph">${rings}<div class="fc-ph${lv?' lvb':''}" style="${breathe}">${ini}</div></div></div>`}</div>`;
+  const bg=`<div class="bgl face-frame-${dark?'dark':'light'}" style="background:${alpha?'transparent':frameBg}">${aur}${hasV?bgImg(big,SA):SW?`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:flex-end;justify-content:center;overflow:hidden"><svg width="300" height="300" viewBox="0 0 24 24" fill="rgba(255,255,255,.18)" style="margin-bottom:-26px"><circle cx="12" cy="8.500" r="4.200"/><path d="M3.500 22c0-5.200 4-8.200 8.500-8.200s8.500 3 8.500 8.200z"/></svg></div>`:`<div style="position:absolute;left:0;top:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center"><div class="fph">${rings}<div class="fc-ph${lv?' lvb':''}" style="${breathe}">${ini}</div></div></div>`}</div>`;
   const exp=!!s._export;
   const qt=exp?1:e3(q(0,.6)),qb=exp?1:e3(q(.1,.6)),qp=exp?1:e3(q(.35,.6));
   const st=exp?'':(qt<1?`opacity:${qt.toFixed(2)};transform:translateY(${((1-qt)*-12).toFixed(1)}px)`:'' );
@@ -7049,12 +7049,8 @@ img{
 #off .scr.exportface .fc-top,
 #off .scr.exportface .fc-top h2,
 #off .scr.exportface .fc-top p{visibility:visible!important;}
-#off .scr.exportface .fc-top,
-#off .scr.exportface .fc-top h2,
-#off .scr.exportface .fc-top p,
-#off .scr.exportface .fc-btn svg{color:#fff!important;}
-/* 영상통화 상단 시간/상태 표시는 미리보기에서 설정된 원래 색을 그대로 유지.
-   저장용 강제 흰색 지정은 하지 않음. */
+/* 영상통화: 내보내기도 미리보기와 같은 프레임 색을 그대로 사용합니다.
+   이름/시간/상태/버튼 아이콘은 screenFace()의 흰색 UI를 그대로 유지합니다. */
 .scr .fc-pill{opacity:1!important;}
 #off .scr .fc-pill{opacity:1!important;}
 
