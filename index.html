@@ -4804,11 +4804,11 @@ async function encodeCapCutProRes({plan,vis,store,bg,TR}){
       if(n%5===0){busy(`CapCut 호환 프레임 준비 중… ${n+1}/${N}`,.76+.12*n/N);await tick();}
     }
     if(cb)cb.close();
-    // CapCut용 투명 MOV는 ProRes보다 QuickTime Animation(RGBA)을 우선 사용합니다.
-    // MOV 컨테이너 자체가 아니라 내부 코덱이 실제 호환성을 좌우합니다.
-    await ff.exec(['-y','-framerate',String(FPS),'-i','frame%06d.png','-vf','format=argb','-c:v','qtrle','-an','out.mov']);
+    // 투명 MOV는 표준 ProRes 4444 + 10bit RGBA 알파로 저장합니다.
+    // qtrle은 일부 편집 앱에서 알파 해석이 불안정할 수 있어 ProRes 4444를 기본으로 사용합니다.
+    await ff.exec(['-y','-framerate',String(FPS),'-i','frame%06d.png','-vf','format=yuva444p10le','-c:v','prores_ks','-profile:v','4','-pix_fmt','yuva444p10le','-vendor','apl0','-an','out.mov']);
     const movData=await ff.readFile('out.mov');
-    const out={mov:new Blob([movData],{type:'video/quicktime'}),fps:FPS,codec:'qtrle'};
+    const out={mov:new Blob([movData],{type:'video/quicktime'}),fps:FPS,codec:'prores_4444'};
     if(TR){
       // 모바일에서 ProRes 알파가 안 읽히는 경우를 위한 H.264 크로마키 호환본입니다.
       const key=S.exp.keyColor||'#00ff00',hex=key.replace('#','');
@@ -4927,7 +4927,15 @@ async function _exportVideo0(){
   playing=false;
   const faceVid=S.screen==='face'&&VID.other&&VID.other.file&&S.exp.vidAudio;
   const ok=(S.exp.sfx!=='off'||faceVid||popOn()||lkOn()||typeOn()||((S.screen==='call'||S.screen==='dial')&&RING)||videoPlan().some(sxNeed))?await sfxInit():false;
-  const PO=popOnly(S),VB=PO?'transparent':S.exp.vidBg,fmt=(PO&&(S.exp.vidFmt||'mp4')==='mp4')?'webm':(S.exp.vidFmt||'mp4'),plan=videoPlan(),sc=S.exp.vidScale,KEY=S.exp.keyColor||'#00ff00',CK=(VB==='transparent'&&fmt==='mp4'),bg=(CK||VB==='key')?KEY:VB,TR=bg==='transparent',PNGSEQ=fmt==='png',MOV=fmt==='mov';
+  const PO=popOnly(S),VB=PO?'transparent':S.exp.vidBg;
+  // '투명'은 실제 알파 채널을 원하는 설정이므로 MP4(알파 불가) 대신 MOV 알파로 저장합니다.
+  // MP4가 필요하면 '크로마키'를 선택해야 합니다.
+  let fmt=(PO&&(S.exp.vidFmt||'mp4')==='mp4')?'webm':(S.exp.vidFmt||'mp4');
+  if(VB==='transparent'&&fmt==='mp4'){
+    fmt='mov';
+    toast('투명 배경은 MP4에 저장할 수 없어 MOV(ProRes 4444 알파)로 저장합니다');
+  }
+  const plan=videoPlan(),sc=S.exp.vidScale,KEY=S.exp.keyColor||'#00ff00',CK=(VB==='transparent'&&fmt==='mp4'),bg=(CK||VB==='key')?KEY:VB,TR=bg==='transparent',PNGSEQ=fmt==='png',MOV=fmt==='mov';
   if(PO&&(S.exp.vidFmt||'mp4')==='mp4')toast('팝업만 내보내기는 투명이 필요해서 WebM으로 저장해요');
   const ROT=p3rotOn(),RF=ROT?(+R3().fps||15):0,RD=ROT?(+R3().dur||4):0;
   const CUSTOM=S.exp.vidDurOn==1&&+S.exp.vidDur>0;
@@ -4949,10 +4957,9 @@ async function _exportVideo0(){
     for(let i=0;i<uniq.length;i++){
       busy(`프레임 렌더링 중… ${i+1}/${uniq.length}`,.02+.7*(i/uniq.length));
       let capState=await stOf(uniq[i].f);
-      // 영상통화 투명 출력은 '화면 배경'만 제거해야 합니다. 기존 device.bgOff는
-      // 상태바/헤더/홈바 등 프레임 UI까지 숨길 수 있으므로 저장 시에는 강제로 해제하고,
-      // screenFace에만 _alphaFace를 전달해 배경판만 투명하게 렌더링합니다.
-      if(TR&&capState.screen==='face')capState={...capState,_alphaFace:true,device:{...capState.device,bgOff:false}};
+      // 영상통화 투명 출력에서도 사용자가 켜둔 device.bgOff는 그대로 유지합니다.
+      // _alphaFace는 영상통화 화면 내부의 배경판을 투명하게 만드는 용도입니다.
+      if(TR&&capState.screen==='face')capState={...capState,_alphaFace:true};
       const c=await capture(capState,sc,TR?null:bg,uniq[i].pose);
       store.set(uniq[i].key,{w:c.width,h:c.height,blob:await new Promise(r=>(TR||PNGSEQ||MOV)?c.toBlob(r,'image/png'):c.toBlob(r,'image/jpeg',.94))});
       await tick();
