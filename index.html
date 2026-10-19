@@ -7396,6 +7396,20 @@ function pvBase(){
   if(!b)b=location.href.split('#')[0];
   return /^https?:\/\//i.test(b)?b:'';
 }
+/* 링크 줄이기: 기본값과 같은 항목은 빼고 바뀐 것만 담아요 (열 때 기본값과 합쳐서 똑같이 복원)
+   시간·랜덤 id 처럼 열 때마다 달라지는 기본값은 날짜를 밀어 한 번 더 만들어 비교해서 항상 담아요 */
+function pvSlim(st){
+  const RD=Date,off=97*864e5+13*6e4;
+  const A=defaults();let B;
+  class D2 extends RD{constructor(...a){if(a.length)super(...a);else super(RD.now()+off);}static now(){return RD.now()+off;}}
+  window.Date=D2;try{B=defaults();}finally{window.Date=RD;}
+  const po=x=>x&&typeof x==='object'&&!Array.isArray(x);
+  const walk=(v,a,b)=>{
+    if(po(v)&&po(a)){const o={};let n=0;for(const k of Object.keys(v)){const d=walk(v[k],a[k],b&&b[k]);if(d!==undefined){o[k]=d;n++;}}return n?o:undefined;}
+    const j=JSON.stringify(v);return(j===JSON.stringify(a)&&j===JSON.stringify(b))?undefined:v;
+  };
+  return walk(st,A,B)||{};
+}
 function pvPayload(){
   const c=PVL.cfg;
   return{v:1,cfg:{apps:c.apps.slice(),home:!!c.home,frame:!!c.frame,title:String(c.title||'').trim()||'휴대폰 체험'},state:projectSnapshot()};
@@ -7410,6 +7424,7 @@ async function pvMakeLink(){
     const o=pvPayload();let n=0;
     if(c.shrink)n=await pvShrink(o.state,p=>busy('사진 줄이는 중…',.05+p*.8));
     busy('링크 만드는 중…',.92);await tick();
+    try{o.state=pvSlim(o.state);}catch(e){console.warn('링크 줄이기 실패 — 전체 데이터로 만들어요',e);}
     const enc=await pvEncode(o),url=pvBase()+'#pv='+enc;
     PVL.out={url,len:url.length,t:new Date(),n};
   }catch(e){console.error(e);toast('링크를 만들지 못했어요');}
